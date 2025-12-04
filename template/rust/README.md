@@ -1,6 +1,6 @@
 # Advent of Code - Rust
 
-An Rust template for Advent of Code.
+A Rust template for Advent of Code.
 
 ## Getting Started
 

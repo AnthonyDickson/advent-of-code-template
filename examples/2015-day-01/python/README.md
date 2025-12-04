@@ -1,6 +1,6 @@
 ## Advent of Code - Python
 
-An Python template for Advent of Code.
+A Python template for Advent of Code.
 
 ## Getting Started
 

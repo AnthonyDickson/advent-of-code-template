@@ -1,6 +1,6 @@
 # Advent of Code - Zig
 
-An Zig template for Advent of Code.
+A Zig template for Advent of Code.
 
 ## Getting Started
 
