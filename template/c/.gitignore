@@ -1,0 +1,5 @@
+aoc
+test_aoc
+compile_commands.json
+.cache/
+*.o
