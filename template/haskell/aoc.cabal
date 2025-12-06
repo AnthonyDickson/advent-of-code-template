@@ -1,0 +1,33 @@
+cabal-version:   3.0
+name:            aoc
+version:         0.1.0.0
+license:         BSD-3-Clause
+license-file:    LICENSE
+maintainer:      anthony.dickson9656@gmail.com
+author:          Anthony Dickson
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+common shared-properties
+    default-language: GHC2024
+    ghc-options:      -Wall
+    build-depends:    base ^>=4.20.2.0
+
+library
+    import:           shared-properties
+    exposed-modules:  Aoc
+    hs-source-dirs:   src
+
+executable aoc
+    import:           shared-properties
+    main-is:          Main.hs
+    hs-source-dirs:   app
+    build-depends:    aoc
+
+test-suite tests
+    import:           shared-properties
+    type:             exitcode-stdio-1.0
+    main-is:          Tests.hs
+    hs-source-dirs:   test
+    build-depends:    aoc
+                      , HUnit
