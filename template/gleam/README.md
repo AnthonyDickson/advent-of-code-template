@@ -17,16 +17,10 @@ pub fn main() -> Nil {
 
 Further documentation can be found at <https://hexdocs.pm/aoc>.
 
-## Development
+## Getting Started
 
 ```sh
-gleam run   # Run the project
-gleam test  # Run the tests
-```
-
-## Benchmark
-
-```shell
-gleam export erlang-shipment
-hyperfine -N "./build/erlang-shipment/entrypoint.sh run"
+make run
+make test
+make benchmark
 ```

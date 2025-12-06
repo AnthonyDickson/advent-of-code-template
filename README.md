@@ -14,11 +14,11 @@ A template with nix flakes and code snippets in multiple languages for getting s
    nix develop -c fish # Replace `fish` with your shell, e.g. `zsh`
    ```
 
-1. Read README.md in the folder you just copied for instructions on how to run and test the sub-project.
-
 1. Save the problem input as `input.txt` in the folder
 
-1. Benchmark your solution with hyperfine, e.g. assuming you are using the OCaml template:
+1. All templates have the following Make commands:
    ```shell
-   hyperfine -N _build/default/bin/main.exe
+   make test
+   make run
+   make benchmark
    ```

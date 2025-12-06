@@ -12,18 +12,17 @@ If you have `nix`, you can run `nix develop` to enter a dev shell with all of th
 - Build and run:
 
   ```shell
-  cargo run
+  make run
   ```
 
 - Run tests:
 
   ```shell
-  cargo test
+  make test
   ```
 
 - Benchmark:
 
   ```shell
-  cargo build --release
-  hyperfine -N ./target/release/aoc
+  make benchmark
   ```

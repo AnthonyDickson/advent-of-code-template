@@ -12,15 +12,15 @@ If you have `nix`, you can run `nix develop` to enter a dev shell with all of th
 - Run tests:
 
   ```shell
-  python -m unittest
+  make test
   ```
 - Run the program:
 
   ```shell
-  python main.py
+  make run
   ```
 
 - Benchmark the program:
   ```shell
-  hyperfine -N "python main.py"
+  make benchmark
   ```

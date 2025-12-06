@@ -19,6 +19,7 @@
             packages = with pkgs; [
               gleam
               beam28Packages.erlang
+              gnumake
               # For formatting markdown
               dprint
               # Benchmarking

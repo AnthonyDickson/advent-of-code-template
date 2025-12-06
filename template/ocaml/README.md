@@ -18,29 +18,29 @@ If you have `nix`, you can run `nix develop` to enter a dev shell with all of th
 - Build and watch for file changes:
 
   ```shell
-  dune build -w
+  make build
   ```
 
 - Build, run and watch for file changes:
 
   ```shell
-  dune exec aoc -w
+  make run
   ```
 
 - Run tests and watch for file changes:
 
   ```shell
-  dune runtest -w
+  make test
   ```
 
 - Format the entire project:
 
   ```shell
-  dune build @fmt --auto-promote
+  make fmt
   ```
+
 - Compile and run the native binary:
 
   ```shell
-  dune build
-  ./_build/default/bin/main.exe
+  make benchmark
   ```

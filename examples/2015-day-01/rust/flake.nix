@@ -23,6 +23,7 @@
           ];
 
           packages = with pkgs; [
+            gnumake
             # For formatting markdown
             dprint
             # Benchmarking

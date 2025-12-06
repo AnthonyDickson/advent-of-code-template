@@ -24,6 +24,7 @@
               ocamlPackages.ocaml-lsp
               ocamlPackages.ocamlformat
               ocamlPackages.alcotest
+              gnumake
               # For formatting markdown
               dprint
               # Benchmarking

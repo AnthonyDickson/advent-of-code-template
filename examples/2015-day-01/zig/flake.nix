@@ -17,10 +17,9 @@
           with pkgs;
           mkShell {
             packages = with pkgs; [
-              # Zig 0.15.2
               zig
-              # ZLS 0.15.0
               zls
+              gnumake
               # For formatting markdown
               dprint
               # Benchmarking

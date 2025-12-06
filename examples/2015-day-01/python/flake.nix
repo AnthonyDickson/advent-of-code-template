@@ -18,9 +18,9 @@
           mkShell {
             packages = with pkgs; [
               python314
-              # LSP
               pyright
               ruff
+              gnumake
               # For formatting markdown
               dprint
               # Benchmarking

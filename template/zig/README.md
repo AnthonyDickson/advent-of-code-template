@@ -13,18 +13,17 @@ If you have `nix`, you can run `nix develop` to enter a dev shell with all of th
 - Build, run and watch for file changes:
 
   ```shell
-  zig build --watch run
+  make run
   ```
 
 - Run tests and watch for file changes:
 
   ```shell
-  zig build --watch test
+  make test
   ```
 
 - Benchmark:
 
   ```shell
-  zig build --release=fast
-  hyperfine -N ./zig-out/bin/aoc
+  make benchmark
   ```
