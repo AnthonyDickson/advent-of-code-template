@@ -13,7 +13,7 @@ build:
 	cargo build --release
 
 benchmark: build
-	hyperfine -N ./target/release/aoc
+	hyperfine --warmup 3 -N ./target/release/aoc
 
 clean:
 	cargo clean

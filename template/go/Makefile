@@ -13,7 +13,7 @@ $(BINARY):
 	go build -o $(BINARY) ./cmd/aoc
 
 benchmark: $(BINARY)
-	hyperfine -N ./$(BINARY)
+	hyperfine --warmup 3 -N ./$(BINARY)
 
 fmt:
 	go fmt ./...

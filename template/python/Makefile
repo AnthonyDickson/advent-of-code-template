@@ -9,4 +9,4 @@ fmt:
 	ruff format
 
 benchmark:
-	hyperfine -N "python main.py"
+	hyperfine --warmup 3 -N "python main.py"

@@ -1,4 +1,6 @@
-.PHONY: test run benchmark clean
+SRC = src/aoc.gleam
+
+.PHONY: test run build benchmark clean
 
 test:
 	gleam test
@@ -6,9 +8,11 @@ test:
 run:
 	gleam run
 
-benchmark:
+build: $(SRC)
 	gleam export erlang-shipment
-	hyperfine -N "./build/erlang-shipment/entrypoint.sh run"
+
+benchmark: build
+	hyperfine --warmup 3 -N "./build/erlang-shipment/entrypoint.sh run"
 
 clean:
 	rm -f build

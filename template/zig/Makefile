@@ -13,7 +13,7 @@ fmt:
 	zig fmt src/
 
 benchmark: build
-	hyperfine -N ./zig-out/bin/aoc
+	hyperfine --warmup 3 -N ./zig-out/bin/aoc
 
 clean:
 	rm -rf zig-out/

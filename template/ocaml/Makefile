@@ -13,7 +13,7 @@ fmt:
 	dune build @fmt --auto-promote
 
 benchmark: build
-	hyperfine -N ./_build/default/bin/main.exe
+	hyperfine --warmup 3 -N ./_build/default/bin/main.exe
 
 clean:
 	dune clean
