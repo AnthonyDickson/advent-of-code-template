@@ -7,3 +7,6 @@ result-*
 
 # Advent of code
 **/input.txt
+
+# MacOS junk 🤬
+.DS_Store
