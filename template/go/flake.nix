@@ -23,6 +23,7 @@
               gnumake
               dprint # For formatting markdown
               hyperfine # Benchmarking
+              time
             ];
           };
       }

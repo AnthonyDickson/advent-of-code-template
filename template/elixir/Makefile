@@ -13,6 +13,7 @@ run: build
 
 benchmark: build
 	hyperfine --warmup 3 -N ./aoc
+	time -v ./aoc
 
 fmt:
 	mix format

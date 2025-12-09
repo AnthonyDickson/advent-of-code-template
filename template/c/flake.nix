@@ -23,6 +23,7 @@
               bear # for auto-generating compile_commands.json for clangd
               dprint # For formatting markdown
               hyperfine # Benchmarking
+              time # for measuring RAM usage
             ];
           };
       }

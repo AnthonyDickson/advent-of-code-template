@@ -24,6 +24,7 @@
               dprint
               # Benchmarking
               hyperfine
+              time
             ];
           };
       }

@@ -14,6 +14,7 @@ $(BINARY):
 
 benchmark: $(BINARY)
 	hyperfine --warmup 3 -N ./$(BINARY)
+	time -v ./$(BINARY)
 
 fmt:
 	go fmt ./...

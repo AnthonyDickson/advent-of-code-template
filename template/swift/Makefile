@@ -3,6 +3,7 @@ TEST_DIR  = Tests/
 BUILD_DIR = .build/
 SRC = Sources/AoCCLI/main.swift
 MAIN_PKG  = aoc-cli
+EXE = $(BUILD_DIR)/release/AoC
 
 .PHONY: test run build benchmark fmt clean
 
@@ -19,7 +20,8 @@ build: $(SRC)
 	swift build -c release
 
 benchmark: build
-	hyperfine --warmup 3 -N .build/release/AoC
+	hyperfine --warmup 3 -N $(EXE)
+	time -v $(EXE)
 
 clean:
 	rm -rf $(BUILD_DIR)

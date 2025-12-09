@@ -13,6 +13,7 @@ build: $(MAIN)
 
 benchmark: build
 	hyperfine -N $(shell cabal list-bin aoc)
+	time -v $(shell cabal list-bin aoc)
 
 clean:
 	cabal clean

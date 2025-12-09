@@ -1,3 +1,5 @@
+EXE = ./target/release/aoc
+
 .PHONY: test run build benchmark fmt clean
 
 test:
@@ -13,7 +15,8 @@ build:
 	cargo build --release
 
 benchmark: build
-	hyperfine --warmup 3 -N ./target/release/aoc
+	hyperfine --warmup 3 -N $(EXE) 
+	time -v $(EXE)
 
 clean:
 	cargo clean

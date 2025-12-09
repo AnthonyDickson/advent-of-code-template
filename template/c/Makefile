@@ -44,3 +44,4 @@ clean:
 benchmark:
 	$(CC) $(CFLAGS) -O3 -o $(MAIN) $(MAIN_SOURCE) $(AOC_OBJ)
 	hyperfine --warmup 3 -N "./$(MAIN) input.txt"
+	time -v ./$(MAIN) input.txt

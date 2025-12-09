@@ -10,3 +10,4 @@ fmt:
 
 benchmark:
 	hyperfine --warmup 3 -N "python main.py"
+	time -v python main.py

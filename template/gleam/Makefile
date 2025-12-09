@@ -13,6 +13,6 @@ build: $(SRC)
 
 benchmark: build
 	hyperfine --warmup 3 -N "./build/erlang-shipment/entrypoint.sh run"
-
+	time -v ./build/erlang-shipment/entrypoint.sh run
 clean:
 	rm -f build
