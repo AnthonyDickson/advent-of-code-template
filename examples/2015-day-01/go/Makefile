@@ -1,5 +1,6 @@
 # Name as cli to avoid name collision with "aoc" directory
 BINARY = cli
+SRC = aoc/aoc.go
 
 .PHONY: test run build benchmark lint fmt clean
 
@@ -9,11 +10,11 @@ test:
 run:
 	go run ./cmd/aoc
 
-$(BINARY):
+$(BINARY): $(SRC)
 	go build -o $(BINARY) ./cmd/aoc
 
 benchmark: $(BINARY)
-	hyperfine --warmup 3 -N ./$(BINARY)
+	hyperfine --time-unit microsecond --warmup 3 -N ./$(BINARY)
 	time -v ./$(BINARY)
 
 fmt:
