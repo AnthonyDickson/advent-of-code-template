@@ -1,11 +1,9 @@
 module Main (main) where
 
 import Aoc
-import System.IO
 
 main :: IO ()
 main = do
-  handle <- openFile "input.txt" ReadMode
-  contents <- hGetContents handle
+  contents <- readFile "input.txt"
   print (solvePartOne contents)
   print (solvePartTwo contents)
