@@ -4,3 +4,4 @@ let () =
   print_newline ();
   print_int (Aoc.solve_part_two problem_input);
   print_newline ()
+;;
