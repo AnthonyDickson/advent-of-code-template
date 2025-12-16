@@ -1,4 +1,5 @@
-SRC = src/aoc.gleam
+SRC := $(wildcard src/*.gleam)
+BIN = ./build/erlang-shipment/entrypoint.sh
 
 .PHONY: test run build benchmark clean
 
@@ -8,11 +9,12 @@ test:
 run:
 	gleam run
 
-build: $(SRC)
+$(BIN): $(SRC)
 	gleam export erlang-shipment
 
-benchmark: build
-	hyperfine --warmup 3 -N "./build/erlang-shipment/entrypoint.sh run"
+benchmark: $(BIN)
+	hyperfine --warmup 3 -N "$(BIN) run"
 	time -v ./build/erlang-shipment/entrypoint.sh run
+
 clean:
 	rm -f build
