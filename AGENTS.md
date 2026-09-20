@@ -14,8 +14,8 @@ examples/2015-day-01/<lang>/   reference solutions for Day 1, 2015
 ```
 
 - `template/` has 8 languages: `elixir`, `gleam`, `go`, `haskell`, `ocaml`, `python`, `rust`, `zig`.
-- `examples/` has 6 (no `haskell`, `elixir`, or `swift`). Examples are **snapshots** and can lag behind the templates;
-  do not assume they are in sync. For example the Gleam example has a leftover empty `.github/workflows/` directory.
+- `examples/` has 7 (no `elixir`). Examples are **snapshots** and can lag behind the templates; do not assume they are
+  in sync. For example the Gleam example has a leftover empty `.github/workflows/` directory.
 
 Each language folder is an independent project. Always run commands from inside the specific `template/<lang>` or
 `examples/<lang>` directory, never the root.
