@@ -9,7 +9,7 @@ pub fn main(init: std.process.Init) !void {
     const allocator = init.arena.allocator();
 
     const input = std.Io.Dir.cwd().readFileAlloc(io, INPUT_FILENAME, allocator, .limited(MAX_FILE_SIZE)) catch |err| {
-        std.debug.print("Could not open {s}: {}\n", .{ INPUT_FILENAME, err });
+        std.log.err("Could not open {s}: {}", .{ INPUT_FILENAME, err });
         return err;
     };
 
@@ -26,15 +26,19 @@ pub fn main(init: std.process.Init) !void {
     try stdout.flush();
 }
 
+fn step(char: u8) i64 {
+    return switch (char) {
+        '(' => 1,
+        ')' => -1,
+        else => unreachable,
+    };
+}
+
 fn solve_part_one(input: []const u8) i64 {
     var floor: i64 = 0;
 
     for (input) |char| {
-        switch (char) {
-            '(' => floor += 1,
-            ')' => floor -= 1,
-            else => @panic("Illegal char found, only '(' and ')' are allowed."),
-        }
+        floor += step(char);
     }
 
     return floor;
@@ -44,11 +48,7 @@ fn solve_part_two(input: []const u8) i64 {
     var floor: i64 = 0;
 
     for (input, 0..) |char, i| {
-        switch (char) {
-            '(' => floor += 1,
-            ')' => floor -= 1,
-            else => @panic("Illegal char found, only '(' and ')' are allowed."),
-        }
+        floor += step(char);
 
         if (floor == -1) {
             return 1 + @as(i64, @intCast(i));
@@ -76,10 +76,7 @@ test "test part one" {
 
         const actual = solve_part_one(input);
 
-        std.testing.expectEqual(expected, actual) catch |err| {
-            std.debug.print("test failed for input {s}\n", .{input});
-            return err;
-        };
+        try std.testing.expectEqual(expected, actual);
     }
 }
 
@@ -94,9 +91,6 @@ test "test part two" {
 
         const actual = solve_part_two(input);
 
-        std.testing.expectEqual(expected, actual) catch |err| {
-            std.debug.print("test failed for input {s}\n", .{input});
-            return err;
-        };
+        try std.testing.expectEqual(expected, actual);
     }
 }

@@ -9,7 +9,7 @@ pub fn main(init: std.process.Init) !void {
     const allocator = init.arena.allocator();
 
     const input = std.Io.Dir.cwd().readFileAlloc(io, INPUT_FILENAME, allocator, .limited(MAX_FILE_SIZE)) catch |err| {
-        std.debug.print("Could not open {s}: {}\n", .{ INPUT_FILENAME, err });
+        std.log.err("Could not open {s}: {}", .{ INPUT_FILENAME, err });
         return err;
     };
 

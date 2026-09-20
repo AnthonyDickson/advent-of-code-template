@@ -1,5 +1,6 @@
 import gleam/int
 import gleam/io
+import gleam/list
 import gleam/string
 import simplifile
 
@@ -28,29 +29,34 @@ pub fn main() -> Int {
 }
 
 pub fn solve_part_one(input: String) -> Int {
-  part_one_loop(0, string.to_graphemes(input))
-}
-
-fn part_one_loop(floor, chars) {
-  case chars {
-    [] -> floor
-    ["(", ..tail] -> part_one_loop(floor + 1, tail)
-    [_, ..tail] -> part_one_loop(floor - 1, tail)
-  }
+  input
+  |> string.to_graphemes
+  |> list.fold(0, fn(floor, char) { floor + step(char) })
 }
 
 pub fn solve_part_two(input: String) -> Int {
-  part_two_loop(0, 0, string.to_graphemes(input))
+  let #(_, _, basement_index) =
+    input
+    |> string.to_graphemes
+    |> list.fold(#(0, 0, 0), fn(state, char) {
+      let #(floor, position, basement_index) = state
+      let floor = floor + step(char)
+      let position = position + 1
+      let basement_index = case basement_index == 0 && floor == -1 {
+        True -> position
+        False -> basement_index
+      }
+
+      #(floor, position, basement_index)
+    })
+
+  basement_index
 }
 
-fn part_two_loop(floor, index, chars) {
-  case chars {
-    [] -> 1 + index
-    ["(", ..tail] -> part_two_loop(floor + 1, index + 1, tail)
-    [_, ..tail] ->
-      case floor {
-        0 -> 1 + index
-        _ -> part_two_loop(floor - 1, index + 1, tail)
-      }
+fn step(char: String) -> Int {
+  case char {
+    "(" -> 1
+    ")" -> -1
+    _ -> panic as "unexpected character, only '(' and ')' are allowed"
   }
 }

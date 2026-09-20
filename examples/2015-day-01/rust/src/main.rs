@@ -10,29 +10,23 @@ fn main() {
     println!("{part_two_solution}");
 }
 
-fn solve_part_one(input: &str) -> i64 {
-    let mut floor = 0;
-
-    for char in input.chars() {
-        match char {
-            '(' => floor += 1,
-            ')' => floor -= 1,
-            other => panic!("got unexpected char '{other}'"),
-        }
+fn step(floor: i64, char: char) -> i64 {
+    match char {
+        '(' => floor + 1,
+        ')' => floor - 1,
+        other => panic!("got unexpected char '{other}'"),
     }
+}
 
-    floor
+fn solve_part_one(input: &str) -> i64 {
+    input.chars().fold(0, step)
 }
 
 fn solve_part_two(input: &str) -> usize {
     let mut floor = 0;
 
     for (i, char) in input.chars().enumerate() {
-        match char {
-            '(' => floor += 1,
-            ')' => floor -= 1,
-            other => panic!("got unexpected char '{other}'"),
-        }
+        floor = step(floor, char);
 
         if floor == -1 {
             return 1 + i;

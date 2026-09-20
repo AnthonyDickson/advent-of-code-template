@@ -1,7 +1,7 @@
 open Alcotest
 
-let test_part_one () = check int "solves part one" 0 (Aoc.solve_part_one "")
-let test_part_two () = check int "solves part two" 0 (Aoc.solve_part_two "")
+let test_part_one () = check int "solves part one" 0 (Aoc.solve_part_one [])
+let test_part_two () = check int "solves part two" 0 (Aoc.solve_part_two [])
 
 let () =
   run

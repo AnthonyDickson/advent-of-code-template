@@ -1,25 +1,30 @@
 import pytest
 
-from main import solve
+from main import solve_part_one, solve_part_two
 
-solutions = [
-    (")", -1, 1),
-    ("()())", -1, 5),
-    ("(())", 0, 0),
-    ("()()", 0, 0),
-    ("(((", 3, 0),
-    ("(()(()(", 3, 0),
-    ("))(((((", 3, 1),
-    ("())", -1, 3),
-    ("))(", -1, 1),
-    (")))", -3, 1),
-    (")())())", -3, 1),
+part_one_examples = [
+    ("(())", 0),
+    ("()()", 0),
+    ("(((", 3),
+    ("(()(()(", 3),
+    ("))(((((", 3),
+    ("())", -1),
+    ("))(", -1),
+    (")))", -3),
+    (")())())", -3),
+]
+
+part_two_examples = [
+    (")", 1),
+    ("()())", 5),
 ]
 
 
-@pytest.mark.parametrize(("data", "expected_floor", "expected_index"), solutions)
-def test_solve(data: str, expected_floor: int, expected_index: int) -> None:
-    actual_floor, actual_index = solve(data)
+@pytest.mark.parametrize(("data", "expected"), part_one_examples)
+def test_part_one(data: str, expected: int) -> None:
+    assert solve_part_one(data) == expected
 
-    assert actual_floor == expected_floor
-    assert actual_index == expected_index
+
+@pytest.mark.parametrize(("data", "expected"), part_two_examples)
+def test_part_two(data: str, expected: int) -> None:
+    assert solve_part_two(data) == expected

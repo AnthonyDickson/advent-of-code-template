@@ -1,35 +1,45 @@
 from pathlib import Path
 
-Floor = int
-Index = int
+type Floor = int
+type Index = int
 
 
-def solve(data: str) -> tuple[Floor, Index]:
+def step(char: str) -> int:
+    match char:
+        case "(":
+            return 1
+        case ")":
+            return -1
+        case other:
+            raise ValueError(f"Unexpected char: {other}")
+
+
+def solve_part_one(data: str) -> Floor:
     floor = 0
-    index = 0
 
-    for i, char in enumerate(data):
-        match char:
-            case "(":
-                floor += 1
-            case ")":
-                floor -= 1
-            case other:
-                raise RuntimeError(f"Unexpected char: {other}")
+    for char in data:
+        floor += step(char)
 
-        if index == 0 and floor == -1:
-            index = 1 + i
+    return floor
 
-    return floor, index
+
+def solve_part_two(data: str) -> Index:
+    floor = 0
+
+    for index, char in enumerate(data, start=1):
+        floor += step(char)
+
+        if floor == -1:
+            return index
+
+    return 0
 
 
 def main() -> None:
     data = Path("input.txt").read_text(encoding="utf-8")
 
-    part_one_solution, part_two_solution = solve(data)
-
-    print(part_one_solution)
-    print(part_two_solution)
+    print(solve_part_one(data))
+    print(solve_part_two(data))
 
 
 if __name__ == "__main__":

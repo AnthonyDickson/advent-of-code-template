@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/anthonydickson/advent-of-code-template/aoc"
@@ -10,8 +11,7 @@ import (
 func main() {
 	contents, err := os.ReadFile("input.txt")
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error reading input file: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("Error reading input file: %v", err)
 	}
 
 	input := string(contents)
