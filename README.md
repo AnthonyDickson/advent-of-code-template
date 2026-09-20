@@ -23,8 +23,6 @@ A template with a nix flake and code snippets in multiple languages for getting 
    ```
 
 > [!NOTE]
-> Every dev environment is defined in the single root [`flake.nix`](./flake.nix)
-> and selected by language (`.#ocaml`, `.#rust`, ...). `nix develop` on its own
-> starts a minimal shell containing only the shared tooling. If you move a
-> copied template out of this repository, install the toolchain listed in that
-> flake yourself.
+> Every dev environment is defined in the single root [`flake.nix`](./flake.nix) and selected by language (`.#ocaml`,
+> `.#rust`, ...). `nix develop` on its own starts a minimal shell containing only the shared tooling. If you move a
+> copied template out of this repository, install the toolchain listed in that flake yourself.
