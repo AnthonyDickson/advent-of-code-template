@@ -14,12 +14,12 @@ template/<lang>/          starter project, one per language
 examples/2015-day-01/<lang>/   reference solutions for Day 1, 2015
 ```
 
-- `template/` has 10 languages: `c`, `elixir`, `gleam`, `go`, `haskell`,
-  `ocaml`, `python`, `rust`, `swift`, `zig`.
-- `examples/` has 8 (no `haskell` or `elixir`). Examples are **snapshots** and
-  can lag behind the templates; do not assume they are in sync. For example the
-  Python example has no `Makefile`, and the Gleam example has a leftover empty
-  `.github/workflows/` directory.
+- `template/` has 8 languages: `elixir`, `gleam`, `go`, `haskell`, `ocaml`,
+  `python`, `rust`, `zig`.
+- `examples/` has 6 (no `haskell`, `elixir`, or `swift`). Examples are
+  **snapshots** and can lag behind the templates; do not assume they are in
+  sync. For example the Python example has no `Makefile`, and the Gleam example
+  has a leftover empty `.github/workflows/` directory.
 
 Each language folder is an independent project. Always run commands from inside
 the specific `template/<lang>` or `examples/<lang>` directory, never the root.
@@ -30,15 +30,15 @@ Every template follows the same shape, adapted to language idiom:
 
 1. A `solve_part_one(input)` and `solve_part_two(input)` function returning an
    integer solution.
-2. A CLI entry point that reads `input.txt` (except C, see below) and prints
-   part one then part two, one per line.
+2. A CLI entry point that reads `input.txt` and prints part one then part two,
+   one per line.
 3. Tests covering both parts with placeholder inputs.
 
 Naming differs by language, follow the local convention:
-`SolvePartOne` (Go), `solvePartOne` (Haskell, Swift), `solve_part_one`
-(C, Python, Rust, Elixir, Gleam, OCaml, Zig). Filenames follow
+`SolvePartOne` (Go), `solvePartOne` (Haskell), `solve_part_one`
+(Python, Rust, Elixir, Gleam, OCaml, Zig). Filenames follow
 `aoc`/`aoc_test` style naming (e.g. `aoc.go`/`aoc_test.go`,
-`aoc_test.exs`, `AoCTests.swift`).
+`aoc_test.exs`).
 
 Language-specific quirks that are easy to get wrong:
 
@@ -46,15 +46,8 @@ Language-specific quirks that are easy to get wrong:
   (lines), so `solve_part_one`/`solve_part_two` take `string list`, not
   `string`. The executable is `bin/main.ml` (referenced by the Makefile as
   `_build/default/bin/main.exe`, invoked via `dune exec aoc`).
-- **C** takes the input path as `argv[1]` instead of hardcoding `input.txt`,
-  and `make run` passes `input.txt` explicitly. It has a hand-rolled test
-  harness (`tests/test_aoc.c`) using `TEST`/`RUN_TEST`/`ASSERT_EQ` macros rather
-  than a framework.
 - **Rust** uses `edition = "2024"`; tests live in an inline `#[cfg(test)] mod
   tests` in `src/main.rs`.
-- **Swift** tests use swift-testing (`import Testing`, `@Test`), which is why
-  `make test` runs `swift test --disable-xctest`. The `AoC` library target and
-  the `@main` struct are both named `AoC`; the executable product is `aoc-cli`.
 - **Haskell**'s Makefile declares `fmt` in `.PHONY` but has **no recipe**, so
   `make fmt` is a no-op. Tests use HUnit via a `test-suite` stanza in `aoc.cabal`.
 - **Elixir** runs doctests: `test/aoc_test.exs` has `doctest Aoc`, so any
@@ -68,12 +61,11 @@ Language-specific quirks that are easy to get wrong:
 ## Commands
 
 Run from within a language directory. Not every language defines every target
-(for example Python has no `build`/`clean`, Gleam and C have no `fmt`); the
-root README's promise of `test`/`run`/`benchmark` holds everywhere.
+(for example Python has no `build`/`clean`, Gleam has no `fmt`); the root
+README's promise of `test`/`run`/`benchmark` holds everywhere.
 
 | Language | test | run | build | fmt | lint |
 |---|---|---|---|---|---|
-| c | `make test` | `make run` | `make` | - | - |
 | elixir | `make test` | `make run` | `make build` | `make fmt` | - |
 | gleam | `make test` | `make run` | `make build` | - | - |
 | go | `make test` | `make run` | `make build` | `make fmt` | `make lint` |
@@ -81,7 +73,6 @@ root README's promise of `test`/`run`/`benchmark` holds everywhere.
 | ocaml | `make test` | `make run` | `make build` | `make fmt` | - |
 | python | `make test` | `make run` | - | `make fmt` | - |
 | rust | `make test` | `make run` | `make build` | `make fmt` | - |
-| swift | `make test` | `make run` | `make build` | `make fmt` | - |
 | zig | `make test` | `make run` | - | `make fmt` | - |
 
 Notes:
@@ -95,20 +86,20 @@ Notes:
 
 ## Dev environment (Nix)
 
-Every language folder contains a `flake.nix` and `flake.lock` pinning the
-toolchain and dev tools (`gnumake`, `dprint`, `hyperfine`, `time`, plus an LSP).
-There is no top-level flake.
+A single top-level [`flake.nix`](./flake.nix) defines every dev environment;
+there are no per-language flakes. Toolchains are pinned to explicit versions in
+`nix/devshells.nix`, and the shared tools (`gnumake`, `dprint`, `hyperfine`,
+`time`) are added to every shell.
 
 ```shell
-cd template/rust
-nix develop -c fish   # or any shell; omit -c to use $SHELL
+nix develop .#rust -c fish   # pick a language; omit -c to use $SHELL
 ```
 
-- Swift is the exception: its flake does **not** install Swift or
-  sourcekit-lsp (Swift is broken on NixOS). You must have Swift 6.2.1
-  (see `.swift-version`) installed manually.
+- `devShells.default` (plain `nix develop`) contains only the shared tooling.
 - Benchmark tooling and formatters are only available inside the flake, so
   failures about `hyperfine`/`dprint` usually mean you are not in the shell.
+- Flakes only see git-tracked files, so `git add` new flake files before
+  running `nix develop`.
 
 ## Formatting and style
 
@@ -119,8 +110,7 @@ nix develop -c fish   # or any shell; omit -c to use $SHELL
 - Language style is enforced implicitly by the toolchains: OCaml uses the
   `janestreet` profile (`.ocamlformat`), Rust `cargo fmt` (edition 2024),
   Haskell `GHC2024` with `-Wall`, Python `ruff`, Elixir `mix format`
-  (`.formatter.exs`), Go `go fmt` + `golangci-lint`, Swift `swift format`,
-  Zig `zig fmt src/`, C compiled with `-Wall -Wextra -std=c11`.
+  (`.formatter.exs`), Go `go fmt` + `golangci-lint`, Zig `zig fmt src/`.
 - Commit history uses Conventional Commits (`feat:`, `chore:`, `refactor:`,
   `fix:`).
 
@@ -131,8 +121,7 @@ nix develop -c fish   # or any shell; omit -c to use $SHELL
   `_build/`, `zig-out/`, `.build/`, `cli`, `aoc`, `compile_commands.json`).
   The working tree will often contain ignored build artifacts; do not commit
   them and do not treat their absence as an error.
-- C uses `clangd`, which needs `compile_commands.json`. Generate it with
-  `bear -- make clean && bear -- make` (see `template/c/README.md`).
 - Adding a new language means adding a full `template/<lang>/` folder with
-  `Makefile`, `flake.nix`/`flake.lock`, `dprint.json`, `.helix/languages.toml`,
-  `README.md`, `.gitignore`, language config, source, and tests.
+  `Makefile`, `dprint.json`, `.helix/languages.toml`, `README.md`,
+  `.gitignore`, language config, source, and tests, plus an entry in
+  `nix/devshells.nix`.

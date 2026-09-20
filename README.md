@@ -1,6 +1,6 @@
 # Advent of Code Template
 
-A template with nix flakes and code snippets in multiple languages for getting started with Advent of Code
+A template with a nix flake and code snippets in multiple languages for getting started with Advent of Code
 
 ## Usage
 
@@ -8,10 +8,9 @@ A template with nix flakes and code snippets in multiple languages for getting s
    ```shell
    cp -r template/ocaml day-01/
    ```
-1. Enter the directory and activate the nix shell:
+1. Enter the nix dev shell for your language, from anywhere inside this repository:
    ```shell
-   cd day-01
-   nix develop -c fish # Replace `fish` with your shell, e.g. `zsh`
+   nix develop .#ocaml -c fish # Replace `ocaml` with your language and `fish` with your shell
    ```
 
 1. Save the problem input as `input.txt` in the folder
@@ -22,3 +21,10 @@ A template with nix flakes and code snippets in multiple languages for getting s
    make run
    make benchmark
    ```
+
+> [!NOTE]
+> Every dev environment is defined in the single root [`flake.nix`](./flake.nix)
+> and selected by language (`.#ocaml`, `.#rust`, ...). `nix develop` on its own
+> starts a minimal shell containing only the shared tooling. If you move a
+> copied template out of this repository, install the toolchain listed in that
+> flake yourself.
