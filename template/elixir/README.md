@@ -27,3 +27,9 @@ dependencies installed.
   ```shell
   just benchmark
   ```
+
+- Upgrade dependencies:
+
+  ```shell
+  just update
+  ```

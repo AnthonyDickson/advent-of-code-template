@@ -78,6 +78,7 @@
       python314Packages.pytest
       pyright
       ruff
+      uv
     ];
 
     rust = pkgs: with pkgs; [

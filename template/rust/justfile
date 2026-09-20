@@ -16,6 +16,12 @@ fmt:
 lint:
     cargo clippy --all-targets -- -D warnings
 
+outdated:
+    cargo update --dry-run
+
+update:
+    cargo update
+
 benchmark: build
     hyperfine --warmup 3 -N ./target/release/aoc
     time -v ./target/release/aoc

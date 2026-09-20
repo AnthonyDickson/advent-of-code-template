@@ -33,3 +33,9 @@ dependencies installed.
   ```shell
   just fmt
   ```
+
+- Check for outdated dependencies:
+
+  ```shell
+  just outdated
+  ```
