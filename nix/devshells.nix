@@ -46,10 +46,10 @@
     haskell =
       pkgs:
       let
-        ghcPackages = pkgs.haskell.packages.ghc914;
+        ghcPackages = pkgs.haskell.packages.ghc912;
       in
       with pkgs; [
-        haskell.compiler.ghc914
+        haskell.compiler.ghc912
         ghcPackages.cabal-install
         ghcPackages.haskell-language-server
       ];
