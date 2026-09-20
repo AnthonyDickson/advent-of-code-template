@@ -1,8 +1,7 @@
 cabal-version:   3.0
 name:            aoc
 version:         0.1.0.0
-license:         BSD-3-Clause
-license-file:    LICENSE
+license:         MIT
 maintainer:      anthony.dickson9656@gmail.com
 author:          Anthony Dickson
 build-type:      Simple
