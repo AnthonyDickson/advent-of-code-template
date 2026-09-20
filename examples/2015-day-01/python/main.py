@@ -1,21 +1,14 @@
-def main():
-    with open("input.txt", "r") as f:
-        input = f.read()
-
-    part_one_solution, part_two_solution = solve(input)
-    print(part_one_solution)
-    print(part_two_solution)
-
+from pathlib import Path
 
 Floor = int
 Index = int
 
 
-def solve(input: str) -> tuple[Floor, Index]:
+def solve(data: str) -> tuple[Floor, Index]:
     floor = 0
     index = 0
 
-    for i, char in enumerate(input):
+    for i, char in enumerate(data):
         match char:
             case "(":
                 floor += 1
@@ -28,6 +21,15 @@ def solve(input: str) -> tuple[Floor, Index]:
             index = 1 + i
 
     return floor, index
+
+
+def main() -> None:
+    data = Path("input.txt").read_text(encoding="utf-8")
+
+    part_one_solution, part_two_solution = solve(data)
+
+    print(part_one_solution)
+    print(part_two_solution)
 
 
 if __name__ == "__main__":

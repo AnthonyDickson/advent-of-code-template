@@ -13,6 +13,9 @@ build:
 fmt:
     cargo fmt
 
+lint:
+    cargo clippy --all-targets -- -D warnings
+
 benchmark: build
     hyperfine --warmup 3 -N ./target/release/aoc
     time -v ./target/release/aoc

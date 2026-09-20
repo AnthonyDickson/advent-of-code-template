@@ -1,26 +1,29 @@
-# aoc
+# Advent of Code - Gleam
 
-[![Package Version](https://img.shields.io/hexpm/v/aoc)](https://hex.pm/packages/aoc)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/aoc/)
-
-```sh
-gleam add aoc@1
-```
-
-```gleam
-import aoc
-
-pub fn main() -> Nil {
-  // TODO: An example of the project in use
-}
-```
-
-Further documentation can be found at <https://hexdocs.pm/aoc>.
+A Gleam template for Advent of Code.
 
 ## Getting Started
 
-```sh
-just run
-just test
-just benchmark
-```
+Refer to the repository's shared [flake.nix](../../../../flake.nix) for the packages needed to compile this project. If
+you have `nix`, run `nix develop .#gleam` from anywhere inside the repository to enter a dev shell with all of the
+dependencies installed.
+
+## Useful Commands
+
+- Run tests:
+
+  ```shell
+  just test
+  ```
+
+- Run the program:
+
+  ```shell
+  just run
+  ```
+
+- Benchmark the program:
+
+  ```shell
+  just benchmark
+  ```

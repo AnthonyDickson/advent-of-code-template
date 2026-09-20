@@ -1,31 +1,25 @@
-import unittest
-from unittest import TestCase
+import pytest
 
 from main import solve
 
-
-class TestAoc(TestCase):
-    def test(self):
-        cases = (
-            (")", -1, 1),
-            ("()())", -1, 5),
-            ("(())", 0, 0),
-            ("()()", 0, 0),
-            ("(((", 3, 0),
-            ("(()(()(", 3, 0),
-            ("))(((((", 3, 1),
-            ("())", -1, 3),
-            ("))(", -1, 1),
-            (")))", -3, 1),
-            (")())())", -3, 1),
-        )
-
-        for input, expected_floor, expected_index in cases:
-            actual_floor, actual_index = solve(input)
-
-            self.assertEqual(expected_floor, actual_floor, f"wrong floor for input {input}")
-            self.assertEqual(expected_index, actual_index, f"wrong index for input {input}")
+solutions = [
+    (")", -1, 1),
+    ("()())", -1, 5),
+    ("(())", 0, 0),
+    ("()()", 0, 0),
+    ("(((", 3, 0),
+    ("(()(()(", 3, 0),
+    ("))(((((", 3, 1),
+    ("())", -1, 3),
+    ("))(", -1, 1),
+    (")))", -3, 1),
+    (")())())", -3, 1),
+]
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.mark.parametrize(("data", "expected_floor", "expected_index"), solutions)
+def test_solve(data: str, expected_floor: int, expected_index: int) -> None:
+    actual_floor, actual_index = solve(data)
+
+    assert actual_floor == expected_floor
+    assert actual_index == expected_index

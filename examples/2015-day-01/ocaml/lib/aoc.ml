@@ -1,10 +1,4 @@
-let load_input filename =
-  let ic = In_channel.open_text filename in
-  let content = In_channel.input_all ic in
-  In_channel.close ic;
-  content
-;;
-
+let load_input filename = In_channel.with_open_text filename In_channel.input_all
 let explode_string str = List.init (String.length str) (String.get str)
 
 let solve_part_one str =

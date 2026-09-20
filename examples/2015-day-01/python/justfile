@@ -2,10 +2,13 @@ default:
     @just --list
 
 test:
-    python -m unittest
+    pytest
 
 run:
     python main.py
+
+lint:
+    ruff check
 
 fmt:
     ruff format

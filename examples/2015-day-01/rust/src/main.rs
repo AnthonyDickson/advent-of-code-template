@@ -1,7 +1,7 @@
 use std::fs;
 
 fn main() {
-    let input = fs::read_to_string("input.txt").unwrap();
+    let input = fs::read_to_string("input.txt").expect("failed to read input.txt");
 
     let part_one_solution = solve_part_one(&input);
     let part_two_solution = solve_part_two(&input);
@@ -21,7 +21,7 @@ fn solve_part_one(input: &str) -> i64 {
         }
     }
 
-    return floor;
+    floor
 }
 
 fn solve_part_two(input: &str) -> usize {
@@ -39,7 +39,7 @@ fn solve_part_two(input: &str) -> usize {
         }
     }
 
-    return 0;
+    0
 }
 
 #[cfg(test)]
