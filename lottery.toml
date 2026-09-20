@@ -4,11 +4,11 @@
 # you are not interested in tuning. A weight of 0 takes a language off the wheel.
 
 [weights]
-elixir = 1
-gleam = 1
+elixir = 2
+gleam = 2
 go = 1
-haskell = 1
-ocaml = 1
-python = 1
-rust = 1
-zig = 1
+haskell = 4
+ocaml = 4
+python = 2
+rust = 3
+zig = 2
