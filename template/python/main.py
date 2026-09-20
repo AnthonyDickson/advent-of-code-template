@@ -1,17 +1,19 @@
-def main():
-    with open("input.txt", "r") as f:
-        input = f.read()
-
-    print(solve_part_one(input))
-    print(solve_part_two(input))
+from pathlib import Path
 
 
-def solve_part_one(_input: str) -> int:
+def solve_part_one(data: str) -> int:
     return 0
 
 
-def solve_part_two(_input: str) -> int:
+def solve_part_two(data: str) -> int:
     return 0
+
+
+def main() -> None:
+    data = Path("input.txt").read_text(encoding="utf-8")
+
+    print(solve_part_one(data))
+    print(solve_part_two(data))
 
 
 if __name__ == "__main__":

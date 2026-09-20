@@ -38,10 +38,12 @@ Language-specific quirks that are easy to get wrong:
   take `string list`, not `string`. The executable is `bin/main.ml` (referenced by the justfile as
   `_build/default/bin/main.exe`, invoked via `dune exec aoc`).
 - **Rust** uses `edition = "2024"`; tests live in an inline `#[cfg(test)] mod tests` in `src/main.rs`.
-- **Haskell** is formatted with `ormolu` (installed in the dev shell); tests use HUnit via a `test-suite` stanza in
-  `aoc.cabal`.
+- **Haskell** is formatted with `ormolu` (installed in the dev shell); tests use `tasty` with `tasty-hunit` via a
+  `test-suite` stanza in `aoc.cabal`. `template/haskell/hie.yaml` maps each source directory to its cabal component so
+  HLS resolves `Aoc`/`tasty` even when the repository is opened at its root.
 - **Elixir** runs doctests: `test/aoc_test.exs` has `doctest Aoc`, so any `@doc` example in `lib/aoc.ex` is executed by
-  `mix test` and must stay correct. The CLI is an escript (`main_module: Aoc.CLI`) built by `just build`.
+  `mix test` and must stay correct. The CLI is an escript (`main_module: Aoc.CLI`) built by `just build`; a missing
+  `input.txt` is reported on stderr with a non-zero exit code.
 - **Go** builds a binary named `cli` (not `aoc`) to avoid colliding with the `aoc/` package directory. Tests are an
   external `package aoc_test`.
 - **Zig**'s `build` recipe produces a release binary that the `benchmark` recipe depends on.
@@ -59,8 +61,8 @@ Run from within a language directory. Not every language defines every recipe (f
 | go       | `just test` | `just run` | `just build` | `just fmt` | `just lint` |
 | haskell  | `just test` | `just run` | `just build` | `just fmt` | -           |
 | ocaml    | `just test` | `just run` | `just build` | `just fmt` | -           |
-| python   | `just test` | `just run` | -            | `just fmt` | -           |
-| rust     | `just test` | `just run` | `just build` | `just fmt` | -           |
+| python   | `just test` | `just run` | -            | `just fmt` | `just lint` |
+| rust     | `just test` | `just run` | `just build` | `just fmt` | `just lint` |
 | zig      | `just test` | `just run` | `just build` | `just fmt` | -           |
 
 Notes:
@@ -92,8 +94,9 @@ nix develop .#rust -c fish   # pick a language; omit -c to use $SHELL
   repository root: a single `dprint.json` and a single `.helix/languages.toml` that makes Helix run `dprint fmt --stdin
   md` with a 120 column ruler. `just fmt` recipes format _code_, not markdown.
 - Language style is enforced implicitly by the toolchains: OCaml uses the `janestreet` profile (`.ocamlformat`), Rust
-  `cargo fmt` (edition 2024), Haskell `ormolu` with `GHC2024` and `-Wall`, Python `ruff`, Elixir `mix format`
-  (`.formatter.exs`), Go `go fmt` + `golangci-lint`, Zig `zig fmt src/`.
+  `cargo fmt` (edition 2024, `rustfmt.toml` pins `style_edition = "2024"`) plus `cargo clippy`, Haskell `ormolu` with
+  `GHC2024` and `-Wall` plus extra warnings, Python `ruff format`/`ruff check`, Elixir `mix format` (`.formatter.exs`),
+  Go `go fmt` + `golangci-lint`, Zig `zig fmt src/`.
 - Commit history uses Conventional Commits (`feat:`, `chore:`, `refactor:`, `fix:`).
 
 ## Gotchas

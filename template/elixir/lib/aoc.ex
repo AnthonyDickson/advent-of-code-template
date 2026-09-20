@@ -12,11 +12,11 @@ defmodule Aoc do
       0
 
   """
-  def solve_part_one _input do
+  def solve_part_one(_input) do
     0
   end
 
-  def solve_part_two _input do
+  def solve_part_two(_input) do
     0
   end
 end

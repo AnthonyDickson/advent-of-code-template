@@ -22,6 +22,13 @@ dependencies installed.
   just test
   ```
 
+- Lint and format:
+
+  ```shell
+  just lint
+  just fmt
+  ```
+
 - Benchmark:
 
   ```shell

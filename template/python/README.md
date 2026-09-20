@@ -21,7 +21,15 @@ dependencies installed.
   just run
   ```
 
+- Lint and format:
+
+  ```shell
+  just lint
+  just fmt
+  ```
+
 - Benchmark the program:
+
   ```shell
   just benchmark
   ```

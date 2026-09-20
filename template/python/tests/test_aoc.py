@@ -1,26 +1,16 @@
-import unittest
-from unittest import TestCase
+import pytest
 
 from main import solve_part_one, solve_part_two
 
-
-class TestAoc(TestCase):
-    def test_part_one(self):
-        input = ""
-        expected = 0
-
-        actual = solve_part_one(input)
-
-        self.assertEqual(expected, actual, f"failed for input {input}")
-
-    def test_part_two(self):
-        input = ""
-        expected = 0
-
-        actual = solve_part_two(input)
-
-        self.assertEqual(expected, actual, f"failed for input {input}")
+part_one_examples = [("", 0)]
+part_two_examples = [("", 0)]
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.mark.parametrize(("data", "expected"), part_one_examples)
+def test_part_one(data: str, expected: int) -> None:
+    assert solve_part_one(data) == expected
+
+
+@pytest.mark.parametrize(("data", "expected"), part_two_examples)
+def test_part_two(data: str, expected: int) -> None:
+    assert solve_part_two(data) == expected

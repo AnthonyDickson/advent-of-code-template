@@ -15,6 +15,6 @@ func main() {
 	}
 
 	input := string(contents)
-	fmt.Println(aoc.SolvePartOne((input)))
-	fmt.Println(aoc.SolvePartTwo((input)))
+	fmt.Println(aoc.SolvePartOne(input))
+	fmt.Println(aoc.SolvePartTwo(input))
 }

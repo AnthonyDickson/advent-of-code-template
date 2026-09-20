@@ -1,29 +1,27 @@
-module Main where
+module Main (main) where
 
-import Aoc
-import System.Exit (exitFailure)
-import Test.HUnit
+import Aoc (solvePartOne, solvePartTwo)
+import Test.Tasty (TestTree, defaultMain, testGroup)
+-- @?= is HUnit's equality assertion, re-exported by tasty-hunit:
+-- `actual @?= expected` passes when the two values are equal and otherwise
+-- fails the test, printing both values so the mismatch is easy to see.
+import Test.Tasty.HUnit (testCase, (@?=))
 
-testPartOne :: Test
-testPartOne = TestCase (assertEqual "Test Part One" expected actual)
-  where
-    expected = 0
-    actual = solvePartOne ""
+main :: IO ()
+main = defaultMain tests
 
-testPartTwo :: Test
-testPartTwo = TestCase (assertEqual "Test Part Two" expected actual)
-  where
-    expected = 0
-    actual = solvePartTwo ""
-
-tests :: Test
+tests :: TestTree
 tests =
-  TestList
-    [ TestLabel "Part One" testPartOne,
-      TestLabel "Part Two" testPartTwo
+  testGroup
+    "AoC"
+    [ testGroup
+        "Part One"
+        [ testCase "example" $
+            solvePartOne "" @?= 0
+        ],
+      testGroup
+        "Part Two"
+        [ testCase "example" $
+            solvePartTwo "" @?= 0
+        ]
     ]
-
-main :: IO Counts
-main = do
-  counts <- runTestTT tests
-  if failures counts > 0 then exitFailure else return counts

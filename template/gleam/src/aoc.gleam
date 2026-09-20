@@ -26,10 +26,6 @@ pub fn main() -> Int {
   }
 }
 
-pub fn load_input(_filename: String) -> String {
-  ""
-}
-
 pub fn solve_part_one(_input: String) -> Int {
   0
 }

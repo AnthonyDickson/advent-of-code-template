@@ -75,6 +75,7 @@
 
     python = pkgs: with pkgs; [
       python314
+      python314Packages.pytest
       pyright
       ruff
     ];

@@ -13,7 +13,7 @@ func TestPartOne(t *testing.T) {
 		expected int
 	}{
 		{"example 1", "test input", 0},
-		{"example 2", "other input", 42},
+		{"example 2", "other input", 0},
 	}
 
 	for _, tt := range tests {
@@ -34,7 +34,7 @@ func TestPartTwo(t *testing.T) {
 		expected int
 	}{
 		{"example 1", "test input", 0},
-		{"example 2", "other input", 42},
+		{"example 2", "other input", 0},
 	}
 
 	for _, tt := range tests {

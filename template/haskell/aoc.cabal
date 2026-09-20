@@ -10,7 +10,15 @@ extra-doc-files: CHANGELOG.md
 
 common shared-properties
     default-language: GHC2024
-    ghc-options:      -Wall
+    ghc-options:
+        -Wall
+        -Wcompat
+        -Widentities
+        -Wincomplete-record-updates
+        -Wincomplete-uni-patterns
+        -Wmissing-export-lists
+        -Wredundant-constraints
+
     build-depends:    base ^>=4.21.0.0
 
 library
@@ -29,5 +37,7 @@ test-suite tests
     type:             exitcode-stdio-1.0
     main-is:          Tests.hs
     hs-source-dirs:   test
+    ghc-options:      -threaded -rtsopts -with-rtsopts=-N
     build-depends:    aoc
-                      , HUnit
+                      , tasty       >=1.5
+                      , tasty-hunit >=0.10
