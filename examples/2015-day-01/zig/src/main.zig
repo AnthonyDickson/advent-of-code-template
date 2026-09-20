@@ -4,12 +4,11 @@ const MAX_FILE_SIZE = 1024 * 1024; // 1 MiB
 const INPUT_FILENAME = "input.txt";
 const STDOUT_BUFFER_SIZE = 1024;
 
-pub fn main() !void {
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    defer arena.deinit();
-    const allocator = arena.allocator();
+pub fn main(init: std.process.Init) !void {
+    const io = init.io;
+    const allocator = init.arena.allocator();
 
-    const input = std.fs.cwd().readFileAlloc(allocator, INPUT_FILENAME, MAX_FILE_SIZE) catch |err| {
+    const input = std.Io.Dir.cwd().readFileAlloc(io, INPUT_FILENAME, allocator, .limited(MAX_FILE_SIZE)) catch |err| {
         std.debug.print("Could not open {s}: {}\n", .{ INPUT_FILENAME, err });
         return err;
     };
@@ -18,7 +17,7 @@ pub fn main() !void {
     const part2_result = solve_part_two(input);
 
     var stdout_buffer: [STDOUT_BUFFER_SIZE]u8 = undefined;
-    var stdout_writer = std.fs.File.stdout().writer(&stdout_buffer);
+    var stdout_writer = std.Io.File.stdout().writer(io, &stdout_buffer);
     const stdout = &stdout_writer.interface;
 
     try stdout.print("{d}\n", .{part1_result});
