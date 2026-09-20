@@ -1,0 +1,24 @@
+default:
+    @just --list
+
+test:
+    mix test
+
+build:
+    mix escript.build
+
+run: build
+    ./aoc
+
+update:
+    mix deps.update --all
+
+benchmark: build
+    hyperfine --warmup 3 -N ./aoc
+    time -v ./aoc
+
+fmt:
+    mix format
+
+clean:
+    mix clean
