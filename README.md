@@ -4,10 +4,11 @@ A template with a nix flake and code snippets in multiple languages for getting 
 
 ## Usage
 
-1. Copy one of the templates, e.g.:
+1. Copy one of the templates yourself, e.g.:
    ```shell
    cp -r template/ocaml day-01/
    ```
+   ... or let the lottery below pick one and copy it for you.
 1. Enter the nix dev shell for your language, from anywhere inside this repository:
    ```shell
    nix develop .#ocaml -c fish # Replace `ocaml` with your language and `fish` with your shell
@@ -26,3 +27,24 @@ A template with a nix flake and code snippets in multiple languages for getting 
 > Every dev environment is defined in the single root [`flake.nix`](./flake.nix) and selected by language (`.#ocaml`,
 > `.#rust`, ...). `nix develop` on its own starts a minimal shell containing only the shared tooling. If you move a
 > copied template out of this repository, install the toolchain listed in that flake yourself.
+
+## Picking a language
+
+Can't decide? `just lottery` spins a weighted wheel over the templates, shows each language's chance of winning, and
+lets you re-roll until you like the pick:
+
+```shell
+just lottery
+```
+
+Settle on a language and the tool offers to bootstrap the day for you: it asks which day it is, copies `template/<lang>`
+into `<year>-day-<dd>` in the repository root, and lists what is left to do (dev shell, `input.txt`, the two functions
+to implement, then `just test`/`just run`/`just benchmark`).
+
+> [!NOTE]
+> Solution folders are written to the repository root so that a private repository created from this one keeps its
+> solutions next to `template/`, one `<year>-day-<dd>/` folder per day.
+
+The weights live in [`lottery.toml`](./lottery.toml), so you can make the languages you want to practise more likely and
+take the ones you do not with a weight of `0`. `uv` fetches the tool's dependencies on the first run;
+[`tools/lottery/README.md`](./tools/lottery/README.md) documents the flags and the TUI-free `--plain` mode.

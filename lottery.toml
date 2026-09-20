@@ -1,0 +1,14 @@
+# Weights for `just lottery`: higher means the language comes up more often.
+#
+# Every template language defaults to a weight of 1, so you can delete the entries
+# you are not interested in tuning. A weight of 0 takes a language off the wheel.
+
+[weights]
+elixir = 1
+gleam = 1
+go = 1
+haskell = 1
+ocaml = 1
+python = 1
+rust = 1
+zig = 1

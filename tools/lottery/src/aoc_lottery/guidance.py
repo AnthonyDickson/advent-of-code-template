@@ -1,0 +1,159 @@
+"""Per-language hints and the next steps printed after a template is copied."""
+
+from __future__ import annotations
+
+import os
+from dataclasses import dataclass
+from pathlib import Path
+
+from aoc_lottery.bootstrap import Bootstrap, display_path
+
+FALLBACK_SHELL = "fish"
+
+
+@dataclass(frozen=True)
+class Guide:
+    """Where the solution goes and what the two entry points are called."""
+
+    entry_point: str
+    part_one: str
+    part_two: str
+    notes: tuple[str, ...] = ()
+
+
+GUIDES: dict[str, Guide] = {
+    "elixir": Guide(
+        entry_point="lib/aoc.ex",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=(
+            "`mix test` also runs the doctests, so keep the `@doc` examples in `lib/aoc.ex` correct.",
+        ),
+    ),
+    "gleam": Guide(
+        entry_point="src/aoc.gleam",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=("Add cases to `test/aoc_test.gleam` to check your types as you go.",),
+    ),
+    "go": Guide(
+        entry_point="aoc/aoc.go",
+        part_one="SolvePartOne",
+        part_two="SolvePartTwo",
+        notes=("The built binary is called `cli` so it does not collide with the `aoc` package.",),
+    ),
+    "haskell": Guide(
+        entry_point="src/Aoc.hs",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
+        notes=("Tests live in `test/Tests.hs` and `just fmt` runs `ormolu`.",),
+    ),
+    "ocaml": Guide(
+        entry_point="lib/aoc.ml",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=(
+            "`Aoc.load_input` returns the input as a `string list` of lines, not a single string.",
+        ),
+    ),
+    "python": Guide(
+        entry_point="main.py",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=("Tests live in `tests/test_aoc.py`.",),
+    ),
+    "rust": Guide(
+        entry_point="src/main.rs",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=("Tests are the inline `#[cfg(test)] mod tests` at the bottom of `src/main.rs`.",),
+    ),
+    "zig": Guide(
+        entry_point="src/main.zig",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=("`just benchmark` needs the release binary from `just build`.",),
+    ),
+}
+
+
+@dataclass(frozen=True)
+class Step:
+    """One thing left to do before the day is solvable."""
+
+    title: str
+    command: str | None = None
+    detail: str | None = None
+
+
+def preferred_shell() -> str:
+    """The user's login shell, used in the printed ``nix develop`` command."""
+    return Path(os.environ.get("SHELL", "")).name or FALLBACK_SHELL
+
+
+def guide_for(language: str) -> Guide:
+    return GUIDES.get(language, Guide("the template", "solve_part_one", "solve_part_two"))
+
+
+def bootstrap_steps(plan: Bootstrap, repo: Path, shell: str) -> tuple[Step, ...]:
+    """Everything to do once the template has been copied."""
+    guide = guide_for(plan.language)
+    location = display_path(plan.destination, repo)
+    return (
+        Step("Open the new folder", command=f"cd {location}"),
+        Step(
+            f"Enter the {plan.language} dev shell",
+            command=f"nix develop .#{plan.language} -c {shell}",
+            detail="Run it from anywhere inside this repository; swap the shell for your own.",
+        ),
+        Step(
+            f"Save the {plan.year} day {plan.day} puzzle input",
+            detail=f"Save it as `{location}/input.txt` (puzzle inputs are never committed).",
+        ),
+        Step(
+            "Implement both parts",
+            detail=f"`{guide.part_one}` and `{guide.part_two}` in `{guide.entry_point}`.",
+        ),
+        Step("Check the tests that ship with the template", command="just test"),
+        Step("Run it against the real input", command="just run"),
+        Step(
+            "Benchmark it once it passes",
+            command="just benchmark",
+            detail="Needs the Nix dev shell.",
+        ),
+    )
+
+
+def next_steps_markdown(plan: Bootstrap, repo: Path, shell: str) -> str:
+    """Render the next steps for the TUI. The heading above this names the folders."""
+    lines = [
+        f"Copied {plan.file_count} files from `{display_path(plan.source, repo)}`.",
+        "",
+        "#### Next steps",
+        "",
+    ]
+    for number, step in enumerate(bootstrap_steps(plan, repo, shell), start=1):
+        lines += [f"**{number}. {step.title}**", ""]
+        if step.command:
+            lines += ["```shell", step.command, "```", ""]
+        if step.detail:
+            lines += [step.detail, ""]
+
+    notes = guide_for(plan.language).notes
+    if notes:
+        lines += ["#### Good to know", ""]
+        lines += [f"- {note}" for note in notes]
+        lines += [""]
+    return "\n".join(lines)
+
+
+def plain_steps(plan: Bootstrap, repo: Path, shell: str) -> tuple[str, ...]:
+    """Render the next steps for a terminal without the TUI."""
+    rendered = []
+    for number, step in enumerate(bootstrap_steps(plan, repo, shell), start=1):
+        rendered.append(f"{number:>2}. {step.title}")
+        if step.command:
+            rendered.append(f"    $ {step.command}")
+        if step.detail:
+            rendered.append(f"    {step.detail}")
+    return tuple(rendered)

@@ -22,6 +22,8 @@
     fd
     # For formatting markdown
     dprint
+    # For running the language lottery in tools/lottery (it fetches its own deps)
+    uv
     # Benchmarking
     hyperfine
     time
