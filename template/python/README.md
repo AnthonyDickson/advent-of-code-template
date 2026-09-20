@@ -13,15 +13,15 @@ dependencies installed.
 - Run tests:
 
   ```shell
-  make test
+  just test
   ```
 - Run the program:
 
   ```shell
-  make run
+  just run
   ```
 
 - Benchmark the program:
   ```shell
-  make benchmark
+  just benchmark
   ```

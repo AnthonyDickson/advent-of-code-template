@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+test:
+    cabal test
+
+run:
+    cabal run
+
+build:
+    cabal build
+
+fmt:
+    fd --extension hs --print0 | xargs -0 ormolu --mode inplace
+
+benchmark: build
+    hyperfine -N "`cabal list-bin aoc`"
+    time -v "`cabal list-bin aoc`"
+
+clean:
+    cabal clean

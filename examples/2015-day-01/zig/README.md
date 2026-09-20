@@ -13,17 +13,17 @@ dependencies installed.
 - Build, run and watch for file changes:
 
   ```shell
-  make run
+  just run
   ```
 
 - Run tests and watch for file changes:
 
   ```shell
-  make test
+  just test
   ```
 
 - Benchmark:
 
   ```shell
-  make benchmark
+  just benchmark
   ```

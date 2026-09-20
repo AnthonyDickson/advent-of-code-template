@@ -15,11 +15,11 @@ A template with a nix flake and code snippets in multiple languages for getting 
 
 1. Save the problem input as `input.txt` in the folder
 
-1. All templates have the following Make commands:
+1. All templates have the following Just commands (run `just` to list every recipe):
    ```shell
-   make test
-   make run
-   make benchmark
+   just test
+   just run
+   just benchmark
    ```
 
 > [!NOTE]

@@ -1,0 +1,15 @@
+default:
+    @just --list
+
+test:
+    python -m unittest
+
+run:
+    python main.py
+
+fmt:
+    ruff format
+
+benchmark:
+    hyperfine --warmup 3 -N "python main.py"
+    time -v python main.py

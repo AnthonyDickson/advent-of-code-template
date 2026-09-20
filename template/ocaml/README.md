@@ -19,29 +19,29 @@ dependencies installed.
 - Build and watch for file changes:
 
   ```shell
-  make build
+  just build
   ```
 
 - Build, run and watch for file changes:
 
   ```shell
-  make run
+  just run
   ```
 
 - Run tests and watch for file changes:
 
   ```shell
-  make test
+  just test
   ```
 
 - Format the entire project:
 
   ```shell
-  make fmt
+  just fmt
   ```
 
 - Compile and run the native binary:
 
   ```shell
-  make benchmark
+  just benchmark
   ```

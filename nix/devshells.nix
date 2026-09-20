@@ -1,7 +1,7 @@
 # Shared dev-shell definitions for every language template.
 #
 # Each language maps to a function of `pkgs` returning the extra packages it
-# needs. The `common` tooling (build runner, markdown formatter, benchmark
+# needs. The `common` tooling (task runner, markdown formatter, benchmark
 # helpers) is added to every shell, including the lean `default` shell.
 #
 # Toolchains are pinned to the latest explicit versions offered by the pinned
@@ -17,7 +17,9 @@
   ];
 
   common = pkgs: with pkgs; [
-    gnumake
+    just
+    # For locating files to pass to formatters
+    fd
     # For formatting markdown
     dprint
     # Benchmarking
@@ -52,6 +54,8 @@
         haskell.compiler.ghc912
         ghcPackages.cabal-install
         ghcPackages.haskell-language-server
+        # For formatting Haskell source
+        ormolu
       ];
 
     ocaml =

@@ -13,17 +13,17 @@ dependencies installed.
 - Run tests:
 
   ```shell
-  make test
+  just test
   ```
 - Run the program:
 
   ```shell
-  make run
+  just run
   ```
 
 - Benchmark the program:
   ```shell
-  make benchmark
+  just benchmark
   ```
 
-See the [Makefile](./Makefile) for more commands.
+See the [justfile](./justfile) for more commands.

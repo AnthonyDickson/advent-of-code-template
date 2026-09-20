@@ -15,8 +15,7 @@ examples/2015-day-01/<lang>/   reference solutions for Day 1, 2015
 
 - `template/` has 8 languages: `elixir`, `gleam`, `go`, `haskell`, `ocaml`, `python`, `rust`, `zig`.
 - `examples/` has 6 (no `haskell`, `elixir`, or `swift`). Examples are **snapshots** and can lag behind the templates;
-  do not assume they are in sync. For example the Python example has no `Makefile`, and the Gleam example has a leftover
-  empty `.github/workflows/` directory.
+  do not assume they are in sync. For example the Gleam example has a leftover empty `.github/workflows/` directory.
 
 Each language folder is an independent project. Always run commands from inside the specific `template/<lang>` or
 `examples/<lang>` directory, never the root.
@@ -36,45 +35,46 @@ Naming differs by language, follow the local convention: `SolvePartOne` (Go), `s
 Language-specific quirks that are easy to get wrong:
 
 - **OCaml** is the odd one out: `Aoc.load_input` returns a `string list` (lines), so `solve_part_one`/`solve_part_two`
-  take `string list`, not `string`. The executable is `bin/main.ml` (referenced by the Makefile as
+  take `string list`, not `string`. The executable is `bin/main.ml` (referenced by the justfile as
   `_build/default/bin/main.exe`, invoked via `dune exec aoc`).
 - **Rust** uses `edition = "2024"`; tests live in an inline `#[cfg(test)] mod tests` in `src/main.rs`.
-- **Haskell**'s Makefile declares `fmt` in `.PHONY` but has **no recipe**, so `make fmt` is a no-op. Tests use HUnit via
-  a `test-suite` stanza in `aoc.cabal`.
+- **Haskell** is formatted with `ormolu` (installed in the dev shell); tests use HUnit via a `test-suite` stanza in
+  `aoc.cabal`.
 - **Elixir** runs doctests: `test/aoc_test.exs` has `doctest Aoc`, so any `@doc` example in `lib/aoc.ex` is executed by
-  `mix test` and must stay correct. The CLI is an escript (`main_module: Aoc.CLI`) built by `make build`.
+  `mix test` and must stay correct. The CLI is an escript (`main_module: Aoc.CLI`) built by `just build`.
 - **Go** builds a binary named `cli` (not `aoc`) to avoid colliding with the `aoc/` package directory. Tests are an
   external `package aoc_test`.
-- **Zig** has no `build` target; the release build is hidden as a dependency of the `benchmark` target.
+- **Zig**'s `build` recipe produces a release binary that the `benchmark` recipe depends on.
 
 ## Commands
 
-Run from within a language directory. Not every language defines every target (for example Python has no
-`build`/`clean`, Gleam has no `fmt`); the root README's promise of `test`/`run`/`benchmark` holds everywhere.
+Run from within a language directory. Not every language defines every recipe (for example Python has no
+`build`/`clean`); the root README's promise of `test`/`run`/`benchmark` holds everywhere. Every justfile also has a
+`default` recipe that prints `just --list`, so running `just` alone shows all recipes.
 
-| Language | test        | run        | build        | fmt                | lint        |
-| -------- | ----------- | ---------- | ------------ | ------------------ | ----------- |
-| elixir   | `make test` | `make run` | `make build` | `make fmt`         | -           |
-| gleam    | `make test` | `make run` | `make build` | -                  | -           |
-| go       | `make test` | `make run` | `make build` | `make fmt`         | `make lint` |
-| haskell  | `make test` | `make run` | `make build` | `make fmt` (no-op) | -           |
-| ocaml    | `make test` | `make run` | `make build` | `make fmt`         | -           |
-| python   | `make test` | `make run` | -            | `make fmt`         | -           |
-| rust     | `make test` | `make run` | `make build` | `make fmt`         | -           |
-| zig      | `make test` | `make run` | -            | `make fmt`         | -           |
+| Language | test        | run        | build        | fmt        | lint        |
+| -------- | ----------- | ---------- | ------------ | ---------- | ----------- |
+| elixir   | `just test` | `just run` | `just build` | `just fmt` | -           |
+| gleam    | `just test` | `just run` | `just build` | `just fmt` | -           |
+| go       | `just test` | `just run` | `just build` | `just fmt` | `just lint` |
+| haskell  | `just test` | `just run` | `just build` | `just fmt` | -           |
+| ocaml    | `just test` | `just run` | `just build` | `just fmt` | -           |
+| python   | `just test` | `just run` | -            | `just fmt` | -           |
+| rust     | `just test` | `just run` | `just build` | `just fmt` | -           |
+| zig      | `just test` | `just run` | `just build` | `just fmt` | -           |
 
 Notes:
 
-- Watch mode is used in two places: OCaml `make run` (`dune exec aoc -w`) and `make test` (`dune runtest -w`), and Zig
-  `make test` (`zig build --watch test`). These commands do not exit on their own.
-- `make benchmark` runs `hyperfine` and GNU `time -v` (for peak RAM), so it needs both tools plus a release build.
+- Watch mode is used in two places: OCaml `just run` (`dune exec aoc -w`) and `just test` (`dune runtest -w`), and Zig
+  `just test` (`zig build --watch test`). These commands do not exit on their own.
+- `just benchmark` runs `hyperfine` and GNU `time -v` (for peak RAM), so it needs both tools plus a release build.
   Requires the Nix dev shell.
 - OCaml has a REPL with project modules loaded: `dune utop`.
 
 ## Dev environment (Nix)
 
 A single top-level [`flake.nix`](./flake.nix) defines every dev environment; there are no per-language flakes.
-Toolchains are pinned to explicit versions in `nix/devshells.nix`, and the shared tools (`gnumake`, `dprint`,
+Toolchains are pinned to explicit versions in `nix/devshells.nix`, and the shared tools (`just`, `fd`, `dprint`,
 `hyperfine`, `time`) are added to every shell.
 
 ```shell
@@ -90,10 +90,10 @@ nix develop .#rust -c fish   # pick a language; omit -c to use $SHELL
 
 - **Markdown** is formatted with `dprint` and hard wrapped at 120 columns. Both formatter configs are shared at the
   repository root: a single `dprint.json` and a single `.helix/languages.toml` that makes Helix run `dprint fmt --stdin
-  md` with a 120 column ruler. `make fmt` targets format _code_, not markdown.
+  md` with a 120 column ruler. `just fmt` recipes format _code_, not markdown.
 - Language style is enforced implicitly by the toolchains: OCaml uses the `janestreet` profile (`.ocamlformat`), Rust
-  `cargo fmt` (edition 2024), Haskell `GHC2024` with `-Wall`, Python `ruff`, Elixir `mix format` (`.formatter.exs`), Go
-  `go fmt` + `golangci-lint`, Zig `zig fmt src/`.
+  `cargo fmt` (edition 2024), Haskell `ormolu` with `GHC2024` and `-Wall`, Python `ruff`, Elixir `mix format`
+  (`.formatter.exs`), Go `go fmt` + `golangci-lint`, Zig `zig fmt src/`.
 - Commit history uses Conventional Commits (`feat:`, `chore:`, `refactor:`, `fix:`).
 
 ## Gotchas
@@ -102,6 +102,6 @@ nix develop .#rust -c fish   # pick a language; omit -c to use $SHELL
 - Each language's `.gitignore` covers its own build output (e.g. `target/`, `_build/`, `zig-out/`, `.build/`, `cli`,
   `aoc`, `compile_commands.json`). The working tree will often contain ignored build artifacts; do not commit them and
   do not treat their absence as an error.
-- Adding a new language means adding a full `template/<lang>/` folder with `Makefile`, `README.md`, `.gitignore`,
+- Adding a new language means adding a full `template/<lang>/` folder with `justfile`, `README.md`, `.gitignore`,
   language config, source, and tests, plus an entry in `nix/devshells.nix`. Markdown and Helix config are shared at the
   repository root, so no per-language copies are needed.

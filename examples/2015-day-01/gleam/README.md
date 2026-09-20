@@ -20,7 +20,7 @@ Further documentation can be found at <https://hexdocs.pm/aoc>.
 ## Getting Started
 
 ```sh
-make run
-make test
-make benchmark
+just run
+just test
+just benchmark
 ```

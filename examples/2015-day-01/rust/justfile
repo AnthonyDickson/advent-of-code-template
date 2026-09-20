@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+test:
+    cargo test
+
+run:
+    cargo run
+
+build:
+    cargo build --release
+
+fmt:
+    cargo fmt
+
+benchmark: build
+    hyperfine --warmup 3 -N ./target/release/aoc
+    time -v ./target/release/aoc
+
+clean:
+    cargo clean
