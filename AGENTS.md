@@ -70,8 +70,8 @@ Notes:
 
 - Watch mode is used in two places: OCaml `just run` (`dune exec aoc -w`) and `just test` (`dune runtest -w`), and Zig
   `just test` (`zig build --watch test`). These commands do not exit on their own.
-- `just benchmark` runs `hyperfine` and GNU `time -v` (for peak RAM), so it needs both tools plus a release build.
-  Requires the Nix dev shell.
+- `just benchmark` runs `hyperfine` and GNU `time -v` (for peak RAM), so it needs both tools and, where the template
+  defines one, the output of `just build`. Requires the Nix dev shell.
 - OCaml has a REPL with project modules loaded: `dune utop`.
 
 ## Dev environment (Nix)
@@ -145,14 +145,27 @@ just update-dprint  # bump the plugins pinned in dprint.json
   `cargo fmt` (edition 2024, `rustfmt.toml` pins `style_edition = "2024"`) plus `cargo clippy`, Haskell `ormolu` with
   `GHC2024` and `-Wall` plus extra warnings, Python `ruff format`/`ruff check`, Elixir `mix format` (`.formatter.exs`),
   Go `go fmt` + `golangci-lint`, Zig `zig fmt src/`.
-- Commit history uses Conventional Commits (`feat:`, `chore:`, `refactor:`, `fix:`).
+
+## Commits and pull requests
+
+- Commit history uses Conventional Commits (`feat:`, `chore:`, `refactor:`, `fix:`); keep the subject line under 72
+  characters and describe the outcome for a reader unfamiliar with the change.
+- There is no CI, so run `just test` (plus `just fmt`/`just lint` where available) inside the language directory before
+  committing.
+
+## Security
+
+- Never commit puzzle inputs or session cookies: `input.txt` is git-ignored and Advent of Code asks that inputs stay
+  private. Keep test fixtures synthetic (copied from the puzzle statement), not the real input.
+- Solutions only read `input.txt`; there is no network code, and none should be added. Do not embed a personal AoC
+  session token in source or config.
 
 ## Gotchas
 
 - `**/input.txt` is ignored globally; puzzle inputs are never committed.
-- Each language's `.gitignore` covers its own build output (e.g. `target/`, `_build/`, `zig-out/`, `.build/`, `cli`,
-  `aoc`, `compile_commands.json`). The working tree will often contain ignored build artifacts; do not commit them and
-  do not treat their absence as an error.
+- Each language's `.gitignore` covers its own build output (e.g. `target/`, `_build/`, `dist-newstyle/`, `zig-out/`,
+  `build`, `cli`, `aoc`, `__pycache__/`). The working tree will often contain ignored build artifacts; do not commit
+  them and do not treat their absence as an error.
 - Adding a new language means adding a full `template/<lang>/` folder with `justfile`, `README.md`, `.gitignore`,
   language config, source, and tests, plus an entry in `nix/devshells.nix`. Markdown and Helix config are shared at the
   repository root, so no per-language copies are needed.
