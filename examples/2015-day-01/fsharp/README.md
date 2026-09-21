@@ -5,8 +5,8 @@ by the `Aoc.slnx` solution.
 
 ## Getting Started
 
-Refer to the repository's shared [flake.nix](../../../../flake.nix) for the packages needed to compile this project. If
-you have `nix`, run `nix develop .#fsharp` from anywhere inside the repository to enter a dev shell with all of the
+Refer to the repository's shared [flake.nix](../../../flake.nix) for the packages needed to compile this project. If you
+have `nix`, run `nix develop .#fsharp` from anywhere inside the repository to enter a dev shell with all of the
 dependencies installed.
 
 The dev shell pins the .NET SDK, restores the dotnet tools from `.config/dotnet-tools.json` (`fantomas` and
