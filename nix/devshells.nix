@@ -17,20 +17,21 @@
     "x86_64-linux"
   ];
 
-  common = pkgs: with pkgs; [
-    just
-    # For locating files to pass to formatters
-    fd
-    # For formatting markdown
-    dprint
-    # For running the language lottery in tools/lottery (it fetches its own deps, and
-    # asks git which files the templates ignore)
-    uv
-    git
-    # Benchmarking
-    hyperfine
-    time
-  ];
+  common =
+    pkgs: with pkgs; [
+      just
+      # For locating files to pass to formatters
+      fd
+      # For formatting markdown
+      dprint
+      # For running the language lottery in tools/lottery (it fetches its own deps, and
+      # asks git which files the templates ignore)
+      uv
+      git
+      # Benchmarking
+      hyperfine
+      time
+    ];
 
   languages = {
     clojure = pkgs: {
@@ -41,6 +42,15 @@
         clj-kondo
         cljfmt
         jdk21
+      ];
+    };
+
+    common-lisp = pkgs: {
+      # `sbcl.withPackages` puts the listed systems, and their transitive
+      # dependencies, on ASDF's source registry, so the template needs no
+      # Quicklisp: `rove` is the test framework.
+      packages = [
+        (pkgs.sbcl.withPackages (ps: [ ps.rove ]))
       ];
     };
 

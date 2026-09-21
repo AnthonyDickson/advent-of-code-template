@@ -32,6 +32,15 @@ GUIDES: dict[str, Guide] = {
             "`just build` packages an executable uberjar at `target/aoc.jar`.",
         ),
     ),
+    "common-lisp": Guide(
+        entry_point="src/aoc.lisp",
+        part_one="solve-part-one",
+        part_two="solve-part-two",
+        notes=(
+            "Tests live in `tests/aoc-test.lisp` and run through `rove`, which the dev shell already provides.",
+            "`just build` dumps a standalone executable to `./aoc`.",
+        ),
+    ),
     "elixir": Guide(
         entry_point="lib/aoc.ex",
         part_one="solve_part_one",

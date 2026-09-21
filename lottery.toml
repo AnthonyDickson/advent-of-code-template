@@ -5,6 +5,7 @@
 
 [weights]
 clojure = 3
+common-lisp = 0
 elixir = 2
 fsharp = 4
 gleam = 2

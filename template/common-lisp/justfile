@@ -1,0 +1,22 @@
+# Make the project next to this justfile visible to ASDF, on top of the `rove`
+# system the dev shell already exposes through its environment.
+asdf := "--eval '(require :asdf)' --eval '(asdf:initialize-source-registry (list :source-registry (list :tree (uiop:getcwd)) :inherit-configuration))'"
+
+default:
+    @just --list
+
+test:
+    sbcl --non-interactive {{asdf}} --eval '(asdf:load-system :aoc/tests)' --eval '(uiop:quit (unless (uiop:symbol-call :rove :run :aoc/tests) 1))'
+
+run:
+    sbcl --non-interactive {{asdf}} --eval '(asdf:load-system :aoc)' --eval '(aoc/main:main)'
+
+build:
+    sbcl --non-interactive {{asdf}} --eval '(asdf:make :aoc)'
+
+benchmark: build
+    hyperfine --warmup 3 -N ./aoc
+    time -v ./aoc
+
+clean:
+    rm -f ./aoc

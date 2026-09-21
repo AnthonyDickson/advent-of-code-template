@@ -1,0 +1,5 @@
+# Compiled fasls land in the per-user ASDF cache, not here.
+*.fasl
+
+# The executable produced by `just build`.
+aoc
