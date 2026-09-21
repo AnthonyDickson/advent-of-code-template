@@ -4,6 +4,7 @@
 # you are not interested in tuning. A weight of 0 takes a language off the wheel.
 
 [weights]
+clojure = 3
 elixir = 2
 fsharp = 4
 gleam = 2

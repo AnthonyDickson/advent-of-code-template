@@ -33,6 +33,17 @@
   ];
 
   languages = {
+    clojure = pkgs: {
+      packages = with pkgs; [
+        clojure
+        clojure-lsp # lsp
+        # For linting and formatting Clojure source
+        clj-kondo
+        cljfmt
+        jdk21
+      ];
+    };
+
     elixir = pkgs: {
       packages = with pkgs; [
         beam29Packages.elixir_1_20

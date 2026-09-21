@@ -1,0 +1,24 @@
+default:
+    @just --list
+
+test:
+    clojure -X:test
+
+run:
+    clojure -M -m aoc
+
+build:
+    clojure -T:build uber
+
+fmt:
+    cljfmt fix src test build.clj
+
+lint:
+    clj-kondo --lint src test build.clj
+
+benchmark: build
+    hyperfine --warmup 3 -N "java -jar target/aoc.jar"
+    time -v java -jar target/aoc.jar
+
+clean:
+    rm -rf target .cpcache

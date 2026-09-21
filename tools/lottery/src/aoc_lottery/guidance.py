@@ -22,6 +22,16 @@ class Guide:
 
 
 GUIDES: dict[str, Guide] = {
+    "clojure": Guide(
+        entry_point="src/aoc.clj",
+        part_one="solve-part-one",
+        part_two="solve-part-two",
+        notes=(
+            "The Clojure CLI downloads Clojure and the test runner on the first run, so the first `just test` needs network.",
+            "Tests live in `test/aoc_test.clj` and run through the cognitect test runner.",
+            "`just build` packages an executable uberjar at `target/aoc.jar`.",
+        ),
+    ),
     "elixir": Guide(
         entry_point="lib/aoc.ex",
         part_one="solve_part_one",
