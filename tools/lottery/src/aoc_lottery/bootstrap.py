@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shutil
+import subprocess
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -13,6 +14,9 @@ MIN_YEAR = 2015
 LAST_DAY = 25
 
 # Build output and caches that templates gitignore but that may sit in the working tree.
+# These lists are only the fallback for when git cannot be asked: normally the skip set is
+# derived from the template's own ignore rules, so a new language never needs an entry here
+# (see `_ignored_below`).
 IGNORED_DIRS = frozenset(
     {
         ".git",
@@ -114,20 +118,64 @@ def bootstrap(
     if target.exists():
         raise BootstrapError(f"{target} already exists, refusing to overwrite it")
 
-    shutil.copytree(source, target, ignore=_ignore_inside(source))
+    shutil.copytree(source, target, ignore=_ignore_inside(source, repo))
     copied = tuple(
         sorted(str(path.relative_to(target)) for path in target.rglob("*") if path.is_file())
     )
     return Bootstrap(language, year, day, source, target, copied)
 
 
-def _ignore_inside(source: Path):
-    """Build the copytree filter that skips build output and stale puzzle inputs."""
+def _ignore_inside(source: Path, repo: Path):
+    """Build the copytree filter that skips ignored build output and stale test inputs."""
+    ignored = _ignored_below(source, repo)
 
     def ignore(directory: str, names: list[str]) -> set[str]:
+        if ignored is not None:
+            parent = Path(directory)
+            return {name for name in names if parent / name in ignored}
+
         top_level = Path(directory) == source
         skipped = {name for name in names if name in IGNORED_DIRS or name in IGNORED_FILES}
         skipped |= {name for name in names if top_level and name in IGNORED_TOP_LEVEL}
         return skipped
 
     return ignore
+
+
+def _ignored_below(source: Path, repo: Path) -> frozenset[Path] | None:
+    """Everything under *source* that git ignores, or ``None`` when git cannot be asked.
+
+    Every template declares its own build output in a ``.gitignore``, so the template's
+    ignore rules are the single source of truth for what must not be copied into a solution
+    folder. That also picks up the repository-wide rules, ``**/input.txt`` above all.
+    """
+    try:
+        root = _run_git(repo, "rev-parse", "--show-toplevel").strip()
+        listing = _run_git(
+            repo,
+            "ls-files",
+            "--others",
+            "--ignored",
+            "--exclude-standard",
+            "--directory",
+            "--full-name",
+            "-z",
+            "--",
+            str(source),
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+    work_tree = Path(root)
+    return frozenset(work_tree / name.rstrip("/") for name in listing.split("\0") if name)
+
+
+def _run_git(repo: Path, *arguments: str) -> str:
+    """Run git in *repo* and return its stdout, raising on a non-zero exit status."""
+    completed = subprocess.run(
+        ("git", "-C", str(repo), *arguments),
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    return completed.stdout

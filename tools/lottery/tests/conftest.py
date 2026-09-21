@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -40,6 +41,37 @@ def repo(tmp_path: Path) -> Path:
     cached.mkdir()
     (cached / "main.cpython-314.pyc").write_text("cache", encoding="utf-8")
     return tmp_path
+
+
+@pytest.fixture
+def git_repo(tmp_path: Path) -> Path:
+    """A miniature repository under version control, so the ignore rules come from git."""
+    repo = tmp_path / "versioned"
+    (repo / "template").mkdir(parents=True)
+    (repo / "flake.nix").write_text("{ }\n", encoding="utf-8")
+    # A repository-wide rule, the same shape as the `**/input.txt` entry in this repository.
+    (repo / ".gitignore").write_text("**/input.txt\n", encoding="utf-8")
+
+    fsharp = repo / "template" / "fsharp"
+    write(fsharp / ".gitignore", "bin/\nobj/\n")
+    write(fsharp / "src" / "Aoc.fsproj", "<Project />\n")
+    write(fsharp / "src" / "bin" / "Debug" / "Aoc.dll", "binary\n")
+    write(fsharp / "src" / "obj" / "project.assets.json", "{}\n")
+    write(fsharp / "input.txt", "yesterday\n")
+
+    # A template whose `bin/` holds source, as this repository's OCaml template does.
+    ocaml = repo / "template" / "ocaml"
+    write(ocaml / ".gitignore", "_build/\n")
+    write(ocaml / "bin" / "main.ml", "let () = print_int 0\n")
+
+    subprocess.run(("git", "init", "--quiet"), cwd=repo, check=True)
+    subprocess.run(("git", "add", "--all"), cwd=repo, check=True)
+    return repo
+
+
+def write(path: Path, contents: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(contents, encoding="utf-8")
 
 
 @pytest.fixture

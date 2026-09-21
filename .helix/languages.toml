@@ -1,4 +1,18 @@
 [[language]]
+name = "fsharp"
+# The local tools from .config/dotnet-tools.json are resolved from the
+# workspace root, so give helix a marker to find it without a hardcoded path.
+roots = [".config/dotnet-tools.json", "*.fsproj"]
+language-servers = ["fsharp-ls"]
+
+[language-server.fsharp-ls]
+command = "dotnet"
+args = ["fsautocomplete", "--adaptive-lsp-server-enabled"]
+
+[language-server.fsharp-ls.config]
+AutomaticWorkspaceInit = true
+
+[[language]]
 name = "markdown"
 formatter = { command = "dprint", args = ["fmt", "--stdin", "md"]}
 rulers = [120]

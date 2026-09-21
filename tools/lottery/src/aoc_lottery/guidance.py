@@ -30,6 +30,15 @@ GUIDES: dict[str, Guide] = {
             "`mix test` also runs the doctests, so keep the `@doc` examples in `lib/aoc.ex` correct.",
         ),
     ),
+    "fsharp": Guide(
+        entry_point="src/Aoc.fs",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
+        notes=(
+            "Tests live in `tests/AocTests.fs` and run through Expecto (`just test`).",
+            "`just fmt` runs `dotnet fantomas`, restored by the dev shell from `.config/dotnet-tools.json`.",
+        ),
+    ),
     "gleam": Guide(
         entry_point="src/aoc.gleam",
         part_one="solve_part_one",

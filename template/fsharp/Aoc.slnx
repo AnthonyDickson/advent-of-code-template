@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Aoc.fsproj" />
+  <Project Path="tests/Aoc.Tests.fsproj" />
+</Solution>

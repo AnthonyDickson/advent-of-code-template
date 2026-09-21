@@ -5,10 +5,11 @@
 
 [weights]
 elixir = 2
+fsharp = 4
 gleam = 2
 go = 1
-haskell = 4
-ocaml = 4
+haskell = 5
+ocaml = 5
 python = 2
 rust = 3
 zig = 2

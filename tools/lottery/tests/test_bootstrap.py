@@ -1,3 +1,5 @@
+import shutil
+
 import pytest
 
 from aoc_lottery.bootstrap import (
@@ -7,6 +9,11 @@ from aoc_lottery.bootstrap import (
     display_path,
     validate_day,
     validate_year,
+)
+
+# The ignore rules normally come from git; without it the fallback lists are used instead.
+needs_git = pytest.mark.skipif(
+    shutil.which("git") is None, reason="git is required to read the template's ignore rules"
 )
 
 
@@ -87,3 +94,21 @@ def test_paths_inside_the_repo_are_shortened(repo):
     inner = repo / "2026-day-05"
     assert display_path(inner, repo) == "2026-day-05"
     assert display_path(repo.parent / "elsewhere", repo) == str(repo.parent / "elsewhere")
+
+
+@needs_git
+def test_bootstrap_skips_whatever_the_template_gitignores(git_repo):
+    plan = bootstrap(git_repo, "fsharp", 2026, 5)
+
+    assert plan.copied == (".gitignore", "src/Aoc.fsproj")
+    assert not (plan.destination / "src" / "bin").exists()
+    assert not (plan.destination / "src" / "obj").exists()
+    assert not (plan.destination / "input.txt").exists()
+
+
+@needs_git
+def test_bootstrap_keeps_a_source_directory_named_bin(git_repo):
+    """`bin/` is build output for .NET and source for this repository's OCaml template."""
+    plan = bootstrap(git_repo, "ocaml", 2026, 1)
+
+    assert plan.copied == (".gitignore", "bin/main.ml")

@@ -30,10 +30,21 @@
           pkgs = import nixpkgs {
             inherit system overlays;
           };
-          mkShell = extra: pkgs.mkShell { packages = devshells.common pkgs ++ extra pkgs; };
+          mkShell =
+            spec:
+            let
+              attrs = spec pkgs;
+            in
+            pkgs.mkShell (
+              attrs
+              // {
+                # The shared tooling is added to every shell, including `default`.
+                packages = devshells.common pkgs ++ attrs.packages;
+              }
+            );
         in
         {
-          default = mkShell (_: [ ]);
+          default = mkShell (_: { packages = [ ]; });
         }
         // nixpkgs.lib.mapAttrs (_: mkShell) devshells.languages
       );

@@ -21,8 +21,8 @@ dependencies on the first run.
    bootstrap the drawn language.
 1. **Bootstrap** asks for the year and day (the day is required, the year defaults to the current one). The destination
    defaults to `<year>-day-<dd>` in the repository root and follows the day until you edit it by hand.
-1. **Next steps** copies the template, skipping build output and any `input.txt`, and lists everything that is left:
-   which file to edit, which functions to implement, and which `just` recipes to run.
+1. **Next steps** copies the template, skipping whatever its `.gitignore` ignores (build output, `input.txt`), and lists
+   everything that is left: which file to edit, which functions to implement, and which `just` recipes to run.
 
 Solutions are written to the repository root so that a private repository created from this one has one
 `<year>-day-<dd>/` folder per day, next to `template/`. The language that was drawn is not part of the path; add it by

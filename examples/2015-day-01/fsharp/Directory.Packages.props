@@ -1,0 +1,11 @@
+<Project>
+  <ItemGroup>
+    <!-- Pinned to the SDK's FSharp.Core so older references (Expecto) unify upwards. -->
+    <PackageVersion Include="FSharp.Core" Version="10.1.401" />
+    <!-- Testing -->
+    <PackageVersion Include="Expecto" Version="11.1.0" />
+    <!-- Drives test discovery/execution for `dotnet test` and IDE test explorers. -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageVersion Include="YoloDev.Expecto.TestSdk" Version="0.16.1" />
+  </ItemGroup>
+</Project>

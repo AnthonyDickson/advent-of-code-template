@@ -1,0 +1,31 @@
+default:
+    @just --list
+
+test:
+    dotnet test Aoc.slnx
+
+test-watch:
+    dotnet watch test Aoc.slnx
+
+run:
+    dotnet run --project src/Aoc.fsproj
+
+build:
+    dotnet build --configuration Release Aoc.slnx
+
+fmt:
+    dotnet fantomas .
+
+outdated:
+    dotnet list Aoc.slnx package --outdated
+
+update:
+    dotnet package update
+    dotnet tool update --all
+
+benchmark: build
+    hyperfine --warmup 3 -N ./src/bin/Release/net10.0/Aoc
+    time -v ./src/bin/Release/net10.0/Aoc
+
+clean:
+    rm -rf src/bin src/obj tests/bin tests/obj
