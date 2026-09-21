@@ -11,5 +11,6 @@ go = 1
 haskell = 5
 ocaml = 5
 python = 2
+scala = 3
 rust = 3
 zig = 2

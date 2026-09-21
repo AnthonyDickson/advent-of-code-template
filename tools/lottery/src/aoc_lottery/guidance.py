@@ -77,6 +77,16 @@ GUIDES: dict[str, Guide] = {
         part_two="solve_part_two",
         notes=("Tests are the inline `#[cfg(test)] mod tests` at the bottom of `src/main.rs`.",),
     ),
+    "scala": Guide(
+        entry_point="src/aoc.scala",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
+        notes=(
+            "Scala CLI fetches the compiler and any libraries on the first run, so the first `just test` needs network.",
+            "Tests live in `test/aoc.test.scala` and run through MUnit.",
+            "`just build` packages a self-contained executable at `./aoc`.",
+        ),
+    ),
     "zig": Guide(
         entry_point="src/main.zig",
         part_one="solve_part_one",

@@ -16,3 +16,11 @@ AutomaticWorkspaceInit = true
 name = "markdown"
 formatter = { command = "dprint", args = ["fmt", "--stdin", "md"]}
 rulers = [120]
+
+[[language]]
+name = "scala"
+# Helix does not know that a scala-cli project is marked by `project.scala` and
+# already ships the build-tool markers below. Without the directive file it
+# finds no root, falls back to the repository root, and lets metals leave
+# `.bsp/`, `.metals/` and `.scala-build/` there.
+roots = ["project.scala", "build.sbt", "build.sc", "build.gradle", "build.gradle.kts", "pom.xml", ".scala-build"]

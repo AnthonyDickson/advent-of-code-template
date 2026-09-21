@@ -137,6 +137,19 @@
       ];
     };
 
+    scala = pkgs: {
+      packages = with pkgs; [
+        scala-cli
+        metals # lsp
+        scalafmt
+        jdk21
+      ];
+
+      # Scala CLI and scalafmt take the JDK from here instead of fetching one
+      # with coursier, so entering the shell does not download a JVM.
+      env.JAVA_HOME = "${pkgs.jdk21}";
+    };
+
     zig = pkgs: {
       packages = with pkgs; [
         zig_0_16

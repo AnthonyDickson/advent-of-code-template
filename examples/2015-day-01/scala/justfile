@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+test:
+    scala-cli test .
+
+run:
+    scala-cli run .
+
+build:
+    scala-cli --power package . --assembly --force -o aoc
+
+fmt:
+    scalafmt .
+
+benchmark: build
+    hyperfine --warmup 3 -N ./aoc
+    time -v ./aoc
+
+clean:
+    rm -rf .scala-build aoc
