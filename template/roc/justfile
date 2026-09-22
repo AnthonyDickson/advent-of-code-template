@@ -1,0 +1,28 @@
+default:
+    @just --list
+
+# Run the `expect` tests in the solution module.
+test:
+    roc test src/Aoc.roc
+
+# Compile and run the CLI, printing both answers one per line.
+run:
+    roc main.roc
+
+# Build the optimized executable at `./main`.
+build:
+    roc build main.roc
+
+# Type-check the app, including the platform imports, without running it.
+check:
+    roc check main.roc
+
+fmt:
+    roc fmt .
+
+benchmark: build
+    hyperfine --warmup 3 -N ./main
+    time -v ./main
+
+clean:
+    rm -f main

@@ -100,6 +100,17 @@ GUIDES: dict[str, Guide] = {
         part_two="solve_part_two",
         notes=("Tests live in `tests/test_aoc.py`.",),
     ),
+    "roc": Guide(
+        entry_point="src/Aoc.roc",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=(
+            "Roc module names are capitalised, which is why the solution file is `src/Aoc.roc`.",
+            "Tests are the `expect` statements in `src/Aoc.roc`; `roc test` runs them without downloading the platform.",
+            "Roc keeps going after it reports an error and may still run the program, so `just check` is the way to see type errors on their own.",
+            "The first `just run`, `just check` or `just build` downloads the `basic-cli` platform and caches it, so it needs network.",
+        ),
+    ),
     "rust": Guide(
         entry_point="src/main.rs",
         part_one="solve_part_one",
