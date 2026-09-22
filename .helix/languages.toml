@@ -24,3 +24,11 @@ name = "scala"
 # finds no root, falls back to the repository root, and lets metals leave
 # `.bsp/`, `.metals/` and `.scala-build/` there.
 roots = ["project.scala", "build.sbt", "build.sc", "build.gradle", "build.gradle.kts", "pom.xml", ".scala-build"]
+
+[[language]]
+name = "typst"
+# Helix has no root marker for typst, so it falls back to the repository root
+# and tinymist resolves the `/src/...` imports of a template, example or
+# bootstrapped day against that instead of against the folder they live in.
+# Each of those folders carries its own `main.typ`, which marks it as the root.
+roots = ["main.typ"]

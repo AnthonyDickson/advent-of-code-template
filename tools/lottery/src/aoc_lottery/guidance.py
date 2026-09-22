@@ -127,6 +127,16 @@ GUIDES: dict[str, Guide] = {
             "SPL has no formatter, so `just fmt` and `just lint` only cover the Python harness.",
         ),
     ),
+    "typst": Guide(
+        entry_point="src/aoc.typ",
+        part_one="solve-part-one",
+        part_two="solve-part-two",
+        notes=(
+            "Typst cannot print, so `main.typ` is the entry point: it reads `input.txt`, renders both answers and publishes them as metadata that `just run` reads back with `typst eval`.",
+            "`just run`, `just build`, `just lint` and `just benchmark` compile `main.typ`, which reads `input.txt`, so save the input first; `just test` and `just fmt` need neither.",
+            "`while` loops stop after 10,000 iterations and function calls nest at most 80 deep, so long puzzles want `for` loops and explicit stacks.",
+        ),
+    ),
     "zig": Guide(
         entry_point="src/main.zig",
         part_one="solve_part_one",

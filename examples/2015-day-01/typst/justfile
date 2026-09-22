@@ -1,0 +1,29 @@
+default:
+    @just --list
+
+# Check both solutions against the examples from the puzzle statement.
+test:
+    typst eval --format yaml 'import "tests/test_aoc.typ": run-tests; run-tests()'
+
+# Print both answers, one per line, out of the report's metadata.
+run:
+    typst eval --in main.typ 'query(<part-one>).first().value'
+    typst eval --in main.typ 'query(<part-two>).first().value'
+
+# Render the report to `main.pdf`.
+build:
+    typst compile main.typ
+
+fmt:
+    typstyle --inplace main.typ src tests
+
+# Lint each Typst file; `--root .` is what lets the tests import the solution.
+lint:
+    fd --extension typ --print0 | xargs -0 -n 1 tinymist lint --root .
+
+benchmark: build
+    hyperfine --warmup 3 -N "just --quiet run"
+    time -v just --quiet run
+
+clean:
+    rm -f main.pdf
