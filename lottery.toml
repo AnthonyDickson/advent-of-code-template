@@ -17,6 +17,7 @@ odin = 3
 python = 2
 scala = 4
 shakespeare = 0
+sql = 0
 typst = 0
 roc = 0
 rust = 3

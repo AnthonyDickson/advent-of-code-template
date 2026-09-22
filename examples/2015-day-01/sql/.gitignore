@@ -1,0 +1,4 @@
+# DuckDB writes no build output into the project folder, so there is nothing to
+# ignore here. The file is kept so that every template has the same shape, and
+# so a solution started from it has somewhere to list what it generates. A
+# solution that writes a database file should ignore `*.duckdb` here too.

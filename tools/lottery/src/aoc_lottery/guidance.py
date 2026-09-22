@@ -148,6 +148,16 @@ GUIDES: dict[str, Guide] = {
             "SPL has no formatter, so `just fmt` and `just lint` only cover the Python harness.",
         ),
     ),
+    "sql": Guide(
+        entry_point="src/aoc.sql",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=(
+            "The two solutions are DuckDB macros over the whole puzzle input, which `read_text('input.txt')` returns in its `content` column.",
+            "`just test` runs `tests/test_aoc.sql`; it stops at the first example that does not match and prints a summary when they all pass.",
+            "DuckDB has no compiler, so `just build` parses and binds the macros in `src/aoc.sql` instead of producing a binary.",
+        ),
+    ),
     "typst": Guide(
         entry_point="src/aoc.typ",
         part_one="solve-part-one",

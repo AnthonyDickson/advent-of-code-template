@@ -1,0 +1,18 @@
+default:
+    @just --list
+
+# Check both solutions against the examples from the puzzle statement.
+test:
+    duckdb -batch -bail -no-init -noheader -list < tests/test_aoc.sql
+
+# Print both answers, one per line.
+run:
+    duckdb -batch -bail -no-init -noheader -list < main.sql
+
+# DuckDB has no compile step, so parse and bind the solution macros instead.
+build:
+    duckdb -batch -bail -no-init -noheader -list -c ".read src/aoc.sql"
+
+benchmark:
+    hyperfine --warmup 3 -N "just --quiet run"
+    time -v just --quiet run
