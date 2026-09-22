@@ -76,6 +76,16 @@ GUIDES: dict[str, Guide] = {
         part_two="solvePartTwo",
         notes=("Tests live in `test/Tests.hs` and `just fmt` runs `ormolu`.",),
     ),
+    "nushell": Guide(
+        entry_point="src/aoc.nu",
+        part_one="solve-part-one",
+        part_two="solve-part-two",
+        notes=(
+            "Commands are kebab-case (`solve-part-one`), while variables and parameters are snake_case.",
+            "Tests live in `tests/test_aoc.nu` as `std/assert` cases; `just test` runs the script and prints a summary.",
+            "Nushell has no compiler, so `just build` parses and type-checks the entry point instead of producing a binary.",
+        ),
+    ),
     "ocaml": Guide(
         entry_point="lib/aoc.ml",
         part_one="solve_part_one",

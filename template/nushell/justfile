@@ -1,0 +1,18 @@
+default:
+    @just --list
+
+# Check both solutions against the examples from the puzzle statement.
+test:
+    nu tests/test_aoc.nu
+
+# Print both answers, one per line.
+run:
+    nu main.nu
+
+# Nushell has no compile step, so parse and type-check the entry point instead.
+build:
+    nu --no-config-file --commands 'source main.nu'
+
+benchmark:
+    hyperfine --warmup 3 -N "nu main.nu"
+    time -v nu main.nu
