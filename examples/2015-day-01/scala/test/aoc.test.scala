@@ -18,10 +18,8 @@ class AocSuite extends munit.FunSuite:
 
   private val partTwoCases = Seq(")" -> 1L, "()())" -> 5L)
 
-  test("part one solves the examples") {
+  test("part one solves the examples"):
     checkSolution(solvePartOne, partOneCases)
-  }
 
-  test("part two solves the examples") {
+  test("part two solves the examples"):
     checkSolution(solvePartTwo, partTwoCases)
-  }

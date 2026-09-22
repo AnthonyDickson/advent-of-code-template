@@ -2,10 +2,10 @@ default:
     @just --list
 
 test:
-    scala-cli test .
+    scala-cli test -rewrite -indent .
 
 run:
-    scala-cli run .
+    scala-cli run -rewrite -indent .
 
 build:
     scala-cli --power package . --assembly --force -o aoc

@@ -12,10 +12,11 @@ def solvePartTwo(input: String): Long =
     .getOrElse(0L)
 
 /** `(` goes up one floor, `)` goes down one, and anything else leaves the floor alone. */
-private def move(floor: Long, char: Char): Long = char match
-  case '(' => floor + 1
-  case ')' => floor - 1
-  case _   => floor
+private def move(floor: Long, char: Char): Long =
+  char match
+    case '(' => floor + 1
+    case ')' => floor - 1
+    case _   => floor
 
 @main def aoc(): Unit =
   val input = Source.fromFile("input.txt").mkString
