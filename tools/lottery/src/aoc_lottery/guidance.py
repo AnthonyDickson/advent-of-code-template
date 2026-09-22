@@ -84,6 +84,16 @@ GUIDES: dict[str, Guide] = {
             "`Aoc.load_input` returns the input as a `string list` of lines, not a single string.",
         ),
     ),
+    "odin": Guide(
+        entry_point="src/aoc/aoc.odin",
+        part_one="solve_part_one",
+        part_two="solve_part_two",
+        notes=(
+            "`just test` runs the `@(test)` procedures in `src/aoc/aoc_test.odin` with Odin's built-in test runner.",
+            "Test files begin with `#+test`, so they are only compiled by `odin test`, never by `just run` or `just build`.",
+            "`just build` compiles a single executable to `./aoc`.",
+        ),
+    ),
     "python": Guide(
         entry_point="main.py",
         part_one="solve_part_one",

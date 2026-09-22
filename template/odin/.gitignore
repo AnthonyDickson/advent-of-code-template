@@ -1,0 +1,3 @@
+# The executable produced by `just build`. Anchored so it does not match the
+# `src/aoc/` package directory.
+/aoc

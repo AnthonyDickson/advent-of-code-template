@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+test:
+    odin test src/aoc
+
+run:
+    odin run src
+
+build:
+    odin build src -out:aoc
+
+fmt:
+    odinfmt -w src
+
+benchmark: build
+    hyperfine --warmup 3 -N ./aoc
+    time -v ./aoc
+
+clean:
+    rm -f ./aoc
