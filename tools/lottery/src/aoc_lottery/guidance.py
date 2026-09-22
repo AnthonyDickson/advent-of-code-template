@@ -116,6 +116,17 @@ GUIDES: dict[str, Guide] = {
             "`just build` packages a self-contained executable at `./aoc`.",
         ),
     ),
+    "shakespeare": Guide(
+        entry_point="src",
+        part_one="part_one.spl",
+        part_two="part_two.spl",
+        notes=(
+            "The two parts are separate plays in `src/`, because a play reads its input once and cannot rewind it.",
+            "`uv` fetches the interpreter from PyPI into `.venv` on the first `just test` or `just run`, so that run needs network.",
+            "Tests live in `tests/test_aoc.py`; `aoc.py` feeds `input.txt` to each play and prints both answers.",
+            "SPL has no formatter, so `just fmt` and `just lint` only cover the Python harness.",
+        ),
+    ),
     "zig": Guide(
         entry_point="src/main.zig",
         part_one="solve_part_one",

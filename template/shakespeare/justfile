@@ -1,0 +1,24 @@
+default:
+    @just --list
+
+test:
+    uv run pytest
+
+run:
+    uv run python aoc.py
+
+build:
+    uv sync
+
+lint:
+    uv run ruff check aoc.py tests
+
+fmt:
+    uv run ruff format aoc.py tests
+
+benchmark: build
+    hyperfine --warmup 3 -N "uv run --quiet python aoc.py"
+    time -v uv run --quiet python aoc.py
+
+clean:
+    rm -rf .venv

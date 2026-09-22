@@ -15,5 +15,6 @@ ocaml = 4
 odin = 3
 python = 2
 scala = 4
+shakespeare = 0
 rust = 3
 zig = 2
