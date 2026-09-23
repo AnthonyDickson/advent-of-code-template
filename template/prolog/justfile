@@ -1,0 +1,18 @@
+default:
+    @just --list
+
+test:
+    swipl -q -g "run_tests, halt(0)" -t "halt(1)" -s tests/aoc_tests.pl
+
+run:
+    swipl -q -g main -t halt -s src/main.pl
+
+build:
+    swipl -q --goal=main --stand_alone=true -o aoc -c src/main.pl
+
+benchmark: build
+    hyperfine --warmup 3 -N ./aoc
+    time -v ./aoc
+
+clean:
+    rm -f ./aoc

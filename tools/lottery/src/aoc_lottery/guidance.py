@@ -104,6 +104,16 @@ GUIDES: dict[str, Guide] = {
             "`just build` compiles a single executable to `./aoc`.",
         ),
     ),
+    "prolog": Guide(
+        entry_point="src/aoc.pl",
+        part_one="solve_part_one/2",
+        part_two="solve_part_two/2",
+        notes=(
+            "Prolog has predicates rather than functions: each solution takes the input and unifies its second argument with the answer.",
+            "Tests live in `tests/aoc_tests.pl` and run through SWI-Prolog's built-in `plunit`, so `just test` needs no external dependency.",
+            "`just build` saves a standalone executable to `./aoc`.",
+        ),
+    ),
     "python": Guide(
         entry_point="main.py",
         part_one="solve_part_one",

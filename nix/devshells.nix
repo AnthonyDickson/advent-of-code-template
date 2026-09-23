@@ -159,6 +159,12 @@
       ];
     };
 
+    prolog = pkgs: {
+      packages = with pkgs; [
+        swi-prolog
+      ];
+    };
+
     python = pkgs: {
       packages = with pkgs; [
         python314
