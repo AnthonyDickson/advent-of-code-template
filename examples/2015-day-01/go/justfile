@@ -13,6 +13,12 @@ run:
 build:
     go build -o {{ binary }} ./cmd/aoc
 
+outdated:
+    go list -m -u all
+
+update:
+    go get -u ./... && go mod tidy
+
 benchmark: build
     hyperfine --time-unit microsecond --warmup 3 -N ./{{ binary }}
     time -v ./{{ binary }}

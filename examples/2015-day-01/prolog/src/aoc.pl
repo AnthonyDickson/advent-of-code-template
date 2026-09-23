@@ -6,13 +6,9 @@
 %
 %  `(` goes up one floor, `)` goes down one, and anything else leaves the
 %  floor alone.
-floor_step(Char, Delta) :-
-    (   Char = '('
-    ->  Delta = 1
-    ;   Char = ')'
-    ->  Delta = -1
-    ;   Delta = 0
-    ).
+floor_step('(', 1).
+floor_step(')', -1).
+floor_step(_, 0).
 
 %% solve_part_one(+Input, -Result) is det.
 %

@@ -1,6 +1,7 @@
 import gleam/int
 import gleam/io
 import gleam/list
+import gleam/result
 import gleam/string
 import simplifile
 
@@ -31,32 +32,23 @@ pub fn main() -> Int {
 pub fn solve_part_one(input: String) -> Int {
   input
   |> string.to_graphemes
-  |> list.fold(0, fn(floor, char) { floor + step(char) })
+  |> list.fold(0, step)
 }
 
 pub fn solve_part_two(input: String) -> Int {
-  let #(_, _, basement_index) =
-    input
-    |> string.to_graphemes
-    |> list.fold(#(0, 0, 0), fn(state, char) {
-      let #(floor, position, basement_index) = state
-      let floor = floor + step(char)
-      let position = position + 1
-      let basement_index = case basement_index == 0 && floor == -1 {
-        True -> position
-        False -> basement_index
-      }
-
-      #(floor, position, basement_index)
-    })
-
-  basement_index
+  input
+  |> string.to_graphemes
+  |> list.scan(0, step)
+  |> list.index_map(fn(floor, index) { #(index, floor) })
+  |> list.find(fn(pair) { pair.1 == -1 })
+  |> result.map(fn(pair) { pair.0 + 1 })
+  |> result.unwrap(0)
 }
 
-fn step(char: String) -> Int {
+fn step(floor: Int, char: String) -> Int {
   case char {
-    "(" -> 1
-    ")" -> -1
-    _ -> panic as "unexpected character, only '(' and ')' are allowed"
+    "(" -> floor + 1
+    ")" -> floor - 1
+    _ -> floor
   }
 }

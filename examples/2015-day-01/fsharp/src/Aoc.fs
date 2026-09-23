@@ -1,10 +1,10 @@
 module Aoc
 
-let step floor instruction =
+let private step floor instruction =
     match instruction with
     | '(' -> floor + 1
     | ')' -> floor - 1
-    | _ -> invalidArg (nameof instruction) $"Invalid instruction '{instruction}', expected '(' or ')'"
+    | _ -> floor
 
 /// Solves part one of the puzzle for the given input.
 let solvePartOne (input : string) : int = input |> Seq.fold step 0

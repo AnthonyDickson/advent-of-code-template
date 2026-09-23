@@ -20,16 +20,16 @@ defmodule AocTest do
   ]
 
   test "solves part one" do
-    for {input, expected} <- @part_one_examples do
+    Enum.each(@part_one_examples, fn {input, expected} ->
       assert Aoc.solve_part_one(input) == expected,
              "failed for input #{inspect(input)}"
-    end
+    end)
   end
 
   test "solves part two" do
-    for {input, expected} <- @part_two_examples do
+    Enum.each(@part_two_examples, fn {input, expected} ->
       assert Aoc.solve_part_two(input) == expected,
              "failed for input #{inspect(input)}"
-    end
+    end)
   end
 end

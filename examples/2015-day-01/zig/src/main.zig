@@ -30,7 +30,7 @@ fn step(char: u8) i64 {
     return switch (char) {
         '(' => 1,
         ')' => -1,
-        else => unreachable,
+        else => 0,
     };
 }
 
@@ -51,7 +51,7 @@ fn solve_part_two(input: []const u8) i64 {
         floor += step(char);
 
         if (floor == -1) {
-            return 1 + @as(i64, @intCast(i));
+            return @intCast(i + 1);
         }
     }
 

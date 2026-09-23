@@ -26,4 +26,11 @@ installed.
   just benchmark
   ```
 
+- Check for and upgrade dependencies:
+
+  ```shell
+  just outdated
+  just update
+  ```
+
 See the [justfile](./justfile) for more commands.

@@ -64,5 +64,5 @@ defmodule Aoc do
 
   defp step(?\(, floor), do: floor + 1
   defp step(?\), floor), do: floor - 1
-  defp step(char, _floor), do: raise("unexpected character: #{<<char>>}")
+  defp step(_char, floor), do: floor
 end

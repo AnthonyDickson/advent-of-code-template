@@ -4,9 +4,8 @@
 # Solves part one: the floor Santa is standing on once every instruction is done.
 export def solve-part-one [input: string]: nothing -> int {
     $input
-    | str trim
     | split chars
-    | each { |char| if $char == "(" { 1 } else { -1 } }
+    | each { if $in == "(" { 1 } else if $in == ")" { -1 } else { 0 } }
     | math sum
 }
 
@@ -15,9 +14,9 @@ export def solve-part-one [input: string]: nothing -> int {
 export def solve-part-two [input: string]: nothing -> int {
     mut floor = 0
     mut position = 0
-    for char in ($input | str trim | split chars) {
+    for char in ($input | split chars) {
         $position += 1
-        $floor += (if $char == "(" { 1 } else { -1 })
+        $floor += (if $char == "(" { 1 } else if $char == ")" { -1 } else { 0 })
         if $floor < 0 {
             return $position
         }

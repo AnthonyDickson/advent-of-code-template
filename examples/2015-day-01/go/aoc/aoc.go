@@ -1,7 +1,5 @@
 package aoc
 
-import "fmt"
-
 func SolvePartOne(input string) int {
 	floor := 0
 
@@ -33,6 +31,6 @@ func step(char rune) int {
 	case ')':
 		return -1
 	default:
-		panic(fmt.Sprintf("unexpected character %q", char))
+		return 0
 	}
 }

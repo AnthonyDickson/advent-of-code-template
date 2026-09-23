@@ -16,7 +16,10 @@
   (")())())", -3),
 )
 
-#let part-two-examples = ((")", 1), ("()())", 5))
+#let part-two-examples = (
+  (")", 1),
+  ("()())", 5),
+)
 
 /// Checks both solutions against every example and returns a summary of the run.
 #let run-tests() = {

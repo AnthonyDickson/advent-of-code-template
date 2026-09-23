@@ -11,7 +11,7 @@ import (
 func main() {
 	contents, err := os.ReadFile("input.txt")
 	if err != nil {
-		log.Fatalf("Error reading input file: %v", err)
+		log.Fatalf("reading input.txt: %v", err)
 	}
 
 	input := string(contents)

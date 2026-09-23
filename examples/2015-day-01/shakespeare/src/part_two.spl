@@ -1,7 +1,7 @@
 A Basement Watcher, a play in one act.
 
 Romeo, the floor the elevator is on.
-Juliet, how many instructions have been read.
+Juliet, the instruction just read, keeping the count so far on her stack.
 
 
 Act I: Following the instructions.
@@ -25,7 +25,7 @@ Juliet:
  If so, let us proceed to scene III.
 
 Romeo:
- You are as villainous as the difference between a cat and twice the difference between yourself and the sum of a big big big big big cat and a big big big cat!
+ You are as good as the difference between a cat and twice the difference between yourself and the sum of a big big big big big cat and a big big big cat!
 
 Juliet:
  You are as handsome as the sum of thyself and myself!

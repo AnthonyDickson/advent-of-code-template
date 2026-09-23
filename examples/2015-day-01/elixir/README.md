@@ -8,6 +8,8 @@ Refer to the repository's shared [flake.nix](../../../flake.nix) for the package
 have `nix`, run `nix develop .#elixir` from anywhere inside the repository to enter a dev shell with all of the
 dependencies installed.
 
+`mix test` also runs the doctests, so any `@doc` example in `lib/aoc.ex` is executed and must stay correct.
+
 ## Useful Commands
 
 - Build and run:

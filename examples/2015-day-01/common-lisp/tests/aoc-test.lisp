@@ -18,11 +18,13 @@
     ("()())" . 5)))
 
 (deftest part-one-solves-the-examples
-  (dolist (case *part-one-cases*)
-    (testing (prin1-to-string (car case))
-      (ok (= (cdr case) (solve-part-one (car case)))))))
+  (dolist (example *part-one-cases*)
+    (destructuring-bind (input . expected) example
+      (testing (prin1-to-string input)
+        (ok (= expected (solve-part-one input)))))))
 
 (deftest part-two-solves-the-examples
-  (dolist (case *part-two-cases*)
-    (testing (prin1-to-string (car case))
-      (ok (= (cdr case) (solve-part-two (car case)))))))
+  (dolist (example *part-two-cases*)
+    (destructuring-bind (input . expected) example
+      (testing (prin1-to-string input)
+        (ok (= expected (solve-part-two input)))))))

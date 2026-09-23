@@ -13,6 +13,9 @@ lint:
 fmt:
     ruff format
 
+outdated:
+    uv pip compile --quiet --upgrade --group dev --no-header pyproject.toml
+
 benchmark:
     hyperfine --warmup 3 -N "python main.py"
     time -v python main.py

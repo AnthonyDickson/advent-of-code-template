@@ -3,8 +3,8 @@
 
 (defn- step
   "`(` goes up one floor, `)` goes down one, and anything else leaves the floor alone."
-  [char]
-  (case char
+  [instruction]
+  (case instruction
     \( 1
     \) -1
     0))
@@ -12,7 +12,7 @@
 (defn solve-part-one
   "Solves part one of the puzzle for the given input."
   [input]
-  (reduce (fn [floor char] (+ floor (step char))) 0 input))
+  (transduce (map step) + 0 input))
 
 (defn solve-part-two
   "Solves part two of the puzzle for the given input."

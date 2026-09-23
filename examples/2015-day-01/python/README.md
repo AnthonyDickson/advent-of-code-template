@@ -33,3 +33,9 @@ dependencies installed.
   ```shell
   just benchmark
   ```
+
+- Check for newer versions of the dev dependencies:
+
+  ```shell
+  just outdated
+  ```

@@ -13,6 +13,9 @@ build:
 fmt:
     fd --extension hs --print0 | xargs -0 ormolu --mode inplace
 
+outdated:
+    cabal update && cabal outdated
+
 benchmark: build
     hyperfine -N "`cabal list-bin aoc`"
     time -v "`cabal list-bin aoc`"

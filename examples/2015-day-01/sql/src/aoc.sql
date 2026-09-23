@@ -18,13 +18,13 @@ CREATE OR REPLACE MACRO move(instruction) AS
 
 -- Solves part one: the floor Santa is on once every instruction is done.
 CREATE OR REPLACE MACRO solve_part_one(input) AS (
-    SELECT sum(move(instruction)) FROM instructions(input)
+    SELECT coalesce(sum(move(instruction)), 0) FROM instructions(input)
 );
 
 -- Solves part two: the position of the instruction that first takes Santa below
 -- the ground floor.
 CREATE OR REPLACE MACRO solve_part_two(input) AS (
-    SELECT min(position)
+    SELECT coalesce(min(position), 0)
     FROM (
         SELECT position, sum(move(instruction)) OVER (ORDER BY position) AS floor
         FROM instructions(input)

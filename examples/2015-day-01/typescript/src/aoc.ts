@@ -37,13 +37,11 @@ export function solvePartOne(input: string): number {
  */
 export function solvePartTwo(input: string): number {
   let floor = 0;
-  let position = 1;
-  for (const char of input) {
+  for (const [index, char] of [...input].entries()) {
     floor += floorDelta(char);
     if (floor === -1) {
-      return position;
+      return index + 1;
     }
-    position += 1;
   }
   return 0;
 }

@@ -1,11 +1,11 @@
 open Alcotest
 
-let test_part_one expected lines =
-  fun () -> check int "solves part one" expected (Aoc.solve_part_one lines)
+let test_part_one expected input =
+  fun () -> check int "solves part one" expected (Aoc.solve_part_one input)
 ;;
 
-let test_part_two expected lines =
-  fun () -> check int "solves part two" expected (Aoc.solve_part_two lines)
+let test_part_two expected input =
+  fun () -> check int "solves part two" expected (Aoc.solve_part_two input)
 ;;
 
 let () =

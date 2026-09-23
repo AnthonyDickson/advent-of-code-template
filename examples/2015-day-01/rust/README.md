@@ -34,3 +34,10 @@ dependencies installed.
   ```shell
   just benchmark
   ```
+
+- Check for and upgrade dependencies:
+
+  ```shell
+  just outdated
+  just update
+  ```

@@ -1,8 +1,5 @@
 from pathlib import Path
 
-type Floor = int
-type Index = int
-
 
 def step(char: str) -> int:
     match char:
@@ -10,11 +7,11 @@ def step(char: str) -> int:
             return 1
         case ")":
             return -1
-        case other:
-            raise ValueError(f"Unexpected char: {other}")
+        case _:
+            return 0
 
 
-def solve_part_one(data: str) -> Floor:
+def solve_part_one(data: str) -> int:
     floor = 0
 
     for char in data:
@@ -23,7 +20,7 @@ def solve_part_one(data: str) -> Floor:
     return floor
 
 
-def solve_part_two(data: str) -> Index:
+def solve_part_two(data: str) -> int:
     floor = 0
 
     for index, char in enumerate(data, start=1):
