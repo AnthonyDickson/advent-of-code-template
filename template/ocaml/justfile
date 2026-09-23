@@ -5,9 +5,15 @@ build:
     dune build
 
 run:
+    dune exec aoc
+
+run-watch:
     dune exec aoc -w
 
 test:
+    dune runtest
+
+test-watch:
     dune runtest -w
 
 fmt:
