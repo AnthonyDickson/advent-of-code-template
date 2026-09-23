@@ -1,0 +1,27 @@
+default:
+    @just --list
+
+test:
+    deno test
+
+check:
+    deno check src/main.ts
+
+run:
+    deno run --allow-read src/main.ts
+
+build:
+    deno compile --allow-read --output aoc src/main.ts
+
+fmt:
+    deno fmt
+
+lint:
+    deno lint
+
+benchmark: build
+    hyperfine --warmup 3 -N ./aoc
+    time -v ./aoc
+
+clean:
+    rm -f aoc

@@ -19,6 +19,7 @@ python = 2
 scala = 4
 shakespeare = 0
 sql = 0
+typescript = 1
 typst = 0
 roc = 0
 rust = 3

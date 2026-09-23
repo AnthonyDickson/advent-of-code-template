@@ -168,6 +168,17 @@ GUIDES: dict[str, Guide] = {
             "DuckDB has no compiler, so `just build` parses and binds the macros in `src/aoc.sql` instead of producing a binary.",
         ),
     ),
+    "typescript": Guide(
+        entry_point="src/aoc.ts",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
+        notes=(
+            "Tests live in `tests/aoc_test.ts` and run through Deno's built-in `deno test`, which type-checks them.",
+            "`deno run` does not type-check, so `just check` is the way to see type errors on their own.",
+            "Deno downloads `@std/assert` from JSR on the first `just test`, so that run needs network.",
+            "`just build` compiles a standalone executable to `./aoc`.",
+        ),
+    ),
     "typst": Guide(
         entry_point="src/aoc.typ",
         part_one="solve-part-one",
