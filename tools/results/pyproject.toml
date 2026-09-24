@@ -1,0 +1,42 @@
+[project]
+name = "aoc-results"
+version = "0.1.0"
+description = "Benchmark an Advent of Code solution and record it in a RESULTS.md table"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+aoc-results = "aoc_results.__main__:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "ruff>=0.16",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aoc_results"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+extend-select = [
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "I",   # isort
+  "PTH", # flake8-use-pathlib
+  "RET", # flake8-return
+  "SIM", # flake8-simplify
+  "UP",  # pyupgrade
+]

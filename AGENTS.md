@@ -12,6 +12,7 @@ as `input.txt`, and implement the two solution functions.
 template/<lang>/                   starter project, one per language
 examples/<year>-day-<dd>/<lang>/   reference solutions for past days
 tools/lottery/                     the language lottery (a self-contained uv project)
+tools/results/                     the benchmark recorder (a self-contained uv project)
 ```
 
 - `ls template/` is the list of languages. No file in this repository enumerates them, so adding a language means adding
@@ -139,6 +140,23 @@ just lottery-fmt     # ruff format
 
 `uv` resolves and caches the dependencies, so the tool needs nothing installed beyond the dev shell. `just lottery`
 forwards arguments to the tool (`just lottery --plain --day 5`), and `tools/lottery/README.md` documents the flags.
+
+## The results recorder
+
+`tools/results/` is the other self-contained uv project. It benchmarks one solution folder with that template's own
+`just benchmark` recipe and upserts the hyperfine mean and GNU `time -v` peak RSS into a `RESULTS.md` table, deriving
+the baseline by benchmarking the untouched template on the same input. It needs `just`, git, and `dprint`, so run it
+inside the language's dev shell.
+
+```shell
+just record 2026-day-05   # benchmark a solution and add it to RESULTS.md
+just results-test         # pytest
+just results-lint         # ruff check
+just results-fmt          # ruff format
+```
+
+The monochrome SVGs under `tools/results/icons/` are vendored because GitHub strips the stylesheet an icon font needs;
+`tools/results/README.md` documents the flags and `tools/results/icons/README.md` the provenance of each file.
 
 ## Gotchas
 

@@ -1,0 +1,8 @@
+# uv-managed environment
+.venv/
+
+# Python caches
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+__pycache__/

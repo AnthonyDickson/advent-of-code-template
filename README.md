@@ -48,3 +48,13 @@ to implement, then `just test`/`just run`/`just benchmark`).
 The weights live in [`lottery.toml`](./lottery.toml), so you can make the languages you want to practise more likely and
 take the ones you do not with a weight of `0`. `uv` fetches the tool's dependencies on the first run;
 [`tools/lottery/README.md`](./tools/lottery/README.md) documents the flags and the TUI-free `--plain` mode.
+
+## Recording results
+
+Once a day is solved, `just record` adds it to `RESULTS.md` in the repository root:
+
+```shell
+nix develop .#rust -c just record 2026-day-05
+```
+
+Run it inside the drawn language's dev shell; [`tools/results/README.md`](./tools/results/README.md) documents the tool.
