@@ -51,7 +51,8 @@ take the ones you do not with a weight of `0`. `uv` fetches the tool's dependenc
 
 ## Recording results
 
-Once a day is solved, `just record` adds it to `RESULTS.md` in the repository root:
+Once a day is solved, `just record` benchmarks it and adds its times and `tokei` line count to `RESULTS.md` in the
+repository root:
 
 ```shell
 nix develop .#rust -c just record 2026-day-05

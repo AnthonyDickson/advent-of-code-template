@@ -16,8 +16,9 @@ COLUMNS = (
     "Total Time",
     "Solution Time",
     "Peak RAM (KiB)",
+    "Lines",
 )
-ALIGNMENTS = ("left", "left", "right", "right", "right", "right")
+ALIGNMENTS = ("left", "left", "right", "right", "right", "right", "right")
 PARTS = ("1", "2", "both")
 PART_LABELS = {"1": "1", "2": "2", "both": "Both"}
 PART_ORDER = {"1": 0, "2": 1, "Both": 2}
@@ -31,6 +32,8 @@ DEFAULT_PREAMBLE = (
     "Times are recorded with `hyperfine --warmup 3` and rounded to the nearest whole number.",
     "The baseline is the untouched template run on the same input, so the solution time is the",
     "total time minus the baseline. Peak RAM is the maximum resident set size from GNU `time -v`.",
+    "Lines are the code lines `tokei` counts in the solution folder, with test files and the",
+    "templates' build and project files left out.",
     "",
 )
 
@@ -93,6 +96,7 @@ class Row:
     baseline_us: float
     total_us: float
     peak_ram_kib: int
+    lines: int
 
     @property
     def solution_us(self) -> float:
@@ -106,6 +110,7 @@ class Row:
             format_microseconds(self.total_us),
             format_microseconds(self.solution_us),
             f"{self.peak_ram_kib:,}",
+            f"{self.lines:,}",
         ]
 
 

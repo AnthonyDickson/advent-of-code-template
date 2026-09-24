@@ -1,7 +1,13 @@
 import pytest
 
-from aoc_results import benchmark
+from aoc_results import benchmark, lines
 from aoc_results.__main__ import main
+
+
+@pytest.fixture(autouse=True)
+def fake_line_count(monkeypatch):
+    """Keep the CLI tests off tokei: one fixed count, unless a test overrides it."""
+    monkeypatch.setattr(lines, "count", lambda directory: 1234)
 
 
 def test_records_a_row_with_a_given_baseline(repo, solution, monkeypatch, capsys):
@@ -17,7 +23,8 @@ def test_records_a_row_with_a_given_baseline(repo, solution, monkeypatch, capsys
     assert "500 µs" in document
     assert "290 µs" in document
     assert "2,268" in document
-    assert "recorded in" in capsys.readouterr().out
+    assert "1,234" in document
+    assert "1,234 lines" in capsys.readouterr().out
 
 
 def test_measures_the_template_baseline_on_the_input(repo, solution, monkeypatch):
@@ -71,3 +78,18 @@ def test_each_part_gets_its_own_label(repo, solution, monkeypatch, part, label):
 
     assert exit_code == 0
     assert f"7 ({label})" in (repo / "RESULTS.md").read_text(encoding="utf-8")
+
+
+def test_a_failed_line_count_is_reported(repo, solution, monkeypatch, capsys):
+    monkeypatch.setattr(benchmark, "run", lambda directory: benchmark.Benchmark(790.0, 2268))
+
+    def explode(directory):
+        raise lines.LinesError("`tokei` is not on PATH")
+
+    monkeypatch.setattr(lines, "count", explode)
+
+    exit_code = main(["--repo", str(repo), "--baseline", "500", str(solution)])
+
+    assert exit_code == 1
+    assert "error:" in capsys.readouterr().err
+    assert not (repo / "RESULTS.md").exists()

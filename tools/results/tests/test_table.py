@@ -61,15 +61,22 @@ def test_rows_read_the_solution_time_as_the_difference():
         baseline_us=718.0,
         total_us=790.0,
         peak_ram_kib=2268,
+        lines=57,
     )
     assert row.solution_us == pytest.approx(72.0)
-    assert row.cells() == ["1 (Both)", "Rust", "718 µs", "790 µs", "72 µs", "2,268"]
+    assert row.cells() == ["1 (Both)", "Rust", "718 µs", "790 µs", "72 µs", "2,268", "57"]
     assert row.cells("tools/results/icons")[1] == "![Rust](tools/results/icons/rust.svg)"
 
 
 def test_a_total_below_the_baseline_never_goes_negative():
     row = table.Row(
-        language="rust", day=1, part="Both", baseline_us=900.0, total_us=790.0, peak_ram_kib=2268
+        language="rust",
+        day=1,
+        part="Both",
+        baseline_us=900.0,
+        total_us=790.0,
+        peak_ram_kib=2268,
+        lines=57,
     )
     assert row.solution_us == 0.0
 
@@ -81,11 +88,11 @@ def test_upsert_creates_the_file_with_a_header_and_a_row(tmp_path):
     document = path.read_text(encoding="utf-8")
     assert document.startswith("# Results\n")
     assert (
-        "| Day (Part) | Language | Baseline Time | Total Time | Solution Time | Peak RAM (KiB) |"
+        "| Day (Part) | Language | Baseline Time | Total Time | Solution Time | Peak RAM (KiB) | Lines |"
         in document
     )
-    assert "| :--- | :--- | ---: | ---: | ---: | ---: |" in document  # the alignment row
-    assert "| 1 (Both) | Rust | 718 µs | 790 µs | 72 µs | 2,268 |" in document
+    assert "| :--- | :--- | ---: | ---: | ---: | ---: | ---: |" in document  # the alignment row
+    assert "| 1 (Both) | Rust | 718 µs | 790 µs | 72 µs | 2,268 | 57 |" in document
     assert "| 🦀 Rust" not in document
 
 
@@ -148,6 +155,7 @@ def _row(*, day: int, part: str, total_us: float = 790.0) -> table.Row:
         baseline_us=718.0,
         total_us=total_us,
         peak_ram_kib=2268,
+        lines=57,
     )
 
 

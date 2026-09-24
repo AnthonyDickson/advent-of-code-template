@@ -19,7 +19,7 @@ lottery-fmt:
 lottery-update:
     uv --directory tools/lottery lock --upgrade
 
-# Benchmark a solution and record its times in RESULTS.md, then pad the table with dprint.
+# Benchmark a solution and record its times and line count in RESULTS.md, then pad the table with dprint.
 record folder *args:
     uv run --directory tools/results aoc-results {{quote(absolute_path(folder))}} {{args}}
     dprint fmt

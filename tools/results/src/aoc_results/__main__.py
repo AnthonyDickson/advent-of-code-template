@@ -1,4 +1,4 @@
-"""Command line entry point for recording a solution's benchmark times."""
+"""Command line entry point for recording a solution's benchmark times and code size."""
 
 from __future__ import annotations
 
@@ -7,13 +7,13 @@ import shutil
 import sys
 from pathlib import Path
 
-from aoc_results import benchmark, repository, table
+from aoc_results import benchmark, lines, repository, table
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="aoc-results",
-        description="Benchmark a solution and add its times to the RESULTS.md table.",
+        description="Benchmark a solution and add its times and lines to the RESULTS.md table.",
     )
     parser.add_argument(
         "folder",
@@ -63,7 +63,12 @@ def main(argv: list[str] | None = None) -> int:
     arguments = build_parser().parse_args(argv)
     try:
         record(arguments)
-    except (benchmark.BenchmarkError, repository.RepositoryError, OSError) as problem:
+    except (
+        benchmark.BenchmarkError,
+        lines.LinesError,
+        repository.RepositoryError,
+        OSError,
+    ) as problem:
         print(f"error: {problem}", file=sys.stderr)
         return 1
     return 0
@@ -95,6 +100,7 @@ def record(arguments: argparse.Namespace) -> None:
         baseline_us=baseline_us,
         total_us=measured.total_us,
         peak_ram_kib=measured.peak_ram_kib,
+        lines=lines.count(solution),
     )
     destination = (arguments.file or repo / table.RESULTS_FILENAME).expanduser().resolve()
     table.upsert(destination, row, icon_prefix=table.relative_icon_prefix(destination))
@@ -103,6 +109,7 @@ def record(arguments: argparse.Namespace) -> None:
         f"{row.day} ({row.part}) {row.language}: "
         f"{table.format_microseconds(row.total_us)} total, "
         f"{table.format_microseconds(row.solution_us)} solution, "
+        f"{row.lines:,} lines, "
         f"{row.peak_ram_kib:,} KiB peak"
     )
     print(f"recorded in {destination}")

@@ -1,7 +1,7 @@
 # Results recorder
 
-Benchmarks an Advent of Code solution with its own `just benchmark` recipe and records the numbers in a `RESULTS.md`
-table.
+Benchmarks an Advent of Code solution with its own `just benchmark` recipe and records the numbers, and the application
+code's line count, in a `RESULTS.md` table.
 
 ```shell
 just record 2026-day-05           # from the repository root
@@ -9,7 +9,8 @@ uv run aoc-results 2026-day-05    # from this directory
 uv run aoc-results --help
 ```
 
-Run it inside the language's dev shell: `just benchmark` needs that language's toolchain, `hyperfine`, and GNU `time`.
+Run it inside the language's dev shell: `just benchmark` needs that language's toolchain, `hyperfine`, and GNU `time`,
+and the line count needs `tokei`.
 
 ```shell
 nix develop .#rust -c just record 2026-day-05
@@ -17,9 +18,12 @@ nix develop .#rust -c just record 2026-day-05
 
 One row is written per day and part:
 
-| Day (Part) | Language                              | Baseline Time | Total Time | Solution Time | Peak RAM (KiB) |
-| :--------- | :------------------------------------ | ------------: | ---------: | ------------: | -------------: |
-| 1 (Both)   | ![Rust](tools/results/icons/rust.svg) |        718 µs |     790 µs |         72 µs |          2,268 |
+| Day (Part) | Language                              | Baseline Time | Total Time | Solution Time | Peak RAM (KiB) | Lines |
+| :--------- | :------------------------------------ | ------------: | ---------: | ------------: | -------------: | ----: |
+| 1 (Both)   | ![Rust](tools/results/icons/rust.svg) |        718 µs |     790 µs |         72 µs |          2,268 |    32 |
+
+`Lines` is the code `tokei` counts in the solution folder with test files, build recipes, and project metadata left out.
+Files in a language `tokei` cannot read, such as Shakespeare's `.spl` plays, contribute nothing.
 
 Language cells use a vendored monochrome SVG from [`icons/`](./icons/README.md) where available; Prolog, roc, and
 shakespeare show the plain name.

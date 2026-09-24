@@ -59,15 +59,15 @@ Two recipe behaviours are not obvious from a single file and matter when running
 
 A single top-level [`flake.nix`](./flake.nix) defines every dev environment; there are no per-language flakes.
 Toolchains are pinned to explicit versions in `nix/devshells.nix`, and the `common` tooling (task runner, markdown
-formatter, benchmark helpers, git) is added to every shell.
+formatter, benchmark helpers, line counter, git) is added to every shell.
 
 ```shell
 nix develop .#rust -c fish   # pick a language; omit -c to use $SHELL
 ```
 
 - `devShells.default` (plain `nix develop`) contains only the shared tooling.
-- Benchmark tooling and formatters are only available inside the flake, so failures about `hyperfine`/`dprint` usually
-  mean you are not in the shell.
+- Benchmark tooling, the line counter, and formatters are only available inside the flake, so failures about
+  `hyperfine`/`tokei`/`dprint` usually mean you are not in the shell.
 - Flakes only see git-tracked files, so `git add` new flake files before running `nix develop`.
 
 ## Dependency upgrades
@@ -144,9 +144,9 @@ forwards arguments to the tool (`just lottery --plain --day 5`), and `tools/lott
 ## The results recorder
 
 `tools/results/` is the other self-contained uv project. It benchmarks one solution folder with that template's own
-`just benchmark` recipe and upserts the hyperfine mean and GNU `time -v` peak RSS into a `RESULTS.md` table, deriving
-the baseline by benchmarking the untouched template on the same input. It needs `just`, git, and `dprint`, so run it
-inside the language's dev shell.
+`just benchmark` recipe and upserts the hyperfine mean, the GNU `time -v` peak RSS, and the application code's `tokei`
+line count into a `RESULTS.md` table, deriving the baseline by benchmarking the untouched template on the same input. It
+needs `just`, `tokei`, git, and `dprint`, so run it inside the language's dev shell.
 
 ```shell
 just record 2026-day-05   # benchmark a solution and add it to RESULTS.md

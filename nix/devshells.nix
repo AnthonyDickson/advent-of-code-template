@@ -31,6 +31,8 @@
       # Benchmarking
       hyperfine
       time
+      # For counting the application code lines the results recorder records
+      tokei
     ];
 
   languages = {

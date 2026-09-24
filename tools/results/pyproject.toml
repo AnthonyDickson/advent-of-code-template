@@ -1,7 +1,7 @@
 [project]
 name = "aoc-results"
 version = "0.1.0"
-description = "Benchmark an Advent of Code solution and record it in a RESULTS.md table"
+description = "Benchmark an Advent of Code solution and record its times and line count in a RESULTS.md table"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
