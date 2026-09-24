@@ -55,10 +55,10 @@ ships; the version nixpkgs packages is the older alpha4 line.
   that `just test` runs.
 - `main.roc` reads `input.txt` and prints both answers.
 
-## Good to know
+## Notes
 
-- Roc keeps compiling after it reports an error, and runs the program anyway when the error is not fatal, so reach for
-  `just check` when `just run` prints output despite diagnostics.
+- Roc keeps compiling after it reports an error, and runs the program anyway when the error is not fatal, so use `just
+  check` when `just run` prints output despite diagnostics.
 - `just test` only compiles `src/Aoc.roc`, so it needs nothing downloaded. The first `just run`, `just check` or `just
   build` fetches the `basic-cli` platform and caches it under `~/.cache/roc`, so that first run needs network.
 

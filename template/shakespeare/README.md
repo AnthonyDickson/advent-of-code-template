@@ -92,7 +92,7 @@ Juliet:
  Let us return to scene II.
 ```
 
-Two details worth knowing before writing much:
+Two details matter when writing a play:
 
 - Characters must be named after a fixed list of Shakespearean characters (`Romeo`, `Juliet`, `Hamlet`, `Othello`,
   `Macbeth`, ...). A name from outside the list is a parse error.

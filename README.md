@@ -1,22 +1,22 @@
 # Advent of Code Template
 
-A template with a nix flake and code snippets in multiple languages for getting started with Advent of Code
+A template with a nix flake and code snippets in multiple languages for getting started with Advent of Code.
 
 ## Usage
 
-1. Copy one of the templates yourself, e.g.:
+1. Copy one of the templates:
    ```shell
    cp -r template/ocaml day-01/
    ```
-   ... or let the lottery below pick one and copy it for you.
+   The lottery below also copies a template for you.
 1. Enter the nix dev shell for your language, from anywhere inside this repository:
    ```shell
    nix develop .#ocaml -c fish # Replace `ocaml` with your language and `fish` with your shell
    ```
 
-1. Save the problem input as `input.txt` in the folder
+1. Save the problem input as `input.txt` in the folder.
 
-1. All templates have the following Just commands (run `just` to list every recipe):
+1. Run the shared Just recipes (run `just` to list every recipe):
    ```shell
    just test
    just run
@@ -30,16 +30,16 @@ A template with a nix flake and code snippets in multiple languages for getting 
 
 ## Picking a language
 
-Can't decide? `just lottery` spins a weighted wheel over the templates, shows each language's chance of winning, and
-lets you re-roll until you like the pick:
+`just lottery` draws a language from a weighted wheel and shows each language's chance of winning. The draw can be
+repeated before a language is accepted:
 
 ```shell
 just lottery
 ```
 
-Settle on a language and the tool offers to bootstrap the day for you: it asks which day it is, copies `template/<lang>`
-into `<year>-day-<dd>` in the repository root, and lists what is left to do (dev shell, `input.txt`, the two functions
-to implement, then `just test`/`just run`/`just benchmark`).
+The tool then bootstraps the day: it asks which day it is, copies `template/<lang>` into `<year>-day-<dd>` in the
+repository root, and lists what is left to do (dev shell, `input.txt`, the two functions to implement, then `just
+test`/`just run`/`just benchmark`).
 
 > [!NOTE]
 > Solution folders are written to the repository root so that a private repository created from this one keeps its

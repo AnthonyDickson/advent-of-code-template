@@ -69,7 +69,7 @@ and `just fmt` only rewrites source, so neither of those does.
 character-by-character puzzles want. Arrays carry `map`, `filter`, `fold`, `enumerate`, `sum` and `sorted`, and `for`,
 `while` and `if`/`else` all work as expressions.
 
-Two limits surprise people, because neither looks like anything special:
+Two limits are not obvious:
 
 - A `while` loop stops after 10,000 iterations with `loop seems to be infinite`. `for` loops are not limited, so drive
   long runs with those or with `range`.

@@ -74,7 +74,7 @@ duckdb -batch -bail -no-init -noheader -list < main.sql
 ```
 
 `.read` is a CLI command rather than SQL, which is why `main.sql` is fed to the CLI on standard input instead of being
-named as an argument. The flags are worth keeping:
+named as an argument. The flags are:
 
 - `-list -noheader` prints each row as a plain line, with no box or column header around the answer.
 - `-batch` keeps the CLI in non-interactive mode even when a terminal is attached.
@@ -88,13 +88,12 @@ named as an argument. The flags are worth keeping:
 Because `error()` aborts the run, reaching the summary is what "every example passed" means, and a failure names the
 input it was given.
 
-## Good to know
+## Notes
 
 - DuckDB has no compiler, so `just build` parses and binds `src/aoc.sql` instead of producing a binary: `CREATE MACRO`
   reports an unknown column or function as soon as the macro is defined.
 - `check` is a reserved word in DuckDB and cannot be used as a macro name; `assert_example` in the tests is named around
   that.
-- DuckDB runs a query across every core by default, so `PRAGMA threads=1;` is worth adding when a benchmark timing looks
-  noisy.
+- DuckDB runs a query across every core by default, so add `PRAGMA threads=1;` when a benchmark timing looks noisy.
 - No SQL formatter is wired into this template, so there is no `just fmt` or `just lint`: the recipes are `test`, `run`,
   `build` and `benchmark`, and the SQL is kept in shape by hand.

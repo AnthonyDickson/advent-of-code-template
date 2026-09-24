@@ -10,8 +10,8 @@ have `nix`, run `nix develop .#nushell` from anywhere inside the repository to e
 dependencies installed.
 
 The dev shell provides Nushell. Its language server is built in (`nu --lsp`), so there is no separate package for it,
-and nothing is downloaded on the first run. Nushell's formatter, `nufmt`, is deliberately not wired in: it still
-rewrites valid code into broken code, so `fmt` is better left to hand editing.
+and nothing is downloaded on the first run. Nushell's formatter, `nufmt`, is not wired in: it rewrites valid code into
+broken code, so formatting is left to hand editing.
 
 ## Useful Commands
 
@@ -54,7 +54,7 @@ chars` and `lines` turn it into a list, `parse` pulls out numbers and `where`, `
 it. `math sum`, `math max` and friends collapse a list of numbers, and `par-each` runs the same pipeline across threads
 when a puzzle is slow.
 
-Two conventions are worth following because the tooling assumes them:
+Two conventions follow from the tooling:
 
 - Commands (`def` and `export def`) are kebab-case, which is why the solutions are `solve-part-one` and
   `solve-part-two`, and flow between them is spelled `solve-part-one` rather than `solve_part_one`.
@@ -78,7 +78,7 @@ library's `std/assert`. Assertions abort on the first failure and name the input
 `all N examples passed` is a run where every case held. Nushell ships no test framework that discovers tests, so the
 tables at the top of the file are the list of cases.
 
-## Good to know
+## Notes
 
 - Nushell has no linter and no formatter this template trusts, so there is no `just fmt` or `just lint`; the recipes are
   `test`, `run`, `build` and `benchmark`.

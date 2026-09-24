@@ -1,4 +1,4 @@
-## Advent of Code - Go
+# Advent of Code - Go
 
 A Go template for Advent of Code.
 

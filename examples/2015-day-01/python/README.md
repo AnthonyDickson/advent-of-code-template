@@ -1,4 +1,4 @@
-## Advent of Code - Python
+# Advent of Code - Python
 
 A Python template for Advent of Code.
 

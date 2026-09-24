@@ -12,7 +12,7 @@ dependencies installed.
 The dev shell pins the .NET SDK, restores the dotnet tools from `.config/dotnet-tools.json` (`fantomas` and
 `fsautocomplete`), and exports `DOTNET_ROOT`.
 
-## Where the code goes
+## Layout
 
 - `src/Aoc.fs` - `solvePartOne`, `solvePartTwo`, the two functions to implement. F# compiles files in the order listed
   in the `.fsproj`, so add new files before `Program.fs`.
