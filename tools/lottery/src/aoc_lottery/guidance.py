@@ -76,6 +76,16 @@ GUIDES: dict[str, Guide] = {
         part_two="solvePartTwo",
         notes=("Tests live in `test/Tests.hs` and `just fmt` runs `ormolu`.",),
     ),
+    "lean4": Guide(
+        entry_point="Aoc.lean",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
+        notes=(
+            "Tests live in `Tests.lean` and run through the `tests` executable (`just test`).",
+            "The solutions return `Int`, Lean's arbitrary-precision integer, so answers are not limited by a machine word.",
+            "`lean-toolchain` pins the compiler; the dev shell provides the same version, so `lake` never downloads one.",
+        ),
+    ),
     "nushell": Guide(
         entry_point="src/aoc.nu",
         part_one="solve-part-one",

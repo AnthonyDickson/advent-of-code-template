@@ -1,0 +1,14 @@
+name = "aoc"
+version = "0.1.0"
+defaultTargets = ["aoc", "tests"]
+
+[[lean_lib]]
+name = "Aoc"
+
+[[lean_exe]]
+name = "aoc"
+root = "Main"
+
+[[lean_exe]]
+name = "tests"
+root = "Tests"

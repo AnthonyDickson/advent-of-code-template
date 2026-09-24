@@ -11,6 +11,7 @@ fsharp = 4
 gleam = 2
 go = 1
 haskell = 5
+lean4 = 4
 nushell = 0
 ocaml = 4
 odin = 3

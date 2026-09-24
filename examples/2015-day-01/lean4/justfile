@@ -1,0 +1,18 @@
+default:
+    @just --list
+
+test:
+    lake exe tests
+
+run:
+    lake exe aoc
+
+build:
+    lake build
+
+benchmark: build
+    hyperfine --warmup 3 -N .lake/build/bin/aoc
+    time -v .lake/build/bin/aoc
+
+clean:
+    rm -rf .lake

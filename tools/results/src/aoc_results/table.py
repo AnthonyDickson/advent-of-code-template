@@ -45,6 +45,7 @@ LANGUAGE_NAMES = {
     "gleam": "Gleam",
     "go": "Go",
     "haskell": "Haskell",
+    "lean4": "Lean 4",
     "nushell": "Nushell",
     "ocaml": "OCaml",
     "odin": "Odin",

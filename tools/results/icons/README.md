@@ -23,4 +23,4 @@ stays legible on GitHub's light and dark themes. Regenerate one with the same UR
 `duckdb.svg` stands in for the `sql` template, whose solutions are DuckDB macros rather than a generic SQL dialect, so
 `LANGUAGE_ICONS` maps `sql` to it.
 
-Prolog, roc and shakespeare have no icon in Simple Icons or Devicon, so those rows show the plain language name.
+Prolog, roc, shakespeare and Lean 4 have no icon in Simple Icons or Devicon, so those rows show the plain language name.
