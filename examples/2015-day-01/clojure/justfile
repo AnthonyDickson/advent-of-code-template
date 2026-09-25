@@ -1,3 +1,5 @@
+java-options := "-XX:TieredStopAtLevel=1 -XX:+UseSerialGC -XX:SharedArchiveFile=target/aoc.jsa"
+
 default:
     @just --list
 
@@ -9,6 +11,7 @@ run:
 
 build:
     clojure -T:build uber
+    java -XX:ArchiveClassesAtExit=target/aoc.jsa -cp target/aoc.jar clojure.main -e "(require 'aoc)" > /dev/null
 
 fmt:
     cljfmt fix src test build.clj
@@ -17,8 +20,8 @@ lint:
     clj-kondo --lint src test build.clj
 
 benchmark: build
-    hyperfine --warmup 3 -N "java -jar target/aoc.jar"
-    time -v java -jar target/aoc.jar
+    hyperfine --warmup 3 -N "java {{java-options}} -jar target/aoc.jar"
+    time -v java {{java-options}} -jar target/aoc.jar
 
 clean:
     rm -rf target .cpcache
