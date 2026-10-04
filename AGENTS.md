@@ -11,6 +11,7 @@ as `input.txt`, and implement the two solution functions.
 ```
 template/<lang>/                   starter project, one per language
 examples/<year>-day-<dd>/<lang>/   reference solutions for past days
+lib/<lang>/                        standalone helper library, one per language
 tools/lottery/                     the language lottery (a self-contained uv project)
 tools/results/                     the benchmark recorder (a self-contained uv project)
 ```
@@ -22,9 +23,17 @@ tools/results/                     the benchmark recorder (a self-contained uv p
 - `examples/` is a **partial** snapshot set: a language does not have to appear in both, and the two drift. Do not
   assume they are in sync, do not treat a difference as a bug, and only port an example change into a template after
   checking that it still applies.
+- `lib/` holds standalone helper libraries, one folder per language. A library is independent of the templates and
+  examples (neither references the other), is built and tested in that language's dev shell, and is the reference
+  implementation when the same helper is ported to another language. `lib/fsharp/` is the parser combinator library.
 
 Each language folder is an independent project. Always run commands from inside the specific language directory, never
 the root.
+
+## Code of Conduct
+
+- You MAY help with maintining the templates, examples (2015 day 1 only), and shared libraries.
+- You MUST NOT help solve puzzles in any way since that defeats the purpose of Advent of Code.
 
 ## The shared AoC contract
 
@@ -54,6 +63,14 @@ Two recipe behaviours are not obvious from a single file and matter when running
 3. Add a `GUIDES` entry in `tools/lottery/src/aoc_lottery/guidance.py`; the lottery tests fail without one.
 4. Nothing else. Markdown and Helix config are shared at the repository root, no list of languages lives outside
    `template/`, and the lottery takes the build output it must not copy from the template's own `.gitignore`.
+
+## Adding a library
+
+A library is a helper shared across days, so it follows the same rules as a template minus the puzzle contract: a
+self-contained `lib/<lang>/` with source, tests, `justfile`, `README.md`, and language config, built in the language's
+existing dev shell. It has no `run` or `benchmark` recipe, and nothing enumerates the set of libraries, so adding one
+means adding the folder and nothing else. Keep it independent of `template/` and `examples/`: nothing in either
+references a library, and a library must not import from them.
 
 ## Dev environment (Nix)
 

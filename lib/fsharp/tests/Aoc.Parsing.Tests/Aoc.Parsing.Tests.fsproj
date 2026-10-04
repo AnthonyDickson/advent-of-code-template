@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Aoc.Parsing.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Aoc.Parsing/Aoc.Parsing.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Helpers.fs" />
+    <Compile Include="PositionTests.fs" />
+    <Compile Include="ParserTests.fs" />
+    <Compile Include="OperatorsTests.fs" />
+    <Compile Include="CharParsersTests.fs" />
+    <Compile Include="WhitespaceParsersTests.fs" />
+    <Compile Include="NumericParsersTests.fs" />
+    <Compile Include="Tests.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Expecto" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="YoloDev.Expecto.TestSdk" />
+  </ItemGroup>
+
+</Project>

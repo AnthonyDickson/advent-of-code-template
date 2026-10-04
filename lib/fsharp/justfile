@@ -1,0 +1,24 @@
+default:
+    @just --list
+
+test:
+    dotnet test Aoc.Parsing.slnx
+
+test-watch:
+    dotnet watch test Aoc.Parsing.slnx
+
+build:
+    dotnet build --configuration Release Aoc.Parsing.slnx
+
+fmt:
+    dotnet fantomas .
+
+outdated:
+    dotnet list Aoc.Parsing.slnx package --outdated
+
+update:
+    dotnet package update
+    dotnet tool update --all
+
+clean:
+    rm -rf src/*/bin src/*/obj tests/*/bin tests/*/obj

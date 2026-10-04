@@ -59,3 +59,14 @@ nix develop .#rust -c just record 2026-day-05
 ```
 
 Run it inside the drawn language's dev shell; [`tools/results/README.md`](./tools/results/README.md) documents the tool.
+
+## Shared libraries
+
+`lib/<lang>/` holds helpers that are useful across many days, kept out of `template/` and `examples/` so those stay
+small. Each is a self-contained project with its own tests, built in that language's dev shell:
+
+```shell
+nix develop .#fsharp -c sh -c 'cd lib/fsharp && just test'
+```
+
+[`lib/fsharp/`](./lib/fsharp/README.md) is a parser combinator library for parsing puzzle input.

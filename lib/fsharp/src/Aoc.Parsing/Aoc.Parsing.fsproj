@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Aoc.Parsing</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Position.fs" />
+    <Compile Include="Parser.fs" />
+    <Compile Include="Operators.fs" />
+    <Compile Include="CharParsers.fs" />
+    <Compile Include="WhitespaceParsers.fs" />
+    <Compile Include="NumericParsers.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" />
+  </ItemGroup>
+
+</Project>

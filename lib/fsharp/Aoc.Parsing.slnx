@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Aoc.Parsing/Aoc.Parsing.fsproj" />
+  <Project Path="tests/Aoc.Parsing.Tests/Aoc.Parsing.Tests.fsproj" />
+</Solution>
