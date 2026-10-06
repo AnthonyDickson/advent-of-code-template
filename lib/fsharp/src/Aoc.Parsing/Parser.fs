@@ -30,14 +30,64 @@ module ParseResult =
             let failureCaret = $"{failureCaretPadding}^{error}"
             $"Line:{linePos} Col:{colPos} Error parsing {label}\n{errorLine}\n{failureCaret}"
 
-/// A parser is a function from an input state to a result, tagged with a label
+/// Whether a parser attempt advanced the input before finishing.
+///
+/// `Consumed` means the parser changed the input state before it failed, so a
+/// surrounding combinator must not backtrack. `NotConsumed` means it failed
+/// without touching the input, so an alternative may be tried from the same
+/// position. This is Parsec's `Consumed`/`Empty` distinction.
+type Consumed =
+    | Consumed
+    | NotConsumed
+
+/// A parse outcome tagged with whether input was consumed before it finished.
+type ParseReply<'a> = {
+    Outcome : ParseResult<'a * InputState>
+    Consumed : Consumed
+}
+
+/// Constructors for `ParseReply`, so the combinators name the branch they take
+/// instead of threading record syntax.
+module ParseReply =
+    /// A success that consumed no input.
+    let ok state value = {
+        Outcome = Success (value, state)
+        Consumed = NotConsumed
+    }
+
+    /// A success that consumed input.
+    let okConsumed state value = {
+        Outcome = Success (value, state)
+        Consumed = Consumed
+    }
+
+    /// A failure that consumed no input, so the caller may backtrack.
+    let softFail label error pos = {
+        Outcome = Failure (label, error, pos)
+        Consumed = NotConsumed
+    }
+
+    /// A failure that consumed input, so the caller must not backtrack.
+    let hardFail label error pos = {
+        Outcome = Failure (label, error, pos)
+        Consumed = Consumed
+    }
+
+    /// Combine the consumption of two replies.
+    let orConsumed a b =
+        if a = Consumed || b = Consumed then
+            Consumed
+        else
+            NotConsumed
+
+/// A parser is a function from an input state to a reply, tagged with a label
 /// used when reporting failures.
 ///
 /// Keeping the label beside the function (rather than inside it) is what lets
 /// `setLabel` and the `<?>` operator relabel a parser without reimplementing
 /// it.
 type Parser<'a> = {
-    ParseFn : (InputState -> ParseResult<'a * InputState>)
+    ParseFn : (InputState -> ParseReply<'a>)
     Label : ParserLabel
 }
 
@@ -48,17 +98,26 @@ module Parser =
     /// Run a parser against an input state.
     let runOnInputState parser input = parser.ParseFn input
 
-    /// Run a parser against a string.
-    let run parser input =
+    /// Run a parser against a string, returning the full reply. Use this when
+    /// the consumption flag matters.
+    let runReply parser input =
         runOnInputState parser (InputState.fromString input)
 
+    /// Run a parser against a string, returning only the `ParseResult`.
+    let run parser input = (runReply parser input).Outcome
+
     /// Replace a parser's label. Failures are reported with the new label; the
-    /// original error text and position are preserved.
+    /// original error text, position and consumption are preserved.
     let setLabel newLabel parser =
         let inner input =
             match parser.ParseFn input with
-            | Success value -> Success value
-            | Failure (_, error, position) -> Failure (newLabel, error, position)
+            | {
+                  Outcome = Failure (_, error, position)
+              } as reply -> {
+                reply with
+                    Outcome = Failure (newLabel, error, position)
+              }
+            | reply -> reply
 
         { ParseFn = inner; Label = newLabel }
 
@@ -66,38 +125,62 @@ module Parser =
     let getLabel parser = parser.Label
 
     /// Parse a single character that satisfies a predicate.
+    ///
+    /// A rejected character does not consume input, so the character is left in
+    /// the stream and an alternative or a repetition can still backtrack.
     let satisfy predicate label =
         let inner input =
             let remainingInput, charOpt = InputState.nextChar input
 
             match charOpt with
-            | None ->
-                let err = "No more input"
-                let pos = ParserPosition.fromInputState input
-                Failure (label, err, pos)
+            | None -> ParseReply.softFail label "No more input" (ParserPosition.fromInputState input)
             | Some first ->
                 if predicate first then
-                    Success (first, remainingInput)
+                    ParseReply.okConsumed remainingInput first
                 else
-                    let err = $"Unexpected '{first}'"
-                    let pos = ParserPosition.fromInputState input
-                    Failure (label, err, pos)
+                    ParseReply.softFail label $"Unexpected '{first}'" (ParserPosition.fromInputState input)
 
         { ParseFn = inner; Label = label }
 
-    /// Try the first parser, falling back to the second if it fails. A failure
-    /// reports the combined label, so a top level error names every alternative
-    /// that was tried rather than only the last one.
+    /// Succeed only at the end of the input, leaving the input untouched.
+    ///
+    /// When input remains the parser fails without consuming, so a caller can
+    /// report trailing junk rather than backtracking into it.
+    let eof =
+        let label = "end of input"
+
+        let inner input =
+            match InputState.nextChar input with
+            | _, None -> ParseReply.ok input ()
+            | _, Some _ -> ParseReply.softFail label "Expected end of input" (ParserPosition.fromInputState input)
+
+        { ParseFn = inner; Label = label }
+
+    /// Try the first parser, falling back to the second if it fails *without*
+    /// consuming input.
+    ///
+    /// A failure that consumed input is committed: it propagates and the second
+    /// parser is never tried. A failure reports the combined label, so a top
+    /// level error names every alternative that was tried.
     let orElse parser1 parser2 =
         let label = $"{parser1.Label} orElse {parser2.Label}"
 
         let inner input =
             match runOnInputState parser1 input with
-            | Success success -> Success success
-            | Failure _ ->
+            | {
+                  Outcome = Failure _
+                  Consumed = Consumed
+              } as committed -> committed
+            | { Outcome = Failure _ } ->
                 match runOnInputState parser2 input with
-                | Success success -> Success success
-                | Failure (_, error, position) -> Failure (label, error, position)
+                | {
+                      Outcome = Failure (_, error, position)
+                  } as failed -> {
+                    failed with
+                        Outcome = Failure (label, error, position)
+                  }
+                | success -> success
+            | success -> success
 
         { ParseFn = inner; Label = label }
 
@@ -106,13 +189,28 @@ module Parser =
 
     /// Run `p`, then use its value to choose the next parser. This is the
     /// monadic bind that every other combinator is built from.
+    ///
+    /// The combined reply is consumed if either half consumed input.
     let bindP f p =
         let inner input =
             match runOnInputState p input with
-            | Failure (label, error, pos) -> Failure (label, error, pos)
-            | Success (value, remainingInput) ->
-                let p2 = f value
-                runOnInputState p2 remainingInput
+            | {
+                  Outcome = Failure (label, error, position)
+                  Consumed = consumed
+              } -> {
+                Outcome = Failure (label, error, position)
+                Consumed = consumed
+              }
+            | {
+                  Outcome = Success (value, remainingInput)
+                  Consumed = consumed
+              } ->
+                let reply = runOnInputState (f value) remainingInput
+
+                {
+                    reply with
+                        Consumed = ParseReply.orConsumed consumed reply.Consumed
+                }
 
         let label = $"bind {p.Label}"
 
@@ -120,7 +218,7 @@ module Parser =
 
     /// A parser that succeeds with `x` without consuming any input.
     let returnP x =
-        let inner input = Success (x, input)
+        let inner input = ParseReply.ok input x
         let label = "returnP"
 
         { ParseFn = inner; Label = label }
@@ -149,19 +247,34 @@ module Parser =
         | [] -> returnP []
         | head :: tail -> consP head (sequence tail)
 
-    /// Consume zero or more occurrences of `parser`. Always succeeds, so it
-    /// never has to report a failure.
-    let rec private parseZeroOrMore parser input =
-        let rec loop remainingInput values =
-            match runOnInputState parser remainingInput with
-            | Failure _ -> List.rev values, remainingInput
-            | Success (value, remainingInput) -> loop remainingInput (value :: values)
-
-        loop input []
-
     /// Match zero or more occurrences of a parser.
+    ///
+    /// The repetition stops, and succeeds with what it has collected, only when
+    /// the element fails without consuming input. An element that fails *after*
+    /// consuming input is committed, so the whole repetition fails with that
+    /// error instead of silently returning a partial list.
     let many parser =
-        let inner input = Success (parseZeroOrMore parser input)
+        let rec loop state values =
+            match runOnInputState parser state with
+            | {
+                  Outcome = Failure (label, error, position)
+                  Consumed = Consumed
+              } -> ParseReply.hardFail label error position
+            | { Outcome = Failure _ } ->
+                let consumed = if List.isEmpty values then NotConsumed else Consumed
+
+                {
+                    Outcome = Success (List.rev values, state)
+                    Consumed = consumed
+                }
+            | {
+                  Outcome = Success _
+                  Consumed = NotConsumed
+              } -> failwith $"many applied to a parser that accepts empty input: {parser.Label}"
+            | { Outcome = Success (value, next) } -> loop next (value :: values)
+
+        let inner input = loop input []
+
         let label = $"many {parser.Label}"
         { ParseFn = inner; Label = label }
 
@@ -172,7 +285,29 @@ module Parser =
         andThen parser (many parser) |> mapP join |> setLabel $"many1 {parser.Label}"
 
     /// Match zero or one occurrence of a parser.
+    ///
+    /// A failure that consumed input is committed and propagates, rather than
+    /// quietly becoming `None`.
     let opt p = orElse (mapP Some p) (returnP None)
+
+    /// Downgrade a committed failure to a non-consuming one, so an alternative
+    /// can run against the original input. This is Parsec's `try`.
+    let attempt parser =
+        let inner input =
+            match runOnInputState parser input with
+            | {
+                  Outcome = Failure _
+                  Consumed = Consumed
+              } as reply -> { reply with Consumed = NotConsumed }
+            | reply -> reply
+
+        {
+            ParseFn = inner
+            Label = parser.Label
+        }
+
+    /// Alias for `attempt`.
+    let tryP = attempt
 
     /// Keep the result of the left parser only.
     let keepLeft p1 p2 =

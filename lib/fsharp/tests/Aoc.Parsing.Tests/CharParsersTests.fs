@@ -64,4 +64,9 @@ let tests =
                     Column = 3
                 }
                 "should point at the mismatch"
+
+        testCase "pstring is atomic, so a shared-prefix alternative still runs"
+        <| fun () ->
+            let parser = pstring "for" <|> pstring "foo"
+            Expect.equal (valueOf (Parser.run parser "foo")) "foo" "should backtrack and try the second keyword"
     ]

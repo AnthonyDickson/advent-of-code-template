@@ -32,8 +32,20 @@ module CharParsers =
     let manyChars1 parser = many1 parser |>> charListToString
 
     /// Parse a specific string.
+    ///
+    /// Atomic: it either matches the whole string or fails without consuming
+    /// any input, so `pstring "for" <|> pstring "foreach"` tries both. This
+    /// matches FParsec's `pstring`, and means callers do not need to wrap a
+    /// keyword in `attempt` to stop a partial match from committing.
     let pstring str =
         let label = $"'{str}'"
 
-        str |> List.ofSeq |> List.map pchar |> sequence |> mapP charListToString
-        <?> label
+        let parser =
+            str
+            |> List.ofSeq
+            |> List.map pchar
+            |> sequence
+            |> mapP charListToString
+            |> attempt
+
+        parser <?> label

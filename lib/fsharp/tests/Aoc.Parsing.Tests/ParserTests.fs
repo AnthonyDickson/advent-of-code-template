@@ -250,8 +250,8 @@ let tests =
 
             testCase "runOnInputState parses from a given state"
             <| fun () ->
-                let result = Parser.runOnInputState (pchar 'b') (inputAt "abc" 0 1)
-                Expect.equal (valueOf result) 'b' "should parse from the given state"
+                let reply = Parser.runOnInputState (pchar 'b') (inputAt "abc" 0 1)
+                Expect.equal (valueOf reply.Outcome) 'b' "should parse from the given state"
         ]
 
         testList "labels" [
@@ -302,5 +302,112 @@ let tests =
                         Column = 0
                     }
                     "should point at the second line"
+        ]
+
+        testList "committed failure" [
+            testCase "orElse does not backtrack when the first parser consumed input"
+            <| fun () ->
+                let first = Parser.keepLeft (pchar 'a') (pchar 'b')
+                let parser = Parser.orElse first (pchar 'a')
+                let _, error, position = failureOf (Parser.run parser "ax")
+                Expect.equal error "Unexpected 'x'" "should keep the committed failure"
+
+                Expect.equal
+                    position
+                    {
+                        CurrentLine = Some "ax"
+                        Line = 0
+                        Column = 1
+                    }
+                    "should point at the offending character, not the start"
+
+            testCase "attempt lets the alternative backtrack"
+            <| fun () ->
+                let first = Parser.attempt (Parser.keepLeft (pchar 'a') (pchar 'b'))
+                let parser = Parser.orElse first (pchar 'a')
+                Expect.equal (valueOf (Parser.run parser "ax")) 'a' "should fall back to the first character"
+
+            testCase "tryP is an alias for attempt"
+            <| fun () ->
+                let first = Parser.tryP (Parser.keepLeft (pchar 'a') (pchar 'b'))
+                let parser = Parser.orElse first (pchar 'a')
+                Expect.equal (valueOf (Parser.run parser "ax")) 'a' "should fall back to the first character"
+
+            testCase "many propagates a committed element failure"
+            <| fun () ->
+                let element = Parser.keepLeft (pchar 'a') (pchar 'b')
+                let _, error, position = failureOf (Parser.run (Parser.many element) "abax")
+                Expect.equal error "Unexpected 'x'" "should report the committed element failure"
+
+                Expect.equal
+                    position
+                    {
+                        CurrentLine = Some "abax"
+                        Line = 0
+                        Column = 3
+                    }
+                    "should point at the committed failure"
+
+            testCase "sepBy propagates a trailing separator"
+            <| fun () ->
+                let parser = Parser.sepBy (pchar 'a') (pchar ',')
+                let _, error, position = failureOf (Parser.run parser "a,a,")
+                Expect.equal error "Unexpected '\n'" "should fail rather than stop at the trailing separator"
+
+                Expect.equal
+                    position
+                    {
+                        CurrentLine = Some "a,a,"
+                        Line = 0
+                        Column = 4
+                    }
+                    "should point past the last separator"
+
+            testCase "opt propagates a committed failure instead of returning None"
+            <| fun () ->
+                let parser = Parser.opt (Parser.andThen (pchar 'a') (pchar 'b'))
+                let _, error, _ = failureOf (Parser.run parser "ax")
+                Expect.equal error "Unexpected 'x'" "should not swallow the committed failure"
+
+            testCase "many raises on a parser that accepts empty input"
+            <| fun () ->
+                let parser = Parser.many (Parser.returnP 'x')
+                Expect.throws (fun () -> Parser.run parser "abc" |> ignore) "should raise the guard error"
+        ]
+
+        testList "runReply" [
+            testCase "reports whether input was consumed"
+            <| fun () ->
+                Expect.equal (Parser.runReply (pchar 'a') "abc").Consumed Consumed "should report consumption"
+
+                Expect.equal
+                    (Parser.runReply (pchar 'a') "xyz").Consumed
+                    NotConsumed
+                    "should report no consumption on a soft failure"
+        ]
+
+        testList "eof" [
+            testCase "succeeds at the end of the input"
+            <| fun () -> Expect.equal (valueOf (Parser.run eof "")) () "should accept the end of the input"
+
+            testCase "fails without consuming when input remains"
+            <| fun () ->
+                let label, error, position = failureOf (Parser.run eof "ab")
+                Expect.equal label "end of input" "should label the failure"
+                Expect.equal error "Expected end of input" "should describe the trailing input"
+
+                Expect.equal
+                    position
+                    {
+                        CurrentLine = Some "ab"
+                        Line = 0
+                        Column = 0
+                    }
+                    "should point at the remaining input"
+
+            testCase "succeeds once the input, including its line break, is consumed"
+            <| fun () ->
+                let parser = pchar 'a' .>> pchar '\n' .>> eof
+                Expect.equal (valueOf (Parser.run parser "a")) 'a' "should accept the end of the input"
         ]
     ]
