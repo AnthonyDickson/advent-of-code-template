@@ -28,7 +28,8 @@ It pins the SDK, restores `fantomas` and `fsautocomplete` from `.config/dotnet-t
   expression-oriented style.
 - `src/Aoc.Parsing/CharParsers.fs` - `pchar`, `anyOf`, the atomic `pstring`, and the `manyChars` helpers.
 - `src/Aoc.Parsing/WhitespaceParsers.fs` - `whitespaceChar`, `spaces`, `spaces1`.
-- `src/Aoc.Parsing/NumericParsers.fs` - `digitChar`, `digits`, `pint`, `pfloat`.
+- `src/Aoc.Parsing/NumericParsers.fs` - `digitChar`, `digits`, `pint`, `pint64`, `pfloat`. An integer too large for its
+  type is a parse failure at its first digit, not an exception.
 - `tests/Aoc.Parsing.Tests/` - the Expecto tests, one file per module above.
 
 The parser modules are `[<AutoOpen>]`, so a single `open Aoc.Parsing` brings the primitives, the operators, and every

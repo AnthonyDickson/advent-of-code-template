@@ -1,5 +1,7 @@
 module Aoc.Parsing.Tests.NumericParsersTests
 
+open System
+
 open Expecto
 
 open Aoc.Parsing
@@ -40,6 +42,29 @@ let tests =
         <| fun () ->
             let label, _, _ = failureOf (Parser.run pint "abc")
             Expect.equal label "integer" "should be labelled integer"
+
+        testCase "pint fails, rather than throwing, when the integer is out of range"
+        <| fun () ->
+            let reply = Parser.runOnInputState pint (inputAt "99999999999" 0 0)
+            Expect.equal reply.Consumed Consumed "should commit to the digits it read"
+            let label, error, position = failureOf reply.Outcome
+            Expect.equal label "integer" "should be labelled integer"
+            Expect.equal error "99999999999 is out of range" "should name the number"
+            Expect.equal (position.Line, position.Column) (0, 0) "should point at the start of the number"
+
+        testCase "pint parses the smallest 32-bit integer"
+        <| fun () -> Expect.equal (valueOf (Parser.run pint "-2147483648")) Int32.MinValue "should parse the minimum"
+
+        testCase "pint64 parses an integer beyond 32 bits"
+        <| fun () -> Expect.equal (valueOf (Parser.run pint64 "99999999999")) 99999999999L "should parse the integer"
+
+        testCase "pint64 parses a negative integer"
+        <| fun () -> Expect.equal (valueOf (Parser.run pint64 "-45")) -45L "should parse the sign"
+
+        testCase "digitChar rejects non-ASCII digits"
+        <| fun () ->
+            let label, _, _ = failureOf (Parser.run digitChar "٣")
+            Expect.equal label "digit" "should be labelled digit"
 
         testCase "pfloat parses a float"
         <| fun () ->
