@@ -5,7 +5,6 @@ license:         MIT
 maintainer:      anthony.dickson9656@gmail.com
 author:          Anthony Dickson
 build-type:      Simple
-extra-doc-files: CHANGELOG.md
 
 common shared-properties
     default-language: GHC2024
