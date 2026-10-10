@@ -21,8 +21,8 @@ def test_unknown_languages_fall_back_to_the_generic_names():
     assert (guide.part_one, guide.part_two) == ("solve_part_one", "solve_part_two")
 
 
-def test_ocaml_guide_mentions_the_line_list():
-    assert "string list" in " ".join(guide_for("ocaml").notes)
+def test_ocaml_guide_mentions_the_interface_file():
+    assert "lib/aoc.mli" in " ".join(guide_for("ocaml").notes)
 
 
 def test_steps_walk_from_the_copy_to_the_benchmark(repo):

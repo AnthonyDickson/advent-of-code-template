@@ -101,7 +101,7 @@ GUIDES: dict[str, Guide] = {
         part_one="solve_part_one",
         part_two="solve_part_two",
         notes=(
-            "`Aoc.load_input` returns the input as a `string list` of lines, not a single string.",
+            "The solutions take the whole input as one `string`; `lib/aoc.mli` declares them, so add any helper the tests call there too.",
         ),
     ),
     "odin": Guide(
