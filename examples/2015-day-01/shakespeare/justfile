@@ -16,9 +16,10 @@ lint:
 fmt:
     uv run ruff format aoc.py tests
 
+# Time the interpreter in `.venv` directly, so `uv run`'s own startup is not measured.
 benchmark: build
-    hyperfine --warmup 3 -N "uv run --quiet python aoc.py"
-    time -v uv run --quiet python aoc.py
+    hyperfine --warmup 3 -N ".venv/bin/python aoc.py"
+    time -v .venv/bin/python aoc.py
 
 clean:
     rm -rf .venv
