@@ -25,11 +25,11 @@ fn solve_part_one(input: &str) -> i64 {
 fn solve_part_two(input: &str) -> i64 {
     let mut floor = 0;
 
-    for (index, instruction) in input.chars().enumerate() {
+    for (position, instruction) in (1..).zip(input.chars()) {
         floor = step(floor, instruction);
 
         if floor == -1 {
-            return index as i64 + 1;
+            return position;
         }
     }
 
@@ -38,7 +38,7 @@ fn solve_part_two(input: &str) -> i64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::{solve_part_one, solve_part_two};
+    use super::*;
 
     #[test]
     fn solves_part_one() {
@@ -57,7 +57,7 @@ mod tests {
         for (input, expected) in cases {
             let actual = solve_part_one(input);
 
-            assert_eq!(actual, expected, "failed on input \"{input}\"")
+            assert_eq!(actual, expected, "failed on input \"{input}\"");
         }
     }
 
@@ -68,7 +68,7 @@ mod tests {
         for (input, expected) in cases {
             let actual = solve_part_two(input);
 
-            assert_eq!(actual, expected, "failed on input \"{input}\"")
+            assert_eq!(actual, expected, "failed on input \"{input}\"");
         }
     }
 }

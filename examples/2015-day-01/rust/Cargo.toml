@@ -9,4 +9,4 @@ edition = "2024"
 unsafe_code = "forbid"
 
 [lints.clippy]
-all = "warn"
+pedantic = { level = "warn", priority = -1 }

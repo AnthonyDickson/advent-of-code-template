@@ -20,7 +20,7 @@ fn solve_part_two(_input: &str) -> i64 {
 
 #[cfg(test)]
 mod tests {
-    use crate::{solve_part_one, solve_part_two};
+    use super::*;
 
     #[test]
     fn solves_part_one() {
@@ -29,7 +29,7 @@ mod tests {
 
         let actual = solve_part_one(input);
 
-        assert_eq!(actual, expected, "failed on input \"{input}\"")
+        assert_eq!(actual, expected, "failed on input \"{input}\"");
     }
 
     #[test]
@@ -39,6 +39,6 @@ mod tests {
 
         let actual = solve_part_two(input);
 
-        assert_eq!(actual, expected, "failed on input \"{input}\"")
+        assert_eq!(actual, expected, "failed on input \"{input}\"");
     }
 }
