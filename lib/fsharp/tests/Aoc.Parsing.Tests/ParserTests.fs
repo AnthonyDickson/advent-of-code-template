@@ -139,7 +139,7 @@ let tests =
 
             testCase "an empty list succeeds"
             <| fun () ->
-                let parser = Parser.sequence ([] : Parser<char> list)
+                let parser = Parser.sequence ([]: Parser<char> list)
                 Expect.equal (valueOf (Parser.run parser "abc")) [] "should return the empty list"
         ]
 
@@ -268,7 +268,7 @@ let tests =
         testList "ParseResult.toDisplayString" [
             testCase "renders a success"
             <| fun () ->
-                let result = Success (42, InputState.fromString "")
+                let result = Success(42, InputState.fromString "")
                 Expect.equal (ParseResult.toDisplayString result) "42" "should render the value"
 
             testCase "renders a failure with a caret"
@@ -279,7 +279,7 @@ let tests =
                     Column = 1
                 }
 
-                let result = Failure ("integer", "Unexpected 'x'", position)
+                let result = Failure("integer", "Unexpected 'x'", position)
 
                 Expect.equal
                     (ParseResult.toDisplayString result)

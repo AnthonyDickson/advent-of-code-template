@@ -21,8 +21,8 @@ module ParseResult =
     /// column where a failure occurred.
     let toDisplayString result =
         match result with
-        | Success (value, _input) -> $"{value}"
-        | Failure (label, error, position) ->
+        | Success(value, _input) -> $"{value}"
+        | Failure(label, error, position) ->
             let errorLine = position.CurrentLine |> Option.defaultValue ""
             let colPos = position.Column
             let linePos = position.Line
@@ -42,8 +42,8 @@ type Consumed =
 
 /// A parse outcome tagged with whether input was consumed before it finished.
 type ParseReply<'a> = {
-    Outcome : ParseResult<'a * InputState>
-    Consumed : Consumed
+    Outcome: ParseResult<'a * InputState>
+    Consumed: Consumed
 }
 
 /// Constructors for `ParseReply`, so the combinators name the branch they take
@@ -51,25 +51,25 @@ type ParseReply<'a> = {
 module ParseReply =
     /// A success that consumed no input.
     let ok state value = {
-        Outcome = Success (value, state)
+        Outcome = Success(value, state)
         Consumed = NotConsumed
     }
 
     /// A success that consumed input.
     let okConsumed state value = {
-        Outcome = Success (value, state)
+        Outcome = Success(value, state)
         Consumed = Consumed
     }
 
     /// A failure that consumed no input, so the caller may backtrack.
     let softFail label error pos = {
-        Outcome = Failure (label, error, pos)
+        Outcome = Failure(label, error, pos)
         Consumed = NotConsumed
     }
 
     /// A failure that consumed input, so the caller must not backtrack.
     let hardFail label error pos = {
-        Outcome = Failure (label, error, pos)
+        Outcome = Failure(label, error, pos)
         Consumed = Consumed
     }
 
@@ -87,8 +87,8 @@ module ParseReply =
 /// `setLabel` and the `<?>` operator relabel a parser without reimplementing
 /// it.
 type Parser<'a> = {
-    ParseFn : (InputState -> ParseReply<'a>)
-    Label : ParserLabel
+    ParseFn: (InputState -> ParseReply<'a>)
+    Label: ParserLabel
 }
 
 /// The core combinators. Auto-opened with the namespace, so `open Aoc.Parsing`
@@ -112,10 +112,10 @@ module Parser =
         let inner input =
             match parser.ParseFn input with
             | {
-                  Outcome = Failure (_, error, position)
+                  Outcome = Failure(_, error, position)
               } as reply -> {
                 reply with
-                    Outcome = Failure (newLabel, error, position)
+                    Outcome = Failure(newLabel, error, position)
               }
             | reply -> reply
 
@@ -174,10 +174,10 @@ module Parser =
             | { Outcome = Failure _ } ->
                 match runOnInputState parser2 input with
                 | {
-                      Outcome = Failure (_, error, position)
+                      Outcome = Failure(_, error, position)
                   } as failed -> {
                     failed with
-                        Outcome = Failure (label, error, position)
+                        Outcome = Failure(label, error, position)
                   }
                 | success -> success
             | success -> success
@@ -195,14 +195,14 @@ module Parser =
         let inner input =
             match runOnInputState p input with
             | {
-                  Outcome = Failure (label, error, position)
+                  Outcome = Failure(label, error, position)
                   Consumed = consumed
               } -> {
-                Outcome = Failure (label, error, position)
+                Outcome = Failure(label, error, position)
                 Consumed = consumed
               }
             | {
-                  Outcome = Success (value, remainingInput)
+                  Outcome = Success(value, remainingInput)
                   Consumed = consumed
               } ->
                 let reply = runOnInputState (f value) remainingInput
@@ -257,21 +257,21 @@ module Parser =
         let rec loop state values =
             match runOnInputState parser state with
             | {
-                  Outcome = Failure (label, error, position)
+                  Outcome = Failure(label, error, position)
                   Consumed = Consumed
               } -> ParseReply.hardFail label error position
             | { Outcome = Failure _ } ->
                 let consumed = if List.isEmpty values then NotConsumed else Consumed
 
                 {
-                    Outcome = Success (List.rev values, state)
+                    Outcome = Success(List.rev values, state)
                     Consumed = consumed
                 }
             | {
                   Outcome = Success _
                   Consumed = NotConsumed
               } -> failwith $"many applied to a parser that accepts empty input: {parser.Label}"
-            | { Outcome = Success (value, next) } -> loop next (value :: values)
+            | { Outcome = Success(value, next) } -> loop next (value :: values)
 
         let inner input = loop input []
 

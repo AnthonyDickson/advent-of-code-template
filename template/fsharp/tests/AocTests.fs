@@ -6,7 +6,7 @@ open Aoc
 
 module AocTests =
     /// Checks one solution function against the example in the puzzle statement.
-    let private checkSolution (solve : string -> int) (input : string) (expected : int) =
+    let private checkSolution (solve: string -> int) (input: string) (expected: int) =
         let actual = solve input
 
         Expect.equal actual expected (sprintf "failed on input %A" input)

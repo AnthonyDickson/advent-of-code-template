@@ -23,7 +23,7 @@ module CharParsers =
         |> setLabel (sprintf "anyOf %A" listOfChars)
 
     /// Convert a list of characters to a string.
-    let charListToString charList = String (List.toArray charList)
+    let charListToString charList = String(List.toArray charList)
 
     /// Parse zero or more characters with `parser` and return them as a string.
     let manyChars parser = many parser |>> charListToString

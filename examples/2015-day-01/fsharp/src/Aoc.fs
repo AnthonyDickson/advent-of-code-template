@@ -7,10 +7,10 @@ let private step floor instruction =
     | _ -> floor
 
 /// Solves part one of the puzzle for the given input.
-let solvePartOne (input : string) : int = input |> Seq.fold step 0
+let solvePartOne (input: string) : int = input |> Seq.fold step 0
 
 /// Solves part two of the puzzle for the given input.
-let solvePartTwo (input : string) : int =
+let solvePartTwo (input: string) : int =
     input
     |> Seq.scan step 0
     |> Seq.skip 1
