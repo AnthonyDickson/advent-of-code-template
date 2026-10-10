@@ -170,7 +170,12 @@
               inherit (asset) hash;
             };
 
-            nativeBuildInputs = [ pkgs.autoPatchelfHook pkgs.zstd ];
+            # The Linux binaries need their interpreter and libraries patched to
+            # point into the store; the macOS ones are not ELF and need nothing.
+            nativeBuildInputs = [
+              pkgs.zstd
+            ]
+            ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.autoPatchelfHook ];
 
             installPhase = ''
               mkdir -p $out
