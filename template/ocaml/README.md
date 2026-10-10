@@ -16,7 +16,7 @@ dependencies installed.
   dune utop
   ```
 
-- Build:
+- Build with the release profile:
 
   ```shell
   just build
