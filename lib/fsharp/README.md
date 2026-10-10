@@ -21,8 +21,8 @@ It pins the SDK, restores `fantomas` and `fsautocomplete` from `.config/dotnet-t
 
 - `src/Aoc.Parsing/Position.fs` - `Position`, `InputState`, and `ParserPosition`. The input is split into lines up front
   and the end of a line is reported as a `'\n'`, so a grammar does not have to special-case line breaks.
-- `src/Aoc.Parsing/Parser.fs` - the core types (`ParseResult`, `ParseReply`, `Parser`) and the combinators built on
-  `bindP`: `satisfy`, `eof`, `orElse`, `choice`, `andThen`, `sequence`, `many`, `many1`, `opt`, `attempt`, `between`,
+- `src/Aoc.Parsing/Parser.fs` - the core types (`ParseResult`, `ParseReply`, `Parser`) and the combinators: `bindP`,
+  `mapP`, `satisfy`, `eof`, `orElse`, `choice`, `andThen`, `sequence`, `many`, `many1`, `opt`, `attempt`, `between`,
   `sepBy`, and friends.
 - `src/Aoc.Parsing/Operators.fs` - infix aliases (`<|>`, `.>>.`, `|>>`, ...) for building parsers in an
   expression-oriented style.

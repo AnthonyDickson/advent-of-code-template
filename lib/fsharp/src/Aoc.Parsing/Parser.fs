@@ -188,7 +188,8 @@ module Parser =
     let choice parsers = List.reduce orElse parsers
 
     /// Run `p`, then use its value to choose the next parser. This is the
-    /// monadic bind that every other combinator is built from.
+    /// monadic bind: it builds a parser from each value, so the fixed-shape
+    /// combinators (`mapP`, `andThen`, `applyP`) are written without it.
     ///
     /// The combined reply is consumed if either half consumed input.
     let bindP f p =
@@ -224,16 +225,69 @@ module Parser =
         { ParseFn = inner; Label = label }
 
     /// Apply a function to the value produced by a parser.
-    let mapP f = bindP (f >> returnP)
+    ///
+    /// Written directly rather than as `bindP (f >> returnP)`, so a parse does
+    /// not build a new parser (and format its label) for every value.
+    let mapP f parser =
+        let inner input =
+            let reply = runOnInputState parser input
+
+            match reply.Outcome with
+            | Success(value, remainingInput) -> {
+                Outcome = Success(f value, remainingInput)
+                Consumed = reply.Consumed
+              }
+            | Failure(label, error, position) -> {
+                Outcome = Failure(label, error, position)
+                Consumed = reply.Consumed
+              }
+
+        {
+            ParseFn = inner
+            Label = parser.Label
+        }
+
+    /// Run `parser1` then `parser2` and combine their values with `combine`.
+    /// A failure keeps the failing parser's label, and the reply is consumed if
+    /// either parser consumed input. This is `bindP` specialised to a second
+    /// parser that is known up front, so nothing is built during a parse.
+    let private combineP combine parser1 parser2 input =
+        let first = runOnInputState parser1 input
+
+        match first.Outcome with
+        | Failure(label, error, position) -> {
+            Outcome = Failure(label, error, position)
+            Consumed = first.Consumed
+          }
+        | Success(value1, remainingInput) ->
+            let second = runOnInputState parser2 remainingInput
+            let consumed = ParseReply.orConsumed first.Consumed second.Consumed
+
+            match second.Outcome with
+            | Failure(label, error, position) -> {
+                Outcome = Failure(label, error, position)
+                Consumed = consumed
+              }
+            | Success(value2, remainingInput) -> {
+                Outcome = Success(combine value1 value2, remainingInput)
+                Consumed = consumed
+              }
 
     /// Run two parsers in sequence, producing a parser of a pair.
     let andThen parser1 parser2 =
-        bindP (fun result1 -> bindP (fun result2 -> returnP (result1, result2)) parser2) parser1
-        |> setLabel $"{parser1.Label} andThen {parser2.Label}"
+        let label = $"{parser1.Label} andThen {parser2.Label}"
+
+        {
+            ParseFn = combineP (fun result1 result2 -> result1, result2) parser1 parser2
+            Label = label
+        }
+        |> setLabel label
 
     /// Apply a parser producing a function to a parser producing a value.
-    let applyP fP xP =
-        bindP (fun f -> bindP (fun x -> returnP (f x)) xP) fP
+    let applyP fP xP = {
+        ParseFn = combineP (fun f x -> f x) fP xP
+        Label = $"{fP.Label} applyP {xP.Label}"
+    }
 
     /// Lift a two parameter function into the parser world.
     let lift2 f xP yP = applyP (applyP (returnP f) xP) yP
