@@ -2,7 +2,7 @@ default:
     @just --list
 
 test:
-    lake exe tests
+    lake test
 
 run:
     lake exe aoc

@@ -1,5 +1,7 @@
 import Aoc
 
+open Aoc
+
 private def check (name : String) (expected actual : Int) : IO Bool := do
   if actual == expected then
     IO.println s!"ok   {name}"

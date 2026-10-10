@@ -1,6 +1,7 @@
 name = "aoc"
 version = "0.1.0"
 defaultTargets = ["aoc", "tests"]
+testDriver = "tests"
 
 [[lean_lib]]
 name = "Aoc"

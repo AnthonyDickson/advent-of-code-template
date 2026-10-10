@@ -1,3 +1,5 @@
+namespace Aoc
+
 private def step (floor : Int) (c : Char) : Int :=
   match c with
   | '(' => floor + 1
@@ -15,3 +17,5 @@ def solvePartOne (input : String) : Int :=
 
 def solvePartTwo (input : String) : Int :=
   firstBasement 0 0 input.toList
+
+end Aoc

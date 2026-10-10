@@ -46,6 +46,6 @@ bundled compiler instead of downloading one.
 
 ## Layout
 
-- `Aoc.lean` holds `solvePartOne` and `solvePartTwo`, the two functions to implement.
+- `Aoc.lean` holds `Aoc.solvePartOne` and `Aoc.solvePartTwo`, the two functions to implement.
 - `Main.lean` reads `input.txt` and prints both answers, one per line.
-- `Tests.lean` runs the example checks and exits non-zero when one fails.
+- `Tests.lean` is the `lake test` driver: it runs the example checks and exits non-zero when one fails.

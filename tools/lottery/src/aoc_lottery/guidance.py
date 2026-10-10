@@ -81,7 +81,7 @@ GUIDES: dict[str, Guide] = {
         part_one="solvePartOne",
         part_two="solvePartTwo",
         notes=(
-            "Tests live in `Tests.lean` and run through the `tests` executable (`just test`).",
+            "Tests live in `Tests.lean`, the `lake test` driver that `just test` runs.",
             "The solutions return `Int`, Lean's arbitrary-precision integer, so answers are not limited by a machine word.",
             "`lean-toolchain` pins the compiler; the dev shell provides the same version, so `lake` never downloads one.",
         ),
