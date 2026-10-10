@@ -1,7 +1,9 @@
 :- use_module(library(readutil), [read_file_to_string/3]).
 :- use_module(aoc).
 
-%% main is det.
+:- initialization(main, main).
+
+%! main is det.
 %
 %  Reads `input.txt` and prints both solutions, one per line.
 main :-
