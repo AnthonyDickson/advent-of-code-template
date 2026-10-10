@@ -13,10 +13,9 @@ common shared-properties
         -Wall
         -Wcompat
         -Widentities
-        -Wincomplete-record-updates
-        -Wincomplete-uni-patterns
         -Wmissing-export-lists
         -Wredundant-constraints
+        -Wunused-packages
 
     build-depends:    base ^>=4.21.0.0
 

@@ -4,7 +4,7 @@ module Aoc
   )
 where
 
-import Data.List
+import Data.List (elemIndex)
 
 step :: Integer -> Char -> Integer
 step currentFloor '(' = currentFloor + 1

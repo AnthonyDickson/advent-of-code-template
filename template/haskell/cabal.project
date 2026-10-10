@@ -1,0 +1,5 @@
+packages: .
+
+-- `just benchmark` times the executable, so build with -O2 rather than
+-- cabal's default of -O1.
+optimization: 2

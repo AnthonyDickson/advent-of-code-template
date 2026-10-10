@@ -17,7 +17,7 @@ outdated:
     cabal update && cabal outdated
 
 benchmark: build
-    hyperfine -N "`cabal list-bin aoc`"
+    hyperfine --warmup 3 -N "`cabal list-bin aoc`"
     time -v "`cabal list-bin aoc`"
 
 clean:
