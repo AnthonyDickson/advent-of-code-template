@@ -29,6 +29,12 @@ dependencies installed.
   ./aoc
   ```
 
+- Check the code with the vet and strict style checks:
+
+  ```shell
+  just lint
+  ```
+
 - Benchmark:
 
   ```shell

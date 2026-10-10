@@ -10,6 +10,9 @@ run:
 build:
     odin build src -out:aoc
 
+lint:
+    odin check src -vet -strict-style
+
 fmt:
     odinfmt -w src
 

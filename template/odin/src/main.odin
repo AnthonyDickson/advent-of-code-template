@@ -3,7 +3,7 @@ package main
 import "core:fmt"
 import "core:os"
 
-import aoc "aoc"
+import "aoc"
 
 main :: proc() {
 	data, err := os.read_entire_file("input.txt", context.allocator)
