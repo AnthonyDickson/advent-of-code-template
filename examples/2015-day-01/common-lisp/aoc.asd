@@ -8,7 +8,8 @@
                              (:file "main"))))
   :build-operation "program-op"
   :build-pathname "aoc"
-  :entry-point "aoc/main:main")
+  :entry-point "aoc/main:main"
+  :in-order-to ((test-op (test-op "aoc/tests"))))
 
 (defsystem "aoc/tests"
   :description "Tests for the Advent of Code solution"
@@ -17,4 +18,8 @@
   :depends-on ("aoc" "rove")
   :serial t
   :components ((:module "tests"
-                :components ((:file "aoc-test")))))
+                :components ((:file "aoc-test"))))
+  :perform (test-op (operation component)
+             (declare (ignore operation))
+             (unless (uiop:symbol-call :rove :run component)
+               (error "Tests failed."))))

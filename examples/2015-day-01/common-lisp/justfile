@@ -6,7 +6,7 @@ default:
     @just --list
 
 test:
-    sbcl --non-interactive {{asdf}} --eval '(asdf:load-system :aoc/tests)' --eval '(uiop:quit (unless (uiop:symbol-call :rove :run :aoc/tests) 1))'
+    sbcl --non-interactive {{asdf}} --eval '(asdf:test-system :aoc)'
 
 run:
     sbcl --non-interactive {{asdf}} --eval '(asdf:load-system :aoc)' --eval '(aoc/main:main)'

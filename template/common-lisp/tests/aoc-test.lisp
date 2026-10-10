@@ -1,5 +1,8 @@
 (defpackage #:aoc/tests
-  (:use #:cl #:rove #:aoc))
+  (:use #:cl #:rove)
+  (:import-from #:aoc
+                #:solve-part-one
+                #:solve-part-two))
 (in-package #:aoc/tests)
 
 (deftest part-one-solves-the-example
