@@ -1,6 +1,6 @@
 defmodule Aoc do
   @moduledoc """
-  Documentation for `Aoc`.
+  Solutions to the Advent of Code puzzle.
   """
 
   @doc """

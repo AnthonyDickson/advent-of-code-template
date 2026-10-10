@@ -10,6 +10,9 @@ build:
 run: build
     ./aoc
 
+outdated:
+    mix hex.outdated
+
 update:
     mix deps.update --all
 

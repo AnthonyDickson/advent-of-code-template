@@ -30,8 +30,9 @@ dependencies installed.
   just benchmark
   ```
 
-- Upgrade dependencies:
+- Check for and upgrade dependencies:
 
   ```shell
+  just outdated
   just update
   ```

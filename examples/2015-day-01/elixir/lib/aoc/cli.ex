@@ -3,8 +3,6 @@ defmodule Aoc.CLI do
   Command line entry point for the Advent of Code solutions.
   """
 
-  alias Aoc
-
   def main(_args \\ []) do
     case File.read("input.txt") do
       {:ok, contents} ->
