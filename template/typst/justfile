@@ -21,9 +21,11 @@ fmt:
 lint:
     fd --extension typ --print0 | xargs -0 -n 1 tinymist lint --root .
 
-benchmark: build
-    hyperfine --warmup 3 -N "just --quiet run"
-    time -v just --quiet run
+# Time one `typst eval`: compiling `main.typ` solves both parts, so a single evaluation
+# measures the whole solution without a `just` process or a second compile.
+benchmark:
+    hyperfine --warmup 3 -N "typst eval --in main.typ 'query(<part-one>).first().value'"
+    time -v typst eval --in main.typ 'query(<part-one>).first().value'
 
 clean:
     rm -f main.pdf

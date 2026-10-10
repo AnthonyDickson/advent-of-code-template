@@ -91,4 +91,5 @@ typst eval --in main.typ 'query(<part-one>).first().value'
 
 `query` finds the labelled element, `first` unwraps the single match, and `value` is the payload. Keeping the answers in
 variables (`#let part-one = solve-part-one(input)`) lets the document show them and publish them at the same time. The
-`run` recipe queries the two answers separately, which is what puts them on two lines.
+`run` recipe queries the two answers separately, which is what puts them on two lines. Each query compiles the whole
+document, solving both parts, so `just benchmark` times a single `typst eval` rather than the two-step `run`.
