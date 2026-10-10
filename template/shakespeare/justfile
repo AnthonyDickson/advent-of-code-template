@@ -16,6 +16,12 @@ lint:
 fmt:
     uv run ruff format aoc.py tests
 
+outdated:
+    uv tree --outdated --depth 1
+
+update:
+    uv lock --upgrade
+
 # Time the interpreter in `.venv` directly, so `uv run`'s own startup is not measured.
 benchmark *args: build
     hyperfine --warmup 3 -N ".venv/bin/python aoc.py" {{args}}

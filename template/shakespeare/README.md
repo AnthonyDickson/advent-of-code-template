@@ -54,6 +54,13 @@ first `just test`, `just run` or `just build`, so that first command needs netwo
   just benchmark
   ```
 
+- Check for and upgrade dependencies:
+
+  ```shell
+  just outdated
+  just update
+  ```
+
 ## Layout
 
 - `src/part_one.spl` and `src/part_two.spl` are the two plays to implement.
