@@ -20,8 +20,8 @@ update:
     gleam deps update
 
 benchmark *args: build
-    hyperfine --warmup 3 "./build/erlang-shipment/entrypoint.sh run" {{args}}
-    time -v ./build/erlang-shipment/entrypoint.sh run
+    hyperfine --warmup 3 -N "sh ./build/erlang-shipment/entrypoint.sh run" {{args}}
+    time -v sh ./build/erlang-shipment/entrypoint.sh run
 
 clean:
     rm -rf build
