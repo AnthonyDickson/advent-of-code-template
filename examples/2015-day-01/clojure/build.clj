@@ -21,9 +21,9 @@
   (b/copy-dir {:src-dirs ["src"]
                :target-dir class-dir})
   (b/compile-clj {:basis (basis)
-                  :ns-compile '[aoc]
+                  :ns-compile '[aoc.core]
                   :class-dir class-dir})
   (b/uber {:class-dir class-dir
            :uber-file uber-file
            :basis (basis)
-           :main 'aoc}))
+           :main 'aoc.core}))

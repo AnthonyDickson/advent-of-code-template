@@ -1,5 +1,5 @@
-(ns aoc-test
-  (:require [aoc :as aoc]
+(ns aoc.core-test
+  (:require [aoc.core :as aoc]
             [clojure.test :refer [deftest is]]))
 
 (def part-one-cases

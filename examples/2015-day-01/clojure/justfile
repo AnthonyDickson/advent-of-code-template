@@ -1,4 +1,4 @@
-java-options := "-XX:TieredStopAtLevel=1 -XX:+UseSerialGC -XX:SharedArchiveFile=target/aoc.jsa"
+java-options := "-XX:+UseSerialGC -XX:SharedArchiveFile=target/aoc.jsa"
 
 default:
     @just --list
@@ -7,11 +7,11 @@ test:
     clojure -X:test
 
 run:
-    clojure -M -m aoc
+    clojure -M -m aoc.core
 
 build:
     clojure -T:build uber
-    java -XX:ArchiveClassesAtExit=target/aoc.jsa -cp target/aoc.jar clojure.main -e "(require 'aoc)" > /dev/null
+    java -XX:ArchiveClassesAtExit=target/aoc.jsa -cp target/aoc.jar clojure.main -e "(require 'aoc.core)" > /dev/null
 
 fmt:
     cljfmt fix src test build.clj

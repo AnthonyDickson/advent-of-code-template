@@ -1,4 +1,4 @@
-(ns aoc
+(ns aoc.core
   (:gen-class))
 
 (defn solve-part-one
