@@ -8,16 +8,22 @@ check:
     deno check src/main.ts
 
 run:
-    deno run --allow-read src/main.ts
+    deno run --allow-read=input.txt src/main.ts
 
 build:
-    deno compile --allow-read --output aoc src/main.ts
+    deno compile --allow-read=input.txt --output aoc src/main.ts
 
 fmt:
     deno fmt
 
 lint:
     deno lint
+
+outdated:
+    deno outdated
+
+update:
+    deno outdated --update
 
 benchmark: build
     hyperfine --warmup 3 -N ./aoc

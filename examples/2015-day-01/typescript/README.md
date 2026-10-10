@@ -52,6 +52,13 @@ Deno downloads and caches on the first `just test`, so that run needs network.
   just benchmark
   ```
 
+- Check for and upgrade dependencies:
+
+  ```shell
+  just outdated
+  just update
+  ```
+
 ## Layout
 
 - `src/aoc.ts` holds `solvePartOne` and `solvePartTwo`, the two functions to implement.
