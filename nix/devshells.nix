@@ -249,8 +249,8 @@
         # nightly here, keep the `roc:` entry in the templates' `app` headers in
         # step with it, and unpack the prebuilt binary, which is statically linked
         # on Linux and so needs no patching.
-        version = "nightly-2026-09-19-d025939";
         stamp = "2026-09-19-d025939";
+        version = "nightly-${stamp}";
         asset =
           {
             x86_64-linux = {
