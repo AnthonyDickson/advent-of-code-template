@@ -1,3 +1,3 @@
 module github.com/anthonydickson/advent-of-code-template
 
-go 1.27.1
+go 1.27
