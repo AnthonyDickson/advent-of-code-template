@@ -37,6 +37,26 @@ let tests =
             <| fun () ->
                 let actual = InputState.fromString "ab\r\ncd"
                 Expect.sequenceEqual actual.Lines [| "ab"; "cd" |] "should strip the carriage return"
+
+            testCase "a trailing line ending does not add an empty line"
+            <| fun () ->
+                let actual = InputState.fromString "ab\ncd\n"
+                Expect.sequenceEqual actual.Lines [| "ab"; "cd" |] "should end on the last line"
+
+            testCase "a trailing \\r\\n does not add an empty line"
+            <| fun () ->
+                let actual = InputState.fromString "ab\r\n"
+                Expect.sequenceEqual actual.Lines [| "ab" |] "should end on the last line"
+
+            testCase "keeps blank lines before the trailing line ending"
+            <| fun () ->
+                let actual = InputState.fromString "ab\n\n"
+                Expect.sequenceEqual actual.Lines [| "ab"; "" |] "should keep the blank line"
+
+            testCase "a lone line ending is one empty line"
+            <| fun () ->
+                let actual = InputState.fromString "\n"
+                Expect.sequenceEqual actual.Lines [| "" |] "should have one empty line"
         ]
 
         testList "InputState.currentLine" [

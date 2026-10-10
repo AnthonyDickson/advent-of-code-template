@@ -37,7 +37,10 @@ module InputState =
     /// Build an input state from a string.
     ///
     /// Both `\r\n` and `\n` are treated as line endings, so input read on
-    /// Windows and input read on Unix produce the same lines.
+    /// Windows and input read on Unix produce the same lines. A line ending at
+    /// the very end of the input terminates the last line rather than starting
+    /// an empty one, so `"a\n"` and `"a"` both produce the single line `"a"`
+    /// (and `nextChar` reports one `'\n'` after it either way).
     let fromString (str : string) =
         if String.IsNullOrEmpty str then
             {
@@ -47,6 +50,12 @@ module InputState =
         else
             let separators = [| "\r\n"; "\n" |]
             let lines = str.Split (separators, StringSplitOptions.None)
+
+            let lines =
+                if lines.Length > 1 && lines.[lines.Length - 1] = "" then
+                    lines.[.. lines.Length - 2]
+                else
+                    lines
 
             {
                 Lines = lines

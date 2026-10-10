@@ -409,5 +409,10 @@ let tests =
             <| fun () ->
                 let parser = pchar 'a' .>> pchar '\n' .>> eof
                 Expect.equal (valueOf (Parser.run parser "a")) 'a' "should accept the end of the input"
+
+            testCase "succeeds after the final line break of input that ends with one"
+            <| fun () ->
+                let parser = pchar 'a' .>> pchar '\n' .>> eof
+                Expect.equal (valueOf (Parser.run parser "a\n")) 'a' "should not report an extra line break"
         ]
     ]
