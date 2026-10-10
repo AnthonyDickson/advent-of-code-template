@@ -22,7 +22,7 @@ dependencies installed.
   just run
   ```
 
-- Build an executable at `./aoc`, then run it:
+- Build an optimized executable at `./aoc`, then run it:
 
   ```shell
   just build

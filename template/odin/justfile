@@ -8,7 +8,7 @@ run:
     odin run src
 
 build:
-    odin build src -out:aoc
+    odin build src -out:aoc -o:speed
 
 lint:
     odin check src -vet -strict-style
