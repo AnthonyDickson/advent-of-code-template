@@ -1,27 +1,27 @@
 const std = @import("std");
 
-const MAX_FILE_SIZE = 1024 * 1024; // 1 MiB
-const INPUT_FILENAME = "input.txt";
-const STDOUT_BUFFER_SIZE = 1024;
+const max_file_size = 1024 * 1024; // 1 MiB
+const input_filename = "input.txt";
+const stdout_buffer_size = 1024;
 
 pub fn main(init: std.process.Init) !void {
     const io = init.io;
     const allocator = init.arena.allocator();
 
-    const input = std.Io.Dir.cwd().readFileAlloc(io, INPUT_FILENAME, allocator, .limited(MAX_FILE_SIZE)) catch |err| {
-        std.log.err("Could not open {s}: {}", .{ INPUT_FILENAME, err });
+    const input = std.Io.Dir.cwd().readFileAlloc(io, input_filename, allocator, .limited(max_file_size)) catch |err| {
+        std.log.err("Could not open {s}: {}", .{ input_filename, err });
         return err;
     };
 
-    const part1_result = solve_part_one(input);
-    const part2_result = solve_part_two(input);
+    const part_one = solvePartOne(input);
+    const part_two = solvePartTwo(input);
 
-    var stdout_buffer: [STDOUT_BUFFER_SIZE]u8 = undefined;
+    var stdout_buffer: [stdout_buffer_size]u8 = undefined;
     var stdout_writer = std.Io.File.stdout().writer(io, &stdout_buffer);
     const stdout = &stdout_writer.interface;
 
-    try stdout.print("{d}\n", .{part1_result});
-    try stdout.print("{d}\n", .{part2_result});
+    try stdout.print("{d}\n", .{part_one});
+    try stdout.print("{d}\n", .{part_two});
 
     try stdout.flush();
 }
@@ -34,7 +34,7 @@ fn step(char: u8) i64 {
     };
 }
 
-fn solve_part_one(input: []const u8) i64 {
+fn solvePartOne(input: []const u8) i64 {
     var floor: i64 = 0;
 
     for (input) |char| {
@@ -44,7 +44,7 @@ fn solve_part_one(input: []const u8) i64 {
     return floor;
 }
 
-fn solve_part_two(input: []const u8) i64 {
+fn solvePartTwo(input: []const u8) i64 {
     var floor: i64 = 0;
 
     for (input, 0..) |char, i| {
@@ -58,7 +58,7 @@ fn solve_part_two(input: []const u8) i64 {
     return 0;
 }
 
-test "test part one" {
+test "part one" {
     const cases = [_]struct { []const u8, i64 }{
         .{ "(())", 0 },
         .{ "()()", 0 },
@@ -74,13 +74,13 @@ test "test part one" {
     for (cases) |case| {
         const input, const expected = case;
 
-        const actual = solve_part_one(input);
+        const actual = solvePartOne(input);
 
         try std.testing.expectEqual(expected, actual);
     }
 }
 
-test "test part two" {
+test "part two" {
     const cases = [_]struct { []const u8, i64 }{
         .{ ")", 1 },
         .{ "()())", 5 },
@@ -89,7 +89,7 @@ test "test part two" {
     for (cases) |case| {
         const input, const expected = case;
 
-        const actual = solve_part_two(input);
+        const actual = solvePartTwo(input);
 
         try std.testing.expectEqual(expected, actual);
     }

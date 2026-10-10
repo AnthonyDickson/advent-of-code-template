@@ -201,8 +201,8 @@ GUIDES: dict[str, Guide] = {
     ),
     "zig": Guide(
         entry_point="src/main.zig",
-        part_one="solve_part_one",
-        part_two="solve_part_two",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
         notes=("`just benchmark` needs the release binary from `just build`.",),
     ),
 }

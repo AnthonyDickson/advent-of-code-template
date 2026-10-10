@@ -11,7 +11,7 @@ build:
     zig build --release=fast
 
 fmt:
-    zig fmt src/
+    zig fmt .
 
 benchmark: build
     hyperfine --warmup 3 -N ./zig-out/bin/aoc
