@@ -70,11 +70,12 @@ SQL has no `print`, so the answers leave the script as the result sets of two `S
 other `solve_part_two`, and the `run` recipe asks the CLI for one value per line:
 
 ```shell
-duckdb -batch -bail -no-init -noheader -list < main.sql
+duckdb -batch -bail -no-init -noheader -list -f main.sql
 ```
 
-`.read` is a CLI command rather than SQL, which is why `main.sql` is fed to the CLI on standard input instead of being
-named as an argument. The flags are:
+`.read` is a CLI command rather than SQL, which is why `main.sql` is run by the CLI as a script (`-f`) rather than
+passed as a query (`-c`). `just benchmark` times this same command, so the timing includes no wrapper process. The flags
+are:
 
 - `-list -noheader` prints each row as a plain line, with no box or column header around the answer.
 - `-batch` keeps the CLI in non-interactive mode even when a terminal is attached.

@@ -1,8 +1,8 @@
 -- The entry point: it reads `input.txt` and prints both answers, one per line.
--- Run it with `just run`, which pipes this script into the DuckDB CLI.
+-- Run it with `just run`, which hands this script to the DuckDB CLI with `-f`.
 --
--- `.read` is a DuckDB CLI command, not SQL, which is why this file is run
--- through the CLI rather than named on the command line.
+-- `.read` is a DuckDB CLI command, not SQL, which is why this file is run by
+-- the CLI as a script rather than sent to DuckDB as a query.
 
 .read src/aoc.sql
 
