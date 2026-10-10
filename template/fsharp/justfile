@@ -23,8 +23,8 @@ update:
     dotnet package update
     dotnet tool update --all
 
-benchmark: build
-    hyperfine --warmup 3 -N ./src/bin/Release/net10.0/Aoc
+benchmark *args: build
+    hyperfine --warmup 3 -N ./src/bin/Release/net10.0/Aoc {{args}}
     time -v ./src/bin/Release/net10.0/Aoc
 
 clean:

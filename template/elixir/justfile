@@ -16,8 +16,8 @@ outdated:
 update:
     mix deps.update --all
 
-benchmark: build
-    hyperfine --warmup 3 -N ./aoc
+benchmark *args: build
+    hyperfine --warmup 3 -N ./aoc {{args}}
     time -v ./aoc
 
 fmt:

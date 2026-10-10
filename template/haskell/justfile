@@ -16,8 +16,8 @@ fmt:
 outdated:
     cabal update && cabal outdated
 
-benchmark: build
-    hyperfine --warmup 3 -N "`cabal list-bin aoc`"
+benchmark *args: build
+    hyperfine --warmup 3 -N "`cabal list-bin aoc`" {{args}}
     time -v "`cabal list-bin aoc`"
 
 clean:

@@ -13,8 +13,8 @@ build:
 fmt:
     zig fmt .
 
-benchmark: build
-    hyperfine --warmup 3 -N ./zig-out/bin/aoc
+benchmark *args: build
+    hyperfine --warmup 3 -N ./zig-out/bin/aoc {{args}}
     time -v ./zig-out/bin/aoc
 
 clean:

@@ -23,8 +23,8 @@ lint:
 
 # Time one `typst eval`: compiling `main.typ` solves both parts, so a single evaluation
 # measures the whole solution without a `just` process or a second compile.
-benchmark:
-    hyperfine --warmup 3 -N "typst eval --in main.typ 'query(<part-one>).first().value'"
+benchmark *args:
+    hyperfine --warmup 3 -N "typst eval --in main.typ 'query(<part-one>).first().value'" {{args}}
     time -v typst eval --in main.typ 'query(<part-one>).first().value'
 
 clean:

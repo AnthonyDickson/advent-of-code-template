@@ -51,7 +51,8 @@ Two recipe behaviours are not obvious from a single file and matter when running
 
 - Some recipes never exit on purpose (watch mode). Check a recipe body for `-w`/`--watch` before running it.
 - `benchmark` recipes use `hyperfine` plus GNU `time -v` for peak RAM, and usually depend on `build` having produced a
-  release binary. Both tools come from the Nix dev shell.
+  release binary. Both tools come from the Nix dev shell. Every `benchmark` recipe takes `*args` and passes them on to
+  `hyperfine`, which is how the results recorder asks for `--export-json`; keep that in any new or changed recipe.
 
 ## Adding a language
 
@@ -161,9 +162,9 @@ forwards arguments to the tool (`just lottery --plain --day 5`), and `tools/lott
 ## The results recorder
 
 `tools/results/` is the other self-contained uv project. It benchmarks one solution folder with that template's own
-`just benchmark` recipe and upserts the hyperfine mean, the GNU `time -v` peak RSS, and the application code's `tokei`
-line count into a `RESULTS.md` table, deriving the baseline by benchmarking the untouched template on the same input. It
-needs `just`, `tokei`, git, and `dprint`, so run it inside the language's dev shell.
+`just benchmark` recipe and upserts the hyperfine mean and peak RSS (read from its `--export-json` output), and the
+application code's `tokei` line count into a `RESULTS.md` table, deriving the baseline by benchmarking the untouched
+template on the same input. It needs `just`, `tokei`, git, and `dprint`, so run it inside the language's dev shell.
 
 ```shell
 just record 2026-day-05   # benchmark a solution and add it to RESULTS.md

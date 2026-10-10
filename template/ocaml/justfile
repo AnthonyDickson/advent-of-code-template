@@ -19,8 +19,8 @@ test-watch:
 fmt:
     dune build @fmt --auto-promote
 
-benchmark: build
-    hyperfine --warmup 3 -N ./_build/default/bin/main.exe
+benchmark *args: build
+    hyperfine --warmup 3 -N ./_build/default/bin/main.exe {{args}}
     time -v ./_build/default/bin/main.exe
 
 clean:

@@ -13,6 +13,6 @@ run:
 build:
     duckdb -batch -bail -no-init -noheader -list -c ".read src/aoc.sql"
 
-benchmark:
-    hyperfine --warmup 3 -N "duckdb -batch -bail -no-init -noheader -list -f main.sql"
+benchmark *args:
+    hyperfine --warmup 3 -N "duckdb -batch -bail -no-init -noheader -list -f main.sql" {{args}}
     time -v duckdb -batch -bail -no-init -noheader -list -f main.sql

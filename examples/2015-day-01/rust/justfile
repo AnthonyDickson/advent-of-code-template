@@ -22,8 +22,8 @@ outdated:
 update:
     cargo update
 
-benchmark: build
-    hyperfine --warmup 3 -N ./target/release/aoc
+benchmark *args: build
+    hyperfine --warmup 3 -N ./target/release/aoc {{args}}
     time -v ./target/release/aoc
 
 clean:

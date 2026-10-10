@@ -13,6 +13,6 @@ run:
 build:
     nu --no-config-file --commands 'source main.nu'
 
-benchmark:
-    hyperfine --warmup 3 -N "nu main.nu"
+benchmark *args:
+    hyperfine --warmup 3 -N "nu main.nu" {{args}}
     time -v nu main.nu

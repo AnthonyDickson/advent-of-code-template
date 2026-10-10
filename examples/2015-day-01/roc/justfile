@@ -20,8 +20,8 @@ check:
 fmt:
     roc fmt .
 
-benchmark: build
-    hyperfine --warmup 3 -N ./main
+benchmark *args: build
+    hyperfine --warmup 3 -N ./main {{args}}
     time -v ./main
 
 clean:

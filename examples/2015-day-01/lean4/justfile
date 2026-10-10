@@ -10,8 +10,8 @@ run:
 build:
     lake build
 
-benchmark: build
-    hyperfine --warmup 3 -N .lake/build/bin/aoc
+benchmark *args: build
+    hyperfine --warmup 3 -N .lake/build/bin/aoc {{args}}
     time -v .lake/build/bin/aoc
 
 clean:

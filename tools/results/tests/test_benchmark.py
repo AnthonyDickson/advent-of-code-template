@@ -1,49 +1,69 @@
+import json
 import shutil
 
 import pytest
 
 from aoc_results import benchmark
 
-SAMPLE = """Benchmark 1: ./target/release/aoc
-  Time (mean ± σ):     790.4 µs ±  20.0 µs    [User: 700.0 µs, System: 90.4 µs]
-  Range (min … max):   770.1 µs … 820.2 µs    10 runs
 
-\tCommand being timed: "./target/release/aoc"
-\tMaximum resident set size (kbytes): 2268
-"""
+def export(mean=0.0007904, memory=(2_322_432, 2_318_336)):
+    """A hyperfine ``--export-json`` document with one command's results."""
+    return json.dumps(
+        {
+            "results": [
+                {
+                    "command": "./target/release/aoc",
+                    "mean": mean,
+                    "stddev": 0.00002,
+                    "times": [mean] * len(memory),
+                    "memory_usage_byte": list(memory),
+                    "exit_codes": [0] * len(memory),
+                }
+            ]
+        }
+    )
+
 
 needs_just = pytest.mark.skipif(shutil.which("just") is None, reason="just is required")
 
 
 def test_parse_reads_the_mean_and_peak_ram():
-    result = benchmark.parse(SAMPLE)
+    result = benchmark.parse(export())
     assert result.total_us == pytest.approx(790.4)
     assert result.peak_ram_kib == 2268
 
 
+def test_parse_takes_the_largest_run_as_the_peak():
+    result = benchmark.parse(export(memory=(1024, 4096, 2048)))
+    assert result.peak_ram_kib == 4
+
+
 @pytest.mark.parametrize(
-    ("printed", "expected"),
+    ("seconds", "expected"),
     [
-        ("5.0 ns", 0.005),
-        ("12.5 µs", 12.5),
-        ("250.0 us", 250.0),
-        ("2.5 ms", 2500.0),
-        ("1.5 s", 1_500_000.0),
+        (0.000000005, 0.005),
+        (0.0000125, 12.5),
+        (0.0025, 2500.0),
+        (1.5, 1_500_000.0),
     ],
 )
-def test_every_hyperfine_unit_converts_to_microseconds(printed, expected):
-    output = f"  Time (mean ± σ):     {printed} ± 1.0 µs\nMaximum resident set size (kbytes): 10\n"
-    assert benchmark.parse(output).total_us == pytest.approx(expected)
+def test_seconds_convert_to_microseconds(seconds, expected):
+    assert benchmark.parse(export(mean=seconds)).total_us == pytest.approx(expected)
 
 
-def test_missing_mean_is_reported():
-    with pytest.raises(benchmark.BenchmarkError, match="mean time"):
-        benchmark.parse("Maximum resident set size (kbytes): 2268\n")
-
-
-def test_missing_peak_ram_is_reported():
-    with pytest.raises(benchmark.BenchmarkError, match="resident set size"):
-        benchmark.parse("  Time (mean ± σ):     790.4 µs ±  20.0 µs\n")
+@pytest.mark.parametrize(
+    "document",
+    [
+        "not json",
+        json.dumps({"results": []}),
+        json.dumps({"results": [{"memory_usage_byte": [1024]}]}),
+        json.dumps({"results": [{"mean": 0.1}]}),
+        json.dumps({"results": [{"mean": 0.1, "memory_usage_byte": []}]}),
+    ],
+)
+def test_an_unreadable_export_is_reported(document):
+    with pytest.raises(benchmark.BenchmarkError, match="JSON export"):
+        benchmark.parse(document)
 
 
 def test_a_folder_without_a_justfile_is_rejected(tmp_path):
@@ -52,11 +72,10 @@ def test_a_folder_without_a_justfile_is_rejected(tmp_path):
 
 
 @needs_just
-def test_run_scrapes_a_real_recipe(tmp_path):
+def test_run_reads_the_export_a_real_recipe_writes(tmp_path):
+    (tmp_path / "export.json").write_text(export(), encoding="utf-8")
     (tmp_path / "justfile").write_text(
-        "benchmark:\n"
-        "\t@printf '  Time (mean ± σ):     790.4 µs ±  20.0 µs    [User: 700.0 µs]\\n'\n"
-        "\t@printf 'Maximum resident set size (kbytes): 2268\\n'\n",
+        "benchmark flag path:\n\t@cp export.json {{path}}\n",
         encoding="utf-8",
     )
     result = benchmark.run(tmp_path)
@@ -65,7 +84,14 @@ def test_run_scrapes_a_real_recipe(tmp_path):
 
 
 @needs_just
+def test_a_recipe_that_ignores_its_arguments_is_reported(tmp_path):
+    (tmp_path / "justfile").write_text("benchmark *args:\n\t@true\n", encoding="utf-8")
+    with pytest.raises(benchmark.BenchmarkError, match="no hyperfine JSON"):
+        benchmark.run(tmp_path)
+
+
+@needs_just
 def test_a_failing_recipe_is_reported(tmp_path):
-    (tmp_path / "justfile").write_text("benchmark:\n\t@exit 3\n", encoding="utf-8")
+    (tmp_path / "justfile").write_text("benchmark *args:\n\t@exit 3\n", encoding="utf-8")
     with pytest.raises(benchmark.BenchmarkError, match="failed"):
         benchmark.run(tmp_path)

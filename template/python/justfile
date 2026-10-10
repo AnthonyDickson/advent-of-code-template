@@ -24,8 +24,8 @@ update:
     uv lock --upgrade
 
 # Time the interpreter in `.venv` directly, so `uv run`'s own startup is not measured.
-benchmark: build
-    hyperfine --warmup 3 -N ".venv/bin/python main.py"
+benchmark *args: build
+    hyperfine --warmup 3 -N ".venv/bin/python main.py" {{args}}
     time -v .venv/bin/python main.py
 
 clean:

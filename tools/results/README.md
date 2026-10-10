@@ -16,6 +16,10 @@ and the line count needs `tokei`.
 nix develop .#rust -c just record 2026-day-05
 ```
 
+The recorder runs `just benchmark --export-json <file>`: every template's `benchmark` recipe passes its arguments on to
+`hyperfine`, and the mean time and the peak resident set size (the largest across the timed runs) are read from that
+JSON rather than from the terminal output.
+
 One row is written per day and part:
 
 | Day (Part) | Language                              | Baseline Time | Total Time | Solution Time | Peak RAM (KiB) | Lines |

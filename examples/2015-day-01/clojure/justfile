@@ -19,8 +19,8 @@ fmt:
 lint:
     clj-kondo --lint src test build.clj
 
-benchmark: build
-    hyperfine --warmup 3 -N "java {{java-options}} -jar target/aoc.jar"
+benchmark *args: build
+    hyperfine --warmup 3 -N "java {{java-options}} -jar target/aoc.jar" {{args}}
     time -v java {{java-options}} -jar target/aoc.jar
 
 clean:
