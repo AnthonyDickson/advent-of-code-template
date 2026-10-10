@@ -2,20 +2,31 @@ default:
     @just --list
 
 test:
-    pytest
+    uv run pytest
 
 run:
-    python main.py
+    uv run python main.py
+
+# Create `.venv` from `uv.lock`, so later recipes run offline.
+build:
+    uv sync
 
 lint:
-    ruff check
+    uv run ruff check
 
 fmt:
-    ruff format
+    uv run ruff format
 
 outdated:
-    uv pip compile --quiet --upgrade --group dev --no-header pyproject.toml
+    uv tree --outdated --depth 1
 
-benchmark:
-    hyperfine --warmup 3 -N "python main.py"
-    time -v python main.py
+update:
+    uv lock --upgrade
+
+# Time the interpreter in `.venv` directly, so `uv run`'s own startup is not measured.
+benchmark: build
+    hyperfine --warmup 3 -N ".venv/bin/python main.py"
+    time -v .venv/bin/python main.py
+
+clean:
+    rm -rf .venv

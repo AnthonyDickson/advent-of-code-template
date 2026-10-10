@@ -128,7 +128,10 @@ GUIDES: dict[str, Guide] = {
         entry_point="main.py",
         part_one="solve_part_one",
         part_two="solve_part_two",
-        notes=("Tests live in `tests/test_aoc.py`.",),
+        notes=(
+            "Tests live in `tests/test_aoc.py`.",
+            "`uv` fetches pytest and ruff into `.venv` on the first `just test`, so that run needs network.",
+        ),
     ),
     "roc": Guide(
         entry_point="src/Aoc.roc",
