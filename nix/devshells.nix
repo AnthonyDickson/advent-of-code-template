@@ -38,12 +38,13 @@
   languages = {
     clojure = pkgs: {
       packages = with pkgs; [
-        clojure
+        # Run the Clojure CLI on the same JDK as `java`, the current LTS.
+        (clojure.override { jdk = jdk25; })
         clojure-lsp # lsp
         # For linting and formatting Clojure source
         clj-kondo
         cljfmt
-        jdk21
+        jdk25
       ];
     };
 
@@ -297,12 +298,12 @@
         scala-cli
         metals # lsp
         scalafmt
-        jdk21
+        jdk25
       ];
 
       # Scala CLI and scalafmt take the JDK from here instead of fetching one
       # with coursier, so entering the shell does not download a JVM.
-      env.JAVA_HOME = "${pkgs.jdk21}";
+      env.JAVA_HOME = "${pkgs.jdk25}";
     };
 
     shakespeare = pkgs: {
