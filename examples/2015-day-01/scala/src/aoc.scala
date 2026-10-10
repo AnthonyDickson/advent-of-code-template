@@ -1,4 +1,4 @@
-import scala.io.Source
+import java.nio.file.{Files, Path}
 
 /** Solves part one of the puzzle for the given input. */
 def solvePartOne(input: String): Long = input.foldLeft(0L)(move)
@@ -19,7 +19,7 @@ private def move(floor: Long, char: Char): Long =
     case _   => floor
 
 @main def aoc(): Unit =
-  val input = Source.fromFile("input.txt").mkString
+  val input = Files.readString(Path.of("input.txt"))
 
   println(solvePartOne(input))
   println(solvePartTwo(input))
