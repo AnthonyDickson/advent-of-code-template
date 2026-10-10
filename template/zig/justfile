@@ -2,6 +2,9 @@ default:
     @just --list
 
 test:
+    zig build test
+
+test-watch:
     zig build --watch test
 
 run:

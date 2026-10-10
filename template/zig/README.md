@@ -10,16 +10,22 @@ dependencies installed.
 
 ## Useful Commands
 
-- Build, run and watch for file changes:
+- Build and run:
 
   ```shell
   just run
   ```
 
-- Run tests and watch for file changes:
+- Run tests:
 
   ```shell
   just test
+  ```
+
+- Run tests and watch for file changes:
+
+  ```shell
+  just test-watch
   ```
 
 - Benchmark:
