@@ -16,22 +16,24 @@ dependencies installed.
   dune utop
   ```
 
-- Build and watch for file changes:
+- Build:
 
   ```shell
   just build
   ```
 
-- Build, run and watch for file changes:
+- Build and run, once or watching for file changes:
 
   ```shell
   just run
+  just run-watch
   ```
 
-- Run tests and watch for file changes:
+- Run tests, once or watching for file changes:
 
   ```shell
   just test
+  just test-watch
   ```
 
 - Format the entire project:
