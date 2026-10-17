@@ -61,7 +61,7 @@
       packages = with pkgs; [
         beam29Packages.elixir_1_20
         beam29Packages.erlang
-        elixir-ls
+        beam29Packages.expert # lsp
       ];
     };
 

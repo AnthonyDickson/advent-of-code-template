@@ -1,4 +1,14 @@
 [[language]]
+name = "elixir"
+# Helix defaults elixir to `elixir-ls`, which the dev shell does not provide.
+# Expert, the official Elixir language server, takes its place.
+language-servers = ["expert"]
+
+[language-server.expert]
+command = "expert"
+args = ["--stdio"]
+
+[[language]]
 name = "fsharp"
 # The local tools from .config/dotnet-tools.json are resolved from the
 # workspace root, so give helix a marker to find it without a hardcoded path.

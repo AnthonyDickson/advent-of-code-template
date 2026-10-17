@@ -8,6 +8,10 @@ Refer to the repository's shared [flake.nix](../../flake.nix) for the packages n
 have `nix`, run `nix develop .#elixir` from anywhere inside the repository to enter a dev shell with all of the
 dependencies installed.
 
+The dev shell also provides [Expert](https://expert-lsp.org), the official Elixir language server. The first time it
+starts with a given Elixir and Erlang version it compiles an engine for them, cached under `~/.cache/expert`, so the
+first diagnostics take a while to appear.
+
 `mix test` also runs the doctests, so any `@doc` example in `lib/aoc.ex` is executed and must stay correct.
 
 ## Useful Commands
