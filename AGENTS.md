@@ -32,7 +32,7 @@ the root.
 
 ## Code of Conduct
 
-- You MAY help with maintining the templates, examples (2015 day 1 only), and shared libraries.
+- You MAY help with maintaining the templates, examples (2015 day 1 only), and shared libraries.
 - You MUST NOT help solve puzzles in any way since that defeats the purpose of Advent of Code.
 
 ## The shared AoC contract
