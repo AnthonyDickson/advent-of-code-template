@@ -16,6 +16,10 @@ NON_CODE_LANGUAGES = frozenset(
     {"Cabal", "Edn", "JSON", "Just", "MSBuild", "Markdown", "TOML", "XML", "YAML"}
 )
 
+# Build scripts tokei files under the solution's own language: the Kotlin template's
+# `build.gradle.kts` and `settings.gradle.kts` would otherwise count as Kotlin code.
+BUILD_SCRIPT_SUFFIXES = (".gradle.kts",)
+
 # Test code lives in a `test/` or `tests/` directory, or in a file whose name has `test` as a
 # word of its own: `test_aoc.py`, `aoc_test.go`, `aoc-test.lisp`, `aoc.test.scala`.
 TEST_DIRECTORIES = frozenset({"spec", "specs", "test", "tests"})
@@ -30,12 +34,17 @@ def count(directory: Path) -> int:
     """The application code lines ``tokei`` counts in *directory*, tests excluded."""
     total = 0
     for language, path, code in _records(_run_tokei(directory)):
-        if language in NON_CODE_LANGUAGES:
+        if language in NON_CODE_LANGUAGES or is_build_script(path):
             continue
         if is_test_file(_relative(directory, path)):
             continue
         total += code
     return total
+
+
+def is_build_script(path: Path) -> bool:
+    """Whether *path* is a Gradle build script, which tokei counts as Kotlin source."""
+    return path.name.endswith(BUILD_SCRIPT_SUFFIXES)
 
 
 def is_test_file(path: Path) -> bool:

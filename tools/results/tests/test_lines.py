@@ -58,6 +58,20 @@ def test_count_adds_application_code_and_leaves_tests_and_build_files_out(tmp_pa
     assert lines.count(tmp_path) == 43
 
 
+def test_count_leaves_gradle_build_scripts_out(tmp_path, monkeypatch):
+    output = "\n".join(
+        [
+            _record("Kotlin", tmp_path / "src" / "main" / "kotlin" / "aoc" / "Aoc.kt", 12),
+            _record("Kotlin", tmp_path / "src" / "test" / "kotlin" / "aoc" / "AocTest.kt", 9),
+            _record("Kotlin", tmp_path / "build.gradle.kts", 30),
+            _record("Kotlin", tmp_path / "settings.gradle.kts", 1),
+        ]
+    )
+    monkeypatch.setattr(lines, "_run_tokei", lambda directory: output)
+
+    assert lines.count(tmp_path) == 12
+
+
 def test_a_missing_tokei_is_reported(tmp_path, monkeypatch):
     def missing(*arguments, **keywords):
         raise FileNotFoundError

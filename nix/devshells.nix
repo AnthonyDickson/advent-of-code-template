@@ -127,6 +127,22 @@
         ];
       };
 
+    kotlin = pkgs: {
+      # Gradle fetches the Kotlin compiler named by the `kotlin("jvm")` plugin
+      # version in `build.gradle.kts`, so keep that in step with `kotlin` here,
+      # which provides `kotlinc` for scripts and the REPL.
+      packages = with pkgs; [
+        gradle_9
+        jdk25
+        kotlin
+        ktfmt
+      ];
+
+      # Gradle and its Kotlin toolchain take the JDK from here instead of
+      # provisioning one, so `jvmToolchain(25)` resolves to this JDK.
+      env.JAVA_HOME = "${pkgs.jdk25}";
+    };
+
     lean4 =
       pkgs:
       let

@@ -18,7 +18,7 @@ stays legible on GitHub's light and dark themes. Regenerate one with the same UR
 | `elixir`      | `elixir`     | `go`      | `go`      | `typescript` | `typescript` |
 | `haskell`     | `haskell`    | `nushell` | `nushell` | `typst`      | `typst`      |
 | `ocaml`       | `ocaml`      | `odin`    | `odin`    | `zig`        | `zig`        |
-| `python`      | `python`     | `duckdb`  | `duckdb`  |              |              |
+| `python`      | `python`     | `duckdb`  | `duckdb`  | `kotlin`     | `kotlin`     |
 
 `duckdb.svg` stands in for the `sql` template, whose solutions are DuckDB macros rather than a generic SQL dialect, so
 `LANGUAGE_ICONS` maps `sql` to it.

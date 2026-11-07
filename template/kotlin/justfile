@@ -1,0 +1,21 @@
+default:
+    @just --list
+
+test:
+    gradle test
+
+run:
+    gradle run --quiet
+
+build:
+    gradle jar --quiet
+
+fmt:
+    ktfmt --kotlinlang-style build.gradle.kts settings.gradle.kts src
+
+benchmark *args: build
+    hyperfine --warmup 3 -N "java -jar build/libs/aoc.jar" {{args}}
+    time -v java -jar build/libs/aoc.jar
+
+clean:
+    rm -rf .gradle .kotlin build

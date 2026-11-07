@@ -76,6 +76,17 @@ GUIDES: dict[str, Guide] = {
         part_two="solvePartTwo",
         notes=("Tests live in `test/Tests.hs` and `just fmt` runs `ormolu`.",),
     ),
+    "kotlin": Guide(
+        entry_point="src/main/kotlin/aoc/Aoc.kt",
+        part_one="solvePartOne",
+        part_two="solvePartTwo",
+        notes=(
+            "Gradle downloads the Kotlin compiler and the test libraries on the first run, so the first `just test` needs network.",
+            "Tests live in `src/test/kotlin/aoc/AocTest.kt` and run through `kotlin.test` on JUnit.",
+            "Warnings are errors and the return value checker is on, so an ignored result (an unused `map`) fails the build.",
+            "`just build` packages an executable jar at `build/libs/aoc.jar`.",
+        ),
+    ),
     "lean4": Guide(
         entry_point="Aoc.lean",
         part_one="solvePartOne",
