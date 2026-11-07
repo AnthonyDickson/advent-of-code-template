@@ -8,6 +8,7 @@ plugins {
 repositories { mavenCentral() }
 
 dependencies {
+    // Errors as values (Either, Raise) and persistent data structures, ready for the solutions.
     implementation("io.arrow-kt:arrow-core:2.3.0")
     implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2")
     testImplementation(kotlin("test"))

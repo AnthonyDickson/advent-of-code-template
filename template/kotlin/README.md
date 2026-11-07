@@ -12,9 +12,8 @@ though the starter code does not use them:
   structures such as `PersistentList` and `PersistentMap`, whose `adding`/`putting` return a new collection that shares
   structure with the old one.
 
-See `examples/2015-day-01/kotlin` for both in use. The build treats warnings as errors and enables Kotlin's return value
-checker, so discarding the result of a pure function (for example calling `map` and ignoring the list it returns) fails
-the build.
+The build treats warnings as errors and enables Kotlin's return value checker, so discarding the result of a pure
+function (for example calling `map` and ignoring the list it returns) fails the build.
 
 ## Getting Started
 
