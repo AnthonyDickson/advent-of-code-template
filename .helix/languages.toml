@@ -23,6 +23,19 @@ args = ["fsautocomplete", "--adaptive-lsp-server-enabled"]
 AutomaticWorkspaceInit = true
 
 [[language]]
+name = "kotlin"
+# Helix defaults kotlin to the community `kotlin-language-server`, which cannot
+# read Kotlin 2.4 libraries. The dev shell provides JetBrains' `kotlin-lsp`
+# instead. The Gradle settings file marks each project, so the server imports the
+# template, example or day folder rather than the repository root.
+roots = ["settings.gradle.kts", "settings.gradle"]
+language-servers = ["kotlin-lsp"]
+
+[language-server.kotlin-lsp]
+command = "kotlin-lsp"
+args = ["--stdio"]
+
+[[language]]
 name = "markdown"
 formatter = { command = "dprint", args = ["fmt", "--stdin", "md"]}
 rulers = [120]

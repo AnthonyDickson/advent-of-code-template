@@ -24,6 +24,9 @@ dependencies installed.
 Gradle comes from the dev shell, so the project has no Gradle wrapper. It downloads the Kotlin compiler and the
 libraries on the first run and caches them under `~/.gradle`.
 
+The language server is JetBrains' [`kotlin-lsp`](https://github.com/Kotlin/kotlin-lsp), which the repository's Helix
+config starts with `kotlin-lsp --stdio`.
+
 ## Useful Commands
 
 - Build and run:

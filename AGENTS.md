@@ -107,8 +107,9 @@ Two upgrade paths are not what they appear to be; check before "fixing" a versio
 The remaining pins live at the repository root and are updated from there:
 
 ```shell
-just update-flake   # move the nixpkgs and rust-overlay pins in flake.lock
-just update-dprint  # bump the plugins pinned in dprint.json
+just update-flake       # move the nixpkgs and rust-overlay pins in flake.lock
+just update-dprint      # bump the plugins pinned in dprint.json
+just update-kotlin-lsp  # pin the Kotlin shell's language server to JetBrains' latest release
 ```
 
 - `nix flake update` moves every toolchain at once, so verify each language afterwards. Templates whose `test` recipe
@@ -118,6 +119,11 @@ just update-dprint  # bump the plugins pinned in dprint.json
   update and bump any attribute that has a newer sibling; tools on unversioned attributes follow nixpkgs automatically.
 - `dprint config update` may rewrite a plugin entry as an npm specifier (`npm:@dprint/markdown@0.24.0`) even when the
   version itself is unchanged.
+- The Kotlin shell's `kotlin-lsp` is a proprietary JetBrains binary pinned in `nix/kotlin-lsp.json`, not in nixpkgs, so
+  `just update-flake` does not move it. JetBrains builds expire about a month after release and old downloads are
+  deleted, so `just update-kotlin-lsp` rewrites that file from the latest GitHub release; the shell hook warns once the
+  pinned build is 25 days old. It is the only unfree package, allowed by name in `flake.nix`, and its bundled Kotlin
+  analyser must support the Kotlin version the templates use, so bump the two together.
 
 ## Formatting and style
 

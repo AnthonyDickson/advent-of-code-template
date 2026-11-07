@@ -127,21 +127,130 @@
         ];
       };
 
-    kotlin = pkgs: {
-      # Gradle fetches the Kotlin compiler named by the `kotlin("jvm")` plugin
-      # version in `build.gradle.kts`, so keep that in step with `kotlin` here,
-      # which provides `kotlinc` for scripts and the REPL.
-      packages = with pkgs; [
-        gradle_9
-        jdk25
-        kotlin
-        ktfmt
-      ];
+    kotlin =
+      pkgs:
+      let
+        # nixpkgs only carries the community `kotlin-language-server`, which
+        # bundles a Kotlin 2.1 compiler that cannot read the 2.4 standard
+        # library. Pin JetBrains' official server instead, from its prebuilt
+        # release: it bundles its own JetBrains Runtime, and the Linux build
+        # needs its interpreter and libraries patched to point into the store.
+        #
+        # JetBrains builds expire about a month after release and old downloads
+        # are deleted, so the pin lives in `kotlin-lsp.json`, which
+        # `just update-kotlin-lsp` rewrites, and the shell hook below says how
+        # old the pinned build is.
+        pin = builtins.fromJSON (builtins.readFile ./kotlin-lsp.json);
+        inherit (pin) version;
 
-      # Gradle and its Kotlin toolchain take the JDK from here instead of
-      # provisioning one, so `jvmToolchain(25)` resolves to this JDK.
-      env.JAVA_HOME = "${pkgs.jdk25}";
-    };
+        # Linux ships as a tarball, macOS as a zip with a `.sit` extension.
+        system = pkgs.stdenv.hostPlatform.system;
+        file =
+          {
+            x86_64-linux = "kotlin-server-${version}.tar.gz";
+            aarch64-linux = "kotlin-server-${version}-aarch64.tar.gz";
+            x86_64-darwin = "kotlin-server-${version}.sit";
+            aarch64-darwin = "kotlin-server-${version}-aarch64.sit";
+          }
+          .${system};
+
+        kotlin-lsp = pkgs.stdenvNoCC.mkDerivation {
+          pname = "kotlin-lsp";
+          inherit version;
+
+          src = pkgs.fetchurl {
+            url = "https://download.jetbrains.com/language-server/kotlin-server/${version}/${file}";
+            hash = pin.hashes.${system};
+          };
+
+          sourceRoot = "kotlin-server-${version}";
+
+          # The macOS release is a zip with a `.sit` extension, which the
+          # default unpacker does not recognise.
+          unpackCmd = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin "unzip -q $curSrc";
+
+          nativeBuildInputs = [
+            pkgs.makeWrapper
+          ]
+          ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ pkgs.unzip ]
+          ++ pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.autoPatchelfHook ];
+
+          buildInputs = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isLinux (
+            with pkgs;
+            [
+              stdenv.cc.cc.lib
+              zlib
+            ]
+          );
+
+          # The bundled runtime ships AWT, sound and font libraries that a
+          # headless language server never loads.
+          autoPatchelfIgnoreMissingDeps = [
+            "libX*"
+            "libxkbcommon*"
+            "libwayland*"
+            "libasound.so.2"
+            "libfreetype.so.6"
+            "libfontconfig.so.1"
+            "libGL.so.1"
+            "libEGL.so.1"
+          ];
+
+          installPhase = ''
+            mkdir -p $out/share/kotlin-lsp $out/bin
+            cp -r ./. $out/share/kotlin-lsp/
+            makeWrapper $out/share/kotlin-lsp/bin/intellij-server $out/bin/kotlin-lsp
+          '';
+
+          # The source is Apache 2.0, but the release bundles closed-source
+          # JetBrains components, so the binary is unfree; `flake.nix` allows
+          # this package by name.
+          meta = {
+            description = "JetBrains' official Kotlin language server";
+            homepage = "https://github.com/Kotlin/kotlin-lsp";
+            license = pkgs.lib.licenses.unfree;
+            sourceProvenance = [ pkgs.lib.sourceTypes.binaryNativeCode ];
+            platforms = [
+              "x86_64-linux"
+              "aarch64-linux"
+              "x86_64-darwin"
+              "aarch64-darwin"
+            ];
+            mainProgram = "kotlin-lsp";
+          };
+        };
+      in
+      {
+        # Gradle fetches the Kotlin compiler named by the `kotlin("jvm")` plugin
+        # version in `build.gradle.kts`, so keep that in step with `kotlin` here,
+        # which provides `kotlinc` for scripts and the REPL.
+        packages = with pkgs; [
+          gradle_9
+          jdk25
+          kotlin
+          kotlin-lsp # lsp
+          ktfmt
+        ];
+
+        # Gradle and its Kotlin toolchain take the JDK from here instead of
+        # provisioning one, so `jvmToolchain(25)` resolves to this JDK.
+        env.JAVA_HOME = "${pkgs.jdk25}";
+
+        # A build that has expired refuses to start, and the editor only shows
+        # the language server failing, so report the pinned build's age.
+        shellHook = ''
+          kotlin_lsp_age=$(( ($(date +%s) - ${toString pin.releasedEpoch}) / 86400 ))
+          if [ "$kotlin_lsp_age" -ge 25 ]; then
+            echo "WARNING: kotlin-lsp ${version} was released ${pin.released}, $kotlin_lsp_age days ago."
+            echo "  JetBrains builds expire about a month after release, so it may already refuse to start."
+            echo "  Update the pin with \`just update-kotlin-lsp\` from the repository root, then re-enter this shell."
+          else
+            echo "kotlin-lsp ${version} was released ${pin.released} ($kotlin_lsp_age days ago); builds expire about a"
+            echo "  month after release, so update it with \`just update-kotlin-lsp\` before then."
+          fi
+          unset kotlin_lsp_age
+        '';
+      };
 
     lean4 =
       pkgs:
