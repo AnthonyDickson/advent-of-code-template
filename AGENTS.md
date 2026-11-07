@@ -58,9 +58,11 @@ Two recipe behaviours are not obvious from a single file and matter when running
 
 1. `template/<lang>/` must be a complete, self-contained project: `justfile`, `README.md`, `.gitignore`, language
    config, source, and tests, all following the shared contract above.
-2. Add the dev shell to `nix/devshells.nix`, pinning toolchains to an explicit version attribute where nixpkgs offers
-   one. An entry returns the attributes the language needs beyond the shared tooling, so it can set `env` entries and a
-   `shellHook` as well as `packages`. Read the existing entries before adding one.
+2. Add the dev shell as `nix/languages/<lang>.nix`, named after the template folder, pinning toolchains to an explicit
+   version attribute where nixpkgs offers one. The file is a function of `pkgs` returning the attributes the language
+   needs beyond the shared tooling, so it can set `env` entries and a `shellHook` as well as `packages`; it is
+   discovered, so nothing else lists it. A toolchain nixpkgs cannot provide is packaged from its prebuilt release in
+   `nix/packages/` and added with `pkgs.callPackage`. Read the existing files before adding one.
 3. Add a `GUIDES` entry in `tools/lottery/src/aoc_lottery/guidance.py`; the lottery tests fail without one.
 4. Nothing else. Markdown and Helix config are shared at the repository root, no list of languages lives outside
    `template/`, and the lottery takes the build output it must not copy from the template's own `.gitignore`.
@@ -75,9 +77,11 @@ references a library, and a library must not import from them.
 
 ## Dev environment (Nix)
 
-A single top-level [`flake.nix`](./flake.nix) defines every dev environment; there are no per-language flakes.
-Toolchains are pinned to explicit versions in `nix/devshells.nix`, and the `common` tooling (task runner, markdown
-formatter, benchmark helpers, line counter, git) is added to every shell.
+A single top-level [`flake.nix`](./flake.nix) defines every dev environment; there are no per-language flakes. Each
+language's shell is a file in `nix/languages/`, where its toolchain is pinned to an explicit version, and
+`nix/devshells.nix` adds the `common` tooling (task runner, markdown formatter, benchmark helpers, line counter, git) to
+every shell. Toolchains packaged from prebuilt releases (Lean 4, Roc, and the Kotlin language server) live in
+`nix/packages/`, each pinning its own version.
 
 ```shell
 nix develop .#rust -c fish   # pick a language; omit -c to use $SHELL
@@ -115,11 +119,12 @@ just update-kotlin-lsp  # pin the Kotlin shell's language server to JetBrains' l
 - `nix flake update` moves every toolchain at once, so verify each language afterwards. Templates whose `test` recipe
   watches for changes never exit, so prefer `nix develop .#<lang> -c sh -c 'cd template/<lang> && timeout 60 just test'`
   or run the language's `build` recipe.
-- `nix/devshells.nix` pins explicit version attributes (`go_1_27`, `zig_0_16`, `ghc912`, ...). Re-check it after a flake
+- `nix/languages/` pins explicit version attributes (`go_1_27`, `zig_0_16`, `ghc912`, ...). Re-check it after a flake
   update and bump any attribute that has a newer sibling; tools on unversioned attributes follow nixpkgs automatically.
+  The prebuilt toolchains in `nix/packages/` do not move with nixpkgs at all.
 - `dprint config update` may rewrite a plugin entry as an npm specifier (`npm:@dprint/markdown@0.24.0`) even when the
   version itself is unchanged.
-- The Kotlin shell's `kotlin-lsp` is a proprietary JetBrains binary pinned in `nix/kotlin-lsp.json`, not in nixpkgs, so
+- The Kotlin shell's `kotlin-lsp` is a proprietary JetBrains binary pinned in `nix/packages/kotlin-lsp/pin.json`, so
   `just update-flake` does not move it. JetBrains builds expire about a month after release and old downloads are
   deleted, so `just update-kotlin-lsp` rewrites that file from the latest GitHub release; the shell hook warns once the
   pinned build is 25 days old. It is the only unfree package, allowed by name in `flake.nix`, and its bundled Kotlin

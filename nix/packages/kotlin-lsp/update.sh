@@ -2,14 +2,14 @@
 # Pin the Kotlin dev shell's `kotlin-lsp` to JetBrains' latest release.
 #
 # JetBrains builds of kotlin-lsp expire about a month after release, and old
-# downloads are deleted, so the pin in `nix/kotlin-lsp.json` has to move every
-# few weeks. This reads the latest GitHub release, takes the SHA-256 of each
-# platform's download from the `.sha256` file JetBrains publishes beside it, and
-# rewrites the JSON that `nix/devshells.nix` reads. Run it from the repository
+# downloads are deleted, so the pin in `pin.json` beside this script has to move
+# every few weeks. This reads the latest GitHub release, takes the SHA-256 of
+# each platform's download from the `.sha256` file JetBrains publishes beside
+# it, and rewrites the JSON that `default.nix` reads. Run it from the repository
 # root (`just update-kotlin-lsp`), then re-enter the Kotlin dev shell.
 set -euo pipefail
 
-pin=nix/kotlin-lsp.json
+pin=nix/packages/kotlin-lsp/pin.json
 api=https://api.github.com/repos/Kotlin/kotlin-lsp/releases/latest
 cdn=https://download.jetbrains.com/language-server/kotlin-server
 

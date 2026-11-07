@@ -30,7 +30,7 @@
           pkgs = import nixpkgs {
             inherit system overlays;
             # The Kotlin shell's language server is a proprietary JetBrains
-            # binary (see `nix/devshells.nix`); allow it by name and nothing else.
+            # binary (see `nix/packages/kotlin-lsp`); allow it by name and nothing else.
             config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [ "kotlin-lsp" ];
           };
           mkShell =

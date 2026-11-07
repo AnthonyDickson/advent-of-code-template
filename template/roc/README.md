@@ -66,5 +66,5 @@ version nixpkgs packages is the older alpha4 line.
 
 Roc has no stable release yet. The compiler version is pinned in two places that have to move together:
 
-- the `roc` entry in the shared [nix/devshells.nix](../../nix/devshells.nix), and
+- the `stamp` in the shared [nix/packages/roc.nix](../../nix/packages/roc.nix), and
 - the `roc:` entry in the `app` header of `main.roc`.

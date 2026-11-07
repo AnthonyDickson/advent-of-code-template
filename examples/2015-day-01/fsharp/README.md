@@ -20,7 +20,7 @@ The dev shell pins the .NET SDK, restores the dotnet tools from `.config/dotnet-
 - `tests/AocTests.fs` - the Expecto tests. Paste the example from the puzzle statement into the `input` bindings.
 - `Directory.Build.props` / `Directory.Packages.props` - the target framework, the shared package versions, and
   `ManagePackageVersionsCentrally`, so a `PackageReference` carries no version.
-- `global.json` - pins the SDK feature band the way `nix/devshells.nix` pins every other toolchain.
+- `global.json` - pins the SDK feature band the way `nix/languages/` pins every other toolchain.
 - `.editorconfig` - the `fantomas` settings: its defaults, which follow the F# style guide, plus Stroustrup brackets.
 
 ## Useful Commands

@@ -48,7 +48,7 @@ update-dprint:
 
 # Pin the Kotlin shell's kotlin-lsp to JetBrains' latest release; builds expire about a month after release.
 update-kotlin-lsp:
-    nix/update-kotlin-lsp.sh
+    nix/packages/kotlin-lsp/update.sh
 
 alias lottery := spin
 alias pick := spin
