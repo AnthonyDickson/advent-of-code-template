@@ -20,10 +20,6 @@ let
         platform = "linux_arm64";
         hash = "sha256-d5HIgsN7q7Unh16XB0VY3KnqdABQaubNku6R3nUgMiM=";
       };
-      x86_64-darwin = {
-        platform = "macos_x86_64";
-        hash = "sha256-UIJcUibUx1O+UuAaPZTFt8k+LGGmTQ/43zTN4MHkhaY=";
-      };
       aarch64-darwin = {
         platform = "macos_apple_silicon";
         hash = "sha256-NmuBgOedQ2fV3wsUYiTq/meP5EIPBUfUXrEfOL8mwNA=";

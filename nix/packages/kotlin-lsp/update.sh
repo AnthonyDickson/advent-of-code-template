@@ -47,7 +47,6 @@ hash_of() {
 
 x86_64_linux=$(hash_of "kotlin-server-$version.tar.gz")
 aarch64_linux=$(hash_of "kotlin-server-$version-aarch64.tar.gz")
-x86_64_darwin=$(hash_of "kotlin-server-$version.sit")
 aarch64_darwin=$(hash_of "kotlin-server-$version-aarch64.sit")
 
 cat > "$pin" <<EOF
@@ -58,7 +57,6 @@ cat > "$pin" <<EOF
   "hashes": {
     "x86_64-linux": "$x86_64_linux",
     "aarch64-linux": "$aarch64_linux",
-    "x86_64-darwin": "$x86_64_darwin",
     "aarch64-darwin": "$aarch64_darwin"
   }
 }

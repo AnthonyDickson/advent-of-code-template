@@ -28,7 +28,6 @@ let
     {
       x86_64-linux = "kotlin-server-${version}.tar.gz";
       aarch64-linux = "kotlin-server-${version}-aarch64.tar.gz";
-      x86_64-darwin = "kotlin-server-${version}.sit";
       aarch64-darwin = "kotlin-server-${version}-aarch64.sit";
     }
     .${system};
@@ -93,7 +92,6 @@ stdenvNoCC.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "kotlin-lsp";

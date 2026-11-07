@@ -23,10 +23,6 @@ let
         platform = "linux_aarch64";
         hash = "sha256-yZxvDt1EaVbUdYxZ1Dg+jmQR/2zHGgH5yqvl66RUEh0=";
       };
-      x86_64-darwin = {
-        platform = "darwin";
-        hash = "sha256-s43YoltbUJbGyQGef/rdvZGiP8tTgnUyJeMxRRV2jKI=";
-      };
       aarch64-darwin = {
         platform = "darwin_aarch64";
         hash = "sha256-By3KSjj7wNPO25b+qIbMJDtCTyvRYkdZYgC5qauT8PU=";
