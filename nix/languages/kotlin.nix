@@ -7,12 +7,17 @@ in
   # Gradle fetches the Kotlin compiler named by the `kotlin("jvm")` plugin
   # version in `build.gradle.kts`, so keep that in step with `kotlin` here,
   # which provides `kotlinc` for scripts and the REPL.
+  #
+  # nixpkgs wraps ktfmt around its default headless JRE (JDK 21) and puts
+  # that JRE on kotlinc's PATH, so rebuild both on the same JDK as `java`.
+  # Gradle follows JAVA_HOME below, and kotlin-lsp runs on the JetBrains
+  # Runtime it bundles.
   packages = with pkgs; [
     gradle_9
     jdk25
-    kotlin
+    (kotlin.override { jre = jdk25; })
     kotlin-lsp # lsp
-    ktfmt
+    (ktfmt.override { jre_headless = jdk25; })
   ];
 
   # Gradle and its Kotlin toolchain take the JDK from here instead of
