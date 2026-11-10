@@ -5,6 +5,10 @@ default:
 spin *args:
     uv run --directory tools/lottery aoc-lottery {{args}}
 
+# Copy a language template into a new folder, leaving ignored build output behind.
+bootstrap language folder:
+    bash tools/bootstrap.sh {{quote(language)}} {{quote(folder)}}
+
 # Check the lottery tool.
 lottery-test:
     uv run --directory tools/lottery pytest

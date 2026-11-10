@@ -14,6 +14,7 @@ examples/<year>-day-<dd>/<lang>/   reference solutions for past days
 lib/<lang>/                        standalone helper library, one per language
 tools/lottery/                     the language lottery (a self-contained uv project)
 tools/results/                     the benchmark recorder (a self-contained uv project)
+tools/bootstrap.sh                 copy a named template, without the lottery
 ```
 
 - `ls template/` is the list of languages. No file in this repository enumerates them, so adding a language means adding
@@ -169,6 +170,13 @@ just lottery-fmt     # ruff format
 
 `uv` resolves and caches the dependencies, so the tool needs nothing installed beyond the dev shell. `just lottery`
 forwards arguments to the tool (`just lottery --plain --day 5`), and `tools/lottery/README.md` documents the flags.
+
+## The template bootstrapper
+
+`tools/bootstrap.sh` is the by-name counterpart to the lottery: `just bootstrap <language> <folder>` copies the
+committed `template/<language>` into a new folder with `git archive`, so git-ignored build output and `input.txt` never
+come along. It refuses an existing destination and writes nothing else. Use the lottery when the draw should choose a
+language, and this when you have already chosen one.
 
 ## The results recorder
 

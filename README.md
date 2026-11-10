@@ -4,11 +4,12 @@ A template with a nix flake and code snippets in multiple languages for getting 
 
 ## Usage
 
-1. Copy one of the templates:
+1. If you know which language you want to use:
    ```shell
-   cp -r template/ocaml day-01/
+   just bootstrap ocaml day-01
    ```
-   The lottery below also copies a template for you.
+   Or if you want one chosen for you see lottery system in the section below.
+
 1. Enter the nix dev shell for your language, from anywhere inside this repository:
    ```shell
    nix develop .#ocaml -c fish # Replace `ocaml` with your language and `fish` with your shell

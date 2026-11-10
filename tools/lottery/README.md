@@ -9,6 +9,8 @@ uv run aoc-lottery                # from this directory
 uv run aoc-lottery --plain --day 5
 ```
 
+To copy a chosen language without a draw, use `just bootstrap <language> <folder>` instead.
+
 The tool needs `uv`, which every dev shell in this repository provides. `uv` installs `textual` and the rest of the
 dependencies on the first run.
 
