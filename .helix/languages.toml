@@ -30,6 +30,9 @@ name = "kotlin"
 # template, example or day folder rather than the repository root.
 roots = ["settings.gradle.kts", "settings.gradle"]
 language-servers = ["kotlin-lsp"]
+# The same formatter and style as the template's `just fmt`; `-` makes ktfmt
+# read the buffer from stdin and write the result to stdout.
+formatter = { command = "ktfmt", args = ["--kotlinlang-style", "-"] }
 
 [language-server.kotlin-lsp]
 command = "kotlin-lsp"
